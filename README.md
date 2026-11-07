@@ -1,6 +1,14 @@
 # OpenHachimi
 
-**Hachimi** Minecraft 1.20.1 客户端本体（`hachimi_body.deobf.jar`，246 个类，从热注入 loader 中 dump 得到）的
+
+## 笑点解析
+
+此“300[中国元](https://zh.wikipedia.org/zh-hans/%E4%BA%BA%E6%B0%91%E5%B8%81)可绕Native”大端并没有我初步猜测的使用了 [ZelixKlassMaster™](https://zelix.com) 模糊器，而是靠一个狗屎级的障眼法躲过了人工dump：
+把所有类 rename 成 `net.minecraftforge.common.internal.util` 来躲过 dump，经过[Claude Opus5.5](https://claude.ai)长达30[秒]("https://zh.wikipedia.org/zh-hans/%E7%A7%92")的分析后找到了所被狗屎障眼法隐藏的[类](https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html)， 
+们不知道此客户端作者是否[脑溢血](https://zh.wikipedia.org/wiki/%E8%85%A6%E5%87%BA%E8%A1%80)又或者是客户端的编码者本身的[脑](https://zh.wikipedia.org/wiki/%E8%84%91)部结构遭到损坏导致[智力](https://zh.wikipedia.org/wiki/%E6%99%BA%E5%8A%9B)低下以至于使用一个会回退到 Java[https://zh.wikipedia.org/wiki/Java] 层 XOR 加密的[Native](https://en.wikipedia.org/wiki/Java_Native_Interface)壳，使他的[Native](https://en.wikipedia.org/wiki/Java_Native_Interface)字符串解密成了[棍母](https://zh.wikipedia.org/wiki/%E5%90%89%E5%90%89%E5%9B%BD%E6%96%87%E5%8C%96)，令人[忍俊不禁](https://baike.baidu.com/item/%E5%BF%8D%E9%9A%BD%E4%B8%8D%E7%A6%81/22455727)。在经过[溜溜梅](https://en.wikipedia.org/wiki/Large_language_model)以及
+人工rename和修复编译错误后得到了这坨狗屎的原始代码。**因为我认为在此客户端消耗太多时间不值得，所以Rename的并不完整，部分类可能Rename是错的，您可自行恢复或在本项目提交[PR](https://github.com/C0rgiTech/OpenHachimi/pulls)。
+
+ **Hachimi** Minecraft 1.20.1 客户端本体（`hachimi_body.deobf.jar`，246 个类，从热注入 loader 中 dump 得到）的
 反编译、去混淆并重新组织后的源码树。
 
 > ⚠️ 仅用于安全研究 / 互操作分析 / 技术教育。本仓库含反编译的闭源代码及抄自 OpenZen 的第三方代码，
@@ -126,10 +134,3 @@ OpenZen 所有特征性着色器 token —— `twoSigmaSq`、`BlurDir`、`TexelS
 | 圆角面板 | `common.glsl` 的 `rdist`/`ralpha`、`rounded_rect.fsh` 的 `roundSDF`、`bloom.fsh` 16×5 环形模糊、`stencil.fsh` | 多模式 SDF `sdBox`/`sdBoxQuad`/`sdRing`/`sdArc`/`sdCapsule`；另有独立的 erf/cdf/probit SDF 文字面板着色器（`uRows[96]`/`uSigma`）|
 
 因此着色器/模糊代码是独立编写的；抄袭仅限于 `shit.zen.utils` 的 Java 助手（以及事件总线的结构）。
-
-## 此客户端笑点解析
-
-此“300元可绕Native”大端并没有我初步猜测的使用了 ZelixKlassMaster™ 模糊器，而是靠一个狗屎级的障眼法躲过了人工dump：
-把所有类 rename 成 `net.minecraftforge.common.internal.util` 来躲过 dump，经过Claude长达30秒的分析后找到了所被狗屎障眼法隐藏的class， 
-们不知道此客户端作者是否脑溢血以至于使用一个会回退到 Java 层 XOR 加密的native壳，使他的Native字符串解密成了棍母，在经过溜溜梅以及
-人工rename和修复编译错误后得到了这坨狗屎的原始代码。**因为我认为在此客户端消耗太多时间不值得，所以Rename的并不完整，部分类可能Rename是错的
