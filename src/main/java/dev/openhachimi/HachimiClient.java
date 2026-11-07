@@ -2,6 +2,7 @@ package dev.openhachimi;
 
 import dev.openhachimi.event.EventRegistrar;
 import dev.openhachimi.config.ConfigLoadManager;
+import dev.openhachimi.modules.ModuleManager;
 import dev.openhachimi.utils.render.font.FontManager;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -34,7 +35,7 @@ public final class HachimiClient {
             dev.openhachimi.config.FontManager.init();
             FontManager.init();
             try {
-                dev.openhachimi.utils.ModuleManager.init();
+                ModuleManager.init();
             } catch (Throwable t) {
                 t.printStackTrace();
             }

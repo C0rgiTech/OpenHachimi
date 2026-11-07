@@ -12,7 +12,6 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import java.nio.ByteBuffer;
 import java.util.function.Supplier;
 
-import dev.openhachimi.utils.player.AttributeManager;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.ShaderInstance;
@@ -64,9 +63,9 @@ public class FontRender {
         double baseY = y + (double)(this.font.getAscent() * this.font.getScale());
         double penX = x;
         int from = this.font.getFrom();
-        AttributeManager[] charData = this.font.getCharData();
+        GlyphLayout[] charData = this.font.getCharData();
         for (int i = 0; i < text.length(); ++i) {
-            AttributeManager m;
+            GlyphLayout m;
             int idx = text.charAt(i) - from;
             if (idx < 0 || idx >= charData.length) {
                 idx = 0;

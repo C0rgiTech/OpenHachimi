@@ -1,9 +1,7 @@
 /*
  * Decompiled with CFR 0.152.
  */
-package dev.openhachimi.render;
-
-import dev.openhachimi.security.NativeLoader;
+package dev.openhachimi.security;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -14,18 +12,18 @@ import java.util.Base64;
 import javax.crypto.Cipher;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-
-public final class Render2D {
+//这个类没啥鸟用因为是他Native XOR解密类
+public final class NativeStringUtil {
     private static final SecureRandom RNG = new SecureRandom();
     private static final String TRANSFORMATION = "AES/GCM/NoPadding";
 
-    private Render2D() {
+    private NativeStringUtil() {
     }
 
     public static byte[] e(String text) {
         if (NativeLoader.ready()) {
             try {
-                byte[] b = Render2D.nEncode(text);
+                byte[] b = NativeStringUtil.nEncode(text);
                 if (b != null) {
                     return b;
                 }
@@ -45,7 +43,7 @@ public final class Render2D {
     public static String d(byte[] data) {
         if (NativeLoader.ready()) {
             try {
-                String s = Render2D.nDecode(data);
+                String s = NativeStringUtil.nDecode(data);
                 if (s != null) {
                     return s;
                 }
@@ -70,7 +68,7 @@ public final class Render2D {
     public static byte[] sha256(byte[] data) {
         if (NativeLoader.ready()) {
             try {
-                byte[] b = Render2D.nSha256(data);
+                byte[] b = NativeStringUtil.nSha256(data);
                 if (b != null && b.length == 32) {
                     return b;
                 }
@@ -88,7 +86,7 @@ public final class Render2D {
     }
 
     public static String encryptToBase64(String plainText, String password) throws Exception {
-        SecretKeySpec keySpec = Render2D.deriveKey(password);
+        SecretKeySpec keySpec = NativeStringUtil.deriveKey(password);
         byte[] iv = new byte[12];
         RNG.nextBytes(iv);
         Cipher cipher = Cipher.getInstance(TRANSFORMATION);
@@ -104,7 +102,7 @@ public final class Render2D {
     private static native byte[] nSha256(byte[] var0);
 
     public static String decryptFromBase64(String base64CipherText, String password) throws Exception {
-        SecretKeySpec keySpec = Render2D.deriveKey(password);
+        SecretKeySpec keySpec = NativeStringUtil.deriveKey(password);
         byte[] cipherMessage = Base64.getDecoder().decode(base64CipherText);
         ByteBuffer byteBuffer = ByteBuffer.wrap(cipherMessage);
         byte[] iv = new byte[12];

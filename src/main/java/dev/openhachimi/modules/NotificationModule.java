@@ -6,8 +6,7 @@ package dev.openhachimi.modules;
 import dev.openhachimi.hud.Notifications;
 import dev.openhachimi.settings.BooleanSetting;
 import dev.openhachimi.settings.ListSetting;
-import dev.openhachimi.utils.ModuleManager;
-import dev.openhachimi.utils.RegistryManager;
+import dev.openhachimi.utils.ColorValue;
 
 import java.util.function.Supplier;
 
@@ -29,16 +28,16 @@ extends Module {
     private static final byte[] S_B5AA0AB = new byte[]{22, 39, 58, 54, 98, 3, 46, 50, 42, 35};  // XOR0x42 "Text Alpha"
     public final BooleanSetting toggleNotify = new BooleanSetting("Toggle Notify", true);
     public final ListSetting infoDuration = new ListSetting("Display Time", 2000, 500, 10000);
-    public final RegistryManager backgroundTop = new RegistryManager("Background Top", 0x343438);
-    public final RegistryManager backgroundBottom = new RegistryManager("Background Bottom", 0x1C1C1F);
+    public final ColorValue backgroundTop = new ColorValue("Background Top", 0x343438);
+    public final ColorValue backgroundBottom = new ColorValue("Background Bottom", 0x1C1C1F);
     public final ListSetting backgroundAlpha = new ListSetting("Background Alpha", 218, 0, 255);
     public final BooleanSetting rectangleCustom = new BooleanSetting("Rectangle Custom", false);
-    public final RegistryManager rectangleColor = new RegistryManager("Rectangle Color", 3906559);
-    public final RegistryManager borderColor = new RegistryManager("Border Color", 0xFFFFFF);
+    public final ColorValue rectangleColor = new ColorValue("Rectangle Color", 3906559);
+    public final ColorValue borderColor = new ColorValue("Border Color", 0xFFFFFF);
     public final ListSetting borderAlpha = new ListSetting("Border Alpha", 54, 0, 255);
     public final ListSetting shadowAlpha = new ListSetting("Shadow Alpha", 24, 0, 255);
-    public final RegistryManager titleColor = new RegistryManager("Title Color", 0xF5F5F7);
-    public final RegistryManager textColor = new RegistryManager("Text Color", 11447986);
+    public final ColorValue titleColor = new ColorValue("Title Color", 0xF5F5F7);
+    public final ColorValue textColor = new ColorValue("Text Color", 11447986);
     public final ListSetting textAlpha = new ListSetting("Text Alpha", 205, 0, 255);
 
     public NotificationModule() {

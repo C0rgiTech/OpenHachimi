@@ -3,10 +3,9 @@
  */
 package dev.openhachimi.modules;
 
-import dev.openhachimi.render.StencilBuffer;
+import dev.openhachimi.utils.rotation.RotationManager;
 import dev.openhachimi.settings.BooleanSetting;
 import dev.openhachimi.settings.ModeSetting;
-import dev.openhachimi.utils.ModuleManager;
 import dev.openhachimi.utils.rotation.Rotation;
 import dev.openhachimi.utils.rotation.RotationUtil;
 
@@ -408,7 +407,7 @@ extends Module {
             this.clearTargetRotation();
             return;
         }
-        Rotation lastRot = StencilBuffer.getLastRotation();
+        Rotation lastRot = RotationManager.getLastRotation();
         float prevYaw = lastRot.getYaw();
         float unwrappedYaw = prevYaw + Mth.wrapDegrees((float)(angles[0] - prevYaw));
         Rotation utilRot = new Rotation(unwrappedYaw, angles[1]);

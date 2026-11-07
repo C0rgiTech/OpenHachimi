@@ -3,8 +3,6 @@
  */
 package dev.openhachimi.utils.rotation;
 
-import dev.openhachimi.render.StencilBuffer;
-
 import dev.openhachimi.utils.player.RaytraceUtil2;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -45,7 +43,7 @@ public class RotationUtil {
     }
 
     public static Rotation move(Rotation targetRotation, double speed) {
-        return RotationUtil.move(StencilBuffer.getLastRotation(), targetRotation, speed);
+        return RotationUtil.move(RotationManager.getLastRotation(), targetRotation, speed);
     }
 
     public static Rotation calculate(BlockPos position, Direction enumFacing) {
@@ -132,7 +130,7 @@ public class RotationUtil {
     }
 
     public static Rotation smooth(Rotation targetRotation, double speed) {
-        return RotationUtil.smooth(StencilBuffer.getLastRotation(), targetRotation, speed);
+        return RotationUtil.smooth(RotationManager.getLastRotation(), targetRotation, speed);
     }
 
     public static Rotation smooth(Rotation lastRotation, Rotation targetRotation, double speed) {
@@ -183,7 +181,7 @@ public class RotationUtil {
         if (RotationUtil.mc.player == null) {
             return rotation;
         }
-        Rotation lastRot = StencilBuffer.getLastRotation();
+        Rotation lastRot = RotationManager.getLastRotation();
         float prevYaw = lastRot.getYaw();
         float prevPitch = lastRot.getPitch();
         Rotation previousRotation = new Rotation(prevYaw, prevPitch);

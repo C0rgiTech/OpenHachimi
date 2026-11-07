@@ -3,7 +3,7 @@
  */
 package dev.openhachimi.utils.player;
 
-import dev.openhachimi.render.StencilBuffer;
+import dev.openhachimi.utils.rotation.RotationManager;
 
 import java.util.List;
 import java.util.Optional;
@@ -62,7 +62,7 @@ public final class RaytraceUtil2 {
     }
 
     public static boolean overBlock(Direction enumFacing, BlockPos pos, boolean strict) {
-        return RaytraceUtil2.overBlock(StencilBuffer.getRotation(), Direction.UP, pos, false);
+        return RaytraceUtil2.overBlock(RotationManager.getRotation(), Direction.UP, pos, false);
     }
 
     public static Boolean overBlock(Rotation rotation, BlockPos pos) {

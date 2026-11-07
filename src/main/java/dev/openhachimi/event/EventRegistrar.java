@@ -12,8 +12,8 @@ import dev.openhachimi.modules.NicknameModule;
 import dev.openhachimi.modules.NofovModule;
 import dev.openhachimi.modules.PotionHudModule;
 import dev.openhachimi.modules.ScoreboardhudModule;
-import dev.openhachimi.render.StencilBuffer;
-import dev.openhachimi.utils.ModuleManager;
+import dev.openhachimi.utils.rotation.RotationManager;
+import dev.openhachimi.modules.ModuleManager;
 import dev.openhachimi.config.ConfigLoadManager;
 
 import io.netty.channel.ChannelDuplexHandler;
@@ -441,13 +441,13 @@ public class EventRegistrar {
                 mc.player.setDeltaMovement(this.savedVelocity);
                 this.restoreVelocity = false;
             }
-            StencilBuffer.onPlayerTickStart();
+            RotationManager.onPlayerTickStart();
             ModuleManager.onPlayerTick(event);
             return;
         }
         if (event.phase == TickEvent.Phase.END) {
             lastSprint = mc.player.isSprinting();
-            StencilBuffer.onPlayerTickEnd();
+            RotationManager.onPlayerTickEnd();
             ModuleManager.onPlayerTick(event);
         }
     }
@@ -471,7 +471,7 @@ public class EventRegistrar {
     }
 
     public void onMovementInput(MovementInputUpdateEvent event) {
-        StencilBuffer.fixInput(event.getInput());
+        RotationManager.fixInput(event.getInput());
         ModuleManager.onMovementInput(event.getInput());
         Minecraft mc = Minecraft.getInstance();
         if (mc.player != null && mc.player.isUsingItem() && !mc.player.isPassenger()) {

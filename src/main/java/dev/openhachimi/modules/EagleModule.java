@@ -5,8 +5,7 @@ package dev.openhachimi.modules;
 
 import dev.openhachimi.settings.BooleanSetting;
 import dev.openhachimi.settings.ListSetting;
-import dev.openhachimi.utils.ModuleManager;
-import dev.openhachimi.utils.MemoryHelper;
+import dev.openhachimi.render.BlockCounterDisplay;
 
 import java.util.concurrent.ThreadLocalRandom;
 import net.minecraft.client.Minecraft;
@@ -43,7 +42,7 @@ extends Module {
     private final BooleanSetting ignoreHalfBlocks = new BooleanSetting("Ignore half blocks", true);
     private final BooleanSetting sneakInAir = new BooleanSetting("Sneak in air", true);
     public final BooleanSetting block = new BooleanSetting("Block", false);
-    private final MemoryHelper blockCounterDisplay = new MemoryHelper();
+    private final BlockCounterDisplay blockCounterDisplay = new BlockCounterDisplay();
     private int ticks;
 
     public EagleModule() {

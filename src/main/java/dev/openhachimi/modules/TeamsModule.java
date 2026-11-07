@@ -4,7 +4,6 @@
 package dev.openhachimi.modules;
 
 import dev.openhachimi.settings.ModeSetting;
-import dev.openhachimi.utils.ModuleManager;
 
 import java.util.Objects;
 import net.minecraft.client.Minecraft;

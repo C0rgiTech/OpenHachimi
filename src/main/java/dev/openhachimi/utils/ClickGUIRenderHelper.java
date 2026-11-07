@@ -4,9 +4,11 @@
 package dev.openhachimi.utils;
 
 import dev.openhachimi.config.ConfigLoadManager;
+import dev.openhachimi.hud.DraggedHUDManager;
 import dev.openhachimi.modules.Category;
 import dev.openhachimi.modules.ClickguiModule;
 import dev.openhachimi.modules.Module;
+import dev.openhachimi.modules.ModuleManager;
 import dev.openhachimi.settings.BooleanSetting;
 import dev.openhachimi.settings.ColorSetting;
 import dev.openhachimi.settings.DoubleSetting;
@@ -26,6 +28,7 @@ import java.util.Map;
 import dev.openhachimi.utils.render.RenderUtil;
 import dev.openhachimi.utils.render.font.Font;
 import dev.openhachimi.utils.render.font.FontManager;
+import dev.openhachimi.utils.render.font.Glyph;
 import dev.openhachimi.utils.render.font.TrueTypeFont;
 import dev.openhachimi.utils.render.shader.KawaseBlur;
 import dev.openhachimi.utils.render.shader.RoundRectRender;
@@ -38,7 +41,7 @@ import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
-public class ClickGUI {
+public class ClickGUIRenderHelper {
     private static final byte[] S_BEAB3C7 = new byte[]{10, 35, 33, 42, 43, 47, 43};  // XOR0x42 "Hachimi"
     private static final byte[] S_41B175C = new byte[]{5, 46, 35, 49, 49};  // XOR0x42 "Glass"
     private static final byte[] S_77E0E98D = new byte[]{1, 35, 48, 32, 45, 44};  // XOR0x42 "Carbon"
@@ -69,7 +72,7 @@ public class ClickGUI {
     private static float bodyY1;
     private static float x;
     private static float y;
-    private static final FrameHelper.Draggable TOKEN;
+    private static final DraggedHUDManager.Draggable TOKEN;
     private static boolean dragging;
     private static float dragX;
     private static float dragY;
@@ -109,7 +112,7 @@ public class ClickGUI {
     private static final int[] scissorScratch;
 
     private static float blurLevel() {
-        ClickguiModule module = ClickGUI.clickGuiModule();
+        ClickguiModule module = ClickGUIRenderHelper.clickGuiModule();
         if (module != null) {
             try {
                 return ((Float)module.blur.get()).floatValue();
@@ -122,7 +125,7 @@ public class ClickGUI {
     }
 
     private static float glassOpacity() {
-        ClickguiModule module = ClickGUI.clickGuiModule();
+        ClickguiModule module = ClickGUIRenderHelper.clickGuiModule();
         if (module != null) {
             try {
                 return ((Float)module.opacity.get()).floatValue();
@@ -135,7 +138,7 @@ public class ClickGUI {
     }
 
     private static float glassBrightness() {
-        ClickguiModule module = ClickGUI.clickGuiModule();
+        ClickguiModule module = ClickGUIRenderHelper.clickGuiModule();
         if (module != null) {
             try {
                 return ((Float)module.brightness.get()).floatValue();
@@ -149,10 +152,10 @@ public class ClickGUI {
 
     private static int[] readScissor() {
         if (!GL11.glIsEnabled((int)3089)) {
-            ClickGUI.scissorScratch[0] = 0;
-            ClickGUI.scissorScratch[1] = 0;
-            ClickGUI.scissorScratch[2] = 0;
-            ClickGUI.scissorScratch[3] = 0;
+            ClickGUIRenderHelper.scissorScratch[0] = 0;
+            ClickGUIRenderHelper.scissorScratch[1] = 0;
+            ClickGUIRenderHelper.scissorScratch[2] = 0;
+            ClickGUIRenderHelper.scissorScratch[3] = 0;
             return scissorScratch;
         }
         GL11.glGetIntegerv((int)3088, (int[])scissorScratch);
@@ -183,7 +186,7 @@ public class ClickGUI {
     }
 
     private static int toggleOffColor(float fade) {
-        ClickguiModule module = ClickGUI.clickGuiModule();
+        ClickguiModule module = ClickGUIRenderHelper.clickGuiModule();
         int rgb = 10134445;
         if (module != null) {
             try {
@@ -193,7 +196,7 @@ public class ClickGUI {
                 // empty catch block
             }
         }
-        return ClickGUI.fade(0xFF000000 | rgb & 0xFFFFFF, fade);
+        return ClickGUIRenderHelper.fade(0xFF000000 | rgb & 0xFFFFFF, fade);
     }
 
     private static void restoreScissor(boolean enabled, int[] box) {
@@ -225,12 +228,12 @@ public class ClickGUI {
     }
 
     private static float settingHeight(Setting<?> v, float colWidth) {
-        boolean twoLines = ClickGUI.usesTwoLines(v, colWidth);
-        if (ClickGUI.isSlider(v)) {
-            return twoLines ? ClickGUI.fontPixel() * 2.0f + 15.0f : 22.0f;
+        boolean twoLines = ClickGUIRenderHelper.usesTwoLines(v, colWidth);
+        if (ClickGUIRenderHelper.isSlider(v)) {
+            return twoLines ? ClickGUIRenderHelper.fontPixel() * 2.0f + 15.0f : 22.0f;
         }
         if (v instanceof DoubleSetting) {
-            return ClickGUI.fontPixel() + 12.0f;
+            return ClickGUIRenderHelper.fontPixel() + 12.0f;
         }
         return twoLines ? 32.0f : 20.0f;
     }
@@ -239,15 +242,15 @@ public class ClickGUI {
         float h = 35.0f;
         for (Setting<?> v : m.values) {
             if (!v.isVisible()) continue;
-            h += ClickGUI.settingHeight(v, colWidth);
+            h += ClickGUIRenderHelper.settingHeight(v, colWidth);
         }
         return h + 8.0f;
     }
 
     private static float sliderTrackWidth(Group group, String display, boolean twoLines) {
-        float reserved = Math.max(ClickGUI.sliderValueWidth(display), 26.0f);
+        float reserved = Math.max(ClickGUIRenderHelper.sliderValueWidth(display), 26.0f);
         float end = group.x + group.w - reserved - 10.0f;
-        return Math.max(16.0f, end - ClickGUI.sliderTrackStart(group, twoLines));
+        return Math.max(16.0f, end - ClickGUIRenderHelper.sliderTrackStart(group, twoLines));
     }
 
     private static float sliderTrackStart(Group group, boolean twoLines) {
@@ -255,14 +258,14 @@ public class ClickGUI {
     }
 
     private static float sliderTrackY(float rowY, float rowHeight, boolean twoLines) {
-        return twoLines ? rowY + ClickGUI.fontPixel() * 2.0f + 5.0f : rowY + (rowHeight - 3.0f) / 2.0f;
+        return twoLines ? rowY + ClickGUIRenderHelper.fontPixel() * 2.0f + 5.0f : rowY + (rowHeight - 3.0f) / 2.0f;
     }
 
     private static List<Group> layoutGroups(float contentX, float contentTop, float colWidth, float gap) {
         ArrayList<Group> groups = new ArrayList<Group>();
         float[] columnY = new float[]{0.0f, 0.0f};
-        for (Module m : ClickGUI.visibleModules()) {
-            float gh = ClickGUI.groupHeight(m, colWidth);
+        for (Module m : ClickGUIRenderHelper.visibleModules()) {
+            float gh = ClickGUIRenderHelper.groupHeight(m, colWidth);
             int col = columnY[0] <= columnY[1] ? 0 : 1;
             groups.add(new Group(m, contentX + (float)col * (colWidth + gap), contentTop + columnY[col], colWidth, gh));
             int n = col;
@@ -295,17 +298,17 @@ public class ClickGUI {
 
     private static void graphicsShell(GuiGraphics g, Palette p, float radius) {
         g.flush();
-        if (ClickGUI.liquidGlass()) {
-            KawaseBlur.prepare(ClickGUI.blurLevel());
-            glassReady = KawaseBlur.panel(g.pose().last().pose(), x, y, width, height, radius, ClickGUI.rgba(0, 0xFFFFFF), anim, ClickGUI.glassOpacity(), ClickGUI.glassBrightness());
+        if (ClickGUIRenderHelper.liquidGlass()) {
+            KawaseBlur.prepare(ClickGUIRenderHelper.blurLevel());
+            glassReady = KawaseBlur.panel(g.pose().last().pose(), x, y, width, height, radius, ClickGUIRenderHelper.rgba(0, 0xFFFFFF), anim, ClickGUIRenderHelper.glassOpacity(), ClickGUIRenderHelper.glassBrightness());
         } else {
             glassReady = false;
         }
         if (!glassReady) {
-            RenderUtil.drawRoundedRect(g, x, y, width, height, radius, ClickGUI.fade(p.shell, anim));
-            Shader.corners(g.pose().last().pose(), x, y, railWidth, height, radius, 0.0f, 0.0f, radius, ClickGUI.fade(p.rail, anim));
+            RenderUtil.drawRoundedRect(g, x, y, width, height, radius, ClickGUIRenderHelper.fade(p.shell, anim));
+            Shader.corners(g.pose().last().pose(), x, y, railWidth, height, radius, 0.0f, 0.0f, radius, ClickGUIRenderHelper.fade(p.rail, anim));
         }
-        RenderUtil.drawRect(g, x + railWidth, y + 1.0f, 1.0f, height - 2.0f, ClickGUI.fade(p.hairline, anim));
+        RenderUtil.drawRect(g, x + railWidth, y + 1.0f, 1.0f, height - 2.0f, ClickGUIRenderHelper.fade(p.hairline, anim));
     }
 
     private static boolean isCtrlDown() {
@@ -320,13 +323,13 @@ public class ClickGUI {
     }
 
     private static boolean liquidGlass() {
-        return "Glass".equals(ClickGUI.themeName()) && KawaseBlur.isAvailable();
+        return "Glass".equals(ClickGUIRenderHelper.themeName()) && KawaseBlur.isAvailable();
     }
 
     public static void commitEdit() {
         Setting<?> p = editingValue;
         if (p instanceof IntSetting) {
-            ClickGUI.finishEdit();
+            ClickGUIRenderHelper.finishEdit();
             return;
         }
         String raw = editBuffer == null ? "" : editBuffer.trim().replace(',', '.');
@@ -354,7 +357,7 @@ public class ClickGUI {
     }
 
     static boolean glassActive() {
-        return ClickGUI.liquidGlass() && KawaseBlur.isReady();
+        return ClickGUIRenderHelper.liquidGlass() && KawaseBlur.isReady();
     }
 
     private static String categoryDisplay(Category cat) {
@@ -363,20 +366,20 @@ public class ClickGUI {
     }
 
     private static boolean glassControl(GuiGraphics g, float cx, float cy, float cw, float ch, float cr, float fade, int tint) {
-        if (!ClickGUI.liquidGlass()) {
+        if (!ClickGUIRenderHelper.liquidGlass()) {
             return false;
         }
         g.flush();
         boolean previous = GL11.glIsEnabled((int)3089);
-        int[] saved = ClickGUI.readScissor();
-        boolean visible = ClickGUI.clipToBody(cx, cy, cw, ch);
-        boolean drawn = visible && KawaseBlur.control(g.pose().last().pose(), cx, cy, cw, ch, cr, tint, fade, fade, ClickGUI.glassBrightness());
-        ClickGUI.restoreScissor(previous, saved);
+        int[] saved = ClickGUIRenderHelper.readScissor();
+        boolean visible = ClickGUIRenderHelper.clipToBody(cx, cy, cw, ch);
+        boolean drawn = visible && KawaseBlur.control(g.pose().last().pose(), cx, cy, cw, ch, cr, tint, fade, fade, ClickGUIRenderHelper.glassBrightness());
+        ClickGUIRenderHelper.restoreScissor(previous, saved);
         return drawn;
     }
 
     private static int pillTint(int alpha, int baseTint) {
-        ClickguiModule module = ClickGUI.clickGuiModule();
+        ClickguiModule module = ClickGUIRenderHelper.clickGuiModule();
         if (module == null) {
             return alpha << 24 | baseTint & 0xFFFFFF;
         }
@@ -396,7 +399,7 @@ public class ClickGUI {
     }
 
     private static int pillTint(int alpha) {
-        ClickguiModule module = ClickGUI.clickGuiModule();
+        ClickguiModule module = ClickGUIRenderHelper.clickGuiModule();
         if (module == null) {
             return alpha << 24 | 0xFFFFFF;
         }
@@ -416,7 +419,7 @@ public class ClickGUI {
     private static int pillFallback(int base, int alpha) {
         int rgb;
         float mul;
-        ClickguiModule module = ClickGUI.clickGuiModule();
+        ClickguiModule module = ClickGUIRenderHelper.clickGuiModule();
         if (module == null) {
             return base;
         }
@@ -440,14 +443,14 @@ public class ClickGUI {
     static {
         x = 100.0f;
         y = 100.0f;
-        TOKEN = new FrameHelper.Draggable(){};
+        TOKEN = new DraggedHUDManager.Draggable(){};
         dragging = false;
         THEMES = new String[]{"Midnight", "Glass", "Carbon", "Sakura", "Classic"};
-        MIDNIGHT = ClickGUI.midnightPalette();
-        GLASS = ClickGUI.glassPalette();
-        CARBON = ClickGUI.carbonPalette();
-        SAKURA = ClickGUI.sakuraPalette();
-        CLASSIC = ClickGUI.classicPalette();
+        MIDNIGHT = ClickGUIRenderHelper.midnightPalette();
+        GLASS = ClickGUIRenderHelper.glassPalette();
+        CARBON = ClickGUIRenderHelper.carbonPalette();
+        SAKURA = ClickGUIRenderHelper.sakuraPalette();
+        CLASSIC = ClickGUIRenderHelper.classicPalette();
         FALLBACK_SEEN = new HashSet();
         editingValue = null;
         bindingValue = null;
@@ -470,7 +473,7 @@ public class ClickGUI {
     }
 
     private static Palette make(int accent, int shell, int rail, int rowHover, int inset, int track, int label, int text, int value, int placeholder, float radius) {
-        return ClickGUI.make(accent, shell, rail, rowHover, inset, track, label, text, value, placeholder, radius, -592135, -526342, ClickGUI.rgba(16, 0xFFFFFF));
+        return ClickGUIRenderHelper.make(accent, shell, rail, rowHover, inset, track, label, text, value, placeholder, radius, -592135, -526342, ClickGUIRenderHelper.rgba(16, 0xFFFFFF));
     }
 
     private static Palette make(int accent, int shell, int rail, int rowHover, int inset, int track, int label, int text, int value, int placeholder, float radius, int title, int knob, int hairline) {
@@ -479,10 +482,10 @@ public class ClickGUI {
         p.rail = rail;
         p.rowHover = rowHover;
         p.inset = inset;
-        p.chip = ClickGUI.rgba(30, accent & 0xFFFFFF);
+        p.chip = ClickGUIRenderHelper.rgba(30, accent & 0xFFFFFF);
         p.accent = accent;
-        p.accentSoft = ClickGUI.rgba(34, accent & 0xFFFFFF);
-        p.toggleOff = ClickGUI.rgba(160, 0x1B222B);
+        p.accentSoft = ClickGUIRenderHelper.rgba(34, accent & 0xFFFFFF);
+        p.toggleOff = ClickGUIRenderHelper.rgba(160, 0x1B222B);
         p.knob = knob;
         p.track = track;
         p.hairline = hairline;
@@ -521,30 +524,30 @@ public class ClickGUI {
         if (font == null || !FontManager.usable()) {
             float vanillaScale = scale * 1.35f;
             g.pose().pushPose();
-            g.pose().translate(ClickGUI.snap(x), ClickGUI.snap(y), 0.0f);
+            g.pose().translate(ClickGUIRenderHelper.snap(x), ClickGUIRenderHelper.snap(y), 0.0f);
             g.pose().scale(vanillaScale, vanillaScale, 1.0f);
             g.drawString(Minecraft.getInstance().font, value, 0, 0, color, false);
             g.pose().popPose();
             return;
         }
-        float gs = ClickGUI.guiScale();
+        float gs = ClickGUIRenderHelper.guiScale();
         float target = (float)font.getHeight() * scale * gs;
-        int devicePx = ClickGUI.snapDevicePx(target);
+        int devicePx = ClickGUIRenderHelper.snapDevicePx(target);
         boolean textFont = font.getFont() != null && font.getFont().getFrom() < 4096;
         Font containerManager = exact = textFont ? FontManager.fontFor(devicePx) : null;
         if (exact != null) {
             float s = target / ((float)devicePx * gs);
             g.pose().pushPose();
-            g.pose().translate(ClickGUI.snap(x), ClickGUI.snap(y), 0.0f);
+            g.pose().translate(ClickGUIRenderHelper.snap(x), ClickGUIRenderHelper.snap(y), 0.0f);
             g.pose().scale(s, s, 1.0f);
             exact.drawString(g, value, 0.0, 0.0, color, false);
             g.flush();
             g.pose().popPose();
             return;
         }
-        ClickGUI.noteFallback(devicePx, textFont);
+        ClickGUIRenderHelper.noteFallback(devicePx, textFont);
         g.pose().pushPose();
-        g.pose().translate(ClickGUI.snap(x), ClickGUI.snap(y), 0.0f);
+        g.pose().translate(ClickGUIRenderHelper.snap(x), ClickGUIRenderHelper.snap(y), 0.0f);
         g.pose().scale(scale, scale, 1.0f);
         font.drawString(g, value, 0.0, 0.0, color, false);
         g.flush();
@@ -566,11 +569,11 @@ public class ClickGUI {
     }
 
     private static ClickguiModule guiModule() {
-        return ClickGUI.clickGuiModule();
+        return ClickGUIRenderHelper.clickGuiModule();
     }
 
     private static Palette carbonPalette() {
-        return ClickGUI.make(-19641, -435089135, -1944841196, 0x1E1B1B1B, -938010857, -13619152, -7960954, -1315861, -19641, -10329502, 9.0f);
+        return ClickGUIRenderHelper.make(-19641, -435089135, -1944841196, 0x1E1B1B1B, -938010857, -13619152, -7960954, -1315861, -19641, -10329502, 9.0f);
     }
 
     private static float settingFloat(NumberSetting setting, float fallback) {
@@ -605,36 +608,36 @@ public class ClickGUI {
         int g = base >> 8 & 0xFF;
         int b = base & 0xFF;
         int luma = (r * 299 + g * 587 + b * 114) / 1000;
-        int tint = luma > 140 ? ClickGUI.rgba(a, 14212580) : ClickGUI.rgba(a, 2764598);
+        int tint = luma > 140 ? ClickGUIRenderHelper.rgba(a, 14212580) : ClickGUIRenderHelper.rgba(a, 2764598);
         return tint;
     }
 
     private static float logoBackBrightness() {
-        ClickguiModule module = ClickGUI.guiModule();
-        return module == null ? 1.0f : ClickGUI.settingFloat(module.logoBackBrightness, 1.0f);
+        ClickguiModule module = ClickGUIRenderHelper.guiModule();
+        return module == null ? 1.0f : ClickGUIRenderHelper.settingFloat(module.logoBackBrightness, 1.0f);
     }
 
     private static float categoryBrightness() {
-        ClickguiModule module = ClickGUI.guiModule();
-        return module == null ? 1.0f : ClickGUI.settingFloat(module.categoryBrightness, 1.0f);
+        ClickguiModule module = ClickGUIRenderHelper.guiModule();
+        return module == null ? 1.0f : ClickGUIRenderHelper.settingFloat(module.categoryBrightness, 1.0f);
     }
 
     private static float chipBrightness() {
-        ClickguiModule module = ClickGUI.guiModule();
-        return module == null ? 1.0f : ClickGUI.settingFloat(module.pillBrightness, 1.0f);
+        ClickguiModule module = ClickGUIRenderHelper.guiModule();
+        return module == null ? 1.0f : ClickGUIRenderHelper.settingFloat(module.pillBrightness, 1.0f);
     }
 
     private static Palette glassPalette() {
-        return ClickGUI.make(-14983522, -219155208, -1337306527, 709513825, -420219143, -7826527, -14998996, -16118252, -15459806, -10590092, 11.0f, -16447476, -1, 0x22FFFFFF);
+        return ClickGUIRenderHelper.make(-14983522, -219155208, -1337306527, 709513825, -420219143, -7826527, -14998996, -16118252, -15459806, -10590092, 11.0f, -16447476, -1, 0x22FFFFFF);
     }
 
     private static Palette classicPalette() {
-        return ClickGUI.make(-12743681, -435023338, -1944841191, 505092897, -938010852, -13816523, -8487287, -1907990, -12743681, -10987422, 9.0f);
+        return ClickGUIRenderHelper.make(-12743681, -435023338, -1944841191, 505092897, -938010852, -13816523, -8487287, -1907990, -12743681, -10987422, 9.0f);
     }
 
     private static float logoBrightness() {
-        ClickguiModule module = ClickGUI.guiModule();
-        return module == null ? 1.0f : ClickGUI.settingFloat(module.logoBrightness, 1.0f);
+        ClickguiModule module = ClickGUIRenderHelper.guiModule();
+        return module == null ? 1.0f : ClickGUIRenderHelper.settingFloat(module.logoBrightness, 1.0f);
     }
 
     private static int scaleTint(int color, float factor) {
@@ -662,7 +665,7 @@ public class ClickGUI {
     }
 
     private static String themeName() {
-        ClickguiModule module = ClickGUI.clickGuiModule();
+        ClickguiModule module = ClickGUIRenderHelper.clickGuiModule();
         if (module != null) {
             try {
                 return module.theme.getDisplay();
@@ -675,7 +678,7 @@ public class ClickGUI {
     }
 
     private static Palette sakuraPalette() {
-        return ClickGUI.make(-25916, -434761190, -1944513505, 505420328, -937749213, -13095870, -7043940, -858896, -25916, -9675146, 11.0f);
+        return ClickGUIRenderHelper.make(-25916, -434761190, -1944513505, 505420328, -937749213, -13095870, -7043940, -858896, -25916, -9675146, 11.0f);
     }
 
     public static int brighten(int color, float factor) {
@@ -710,9 +713,9 @@ public class ClickGUI {
         if (font == null || value == null) {
             return 0.0f;
         }
-        float gs = ClickGUI.guiScale();
+        float gs = ClickGUIRenderHelper.guiScale();
         float target = (float)font.getHeight() * scale * gs;
-        int devicePx = ClickGUI.snapDevicePx(target);
+        int devicePx = ClickGUIRenderHelper.snapDevicePx(target);
         boolean textFont = font.getFont() != null && font.getFont().getFrom() < 4096;
         Font containerManager = exact = textFont ? FontManager.fontFor(devicePx) : null;
         if (exact != null) {
@@ -736,20 +739,20 @@ public class ClickGUI {
         }
         boolean bl = vanilla = ModuleManager.getModule(ClickguiModule.class) != null && ModuleManager.getModule(ClickguiModule.class).fontMode.isMode("Vanilla");
         if (vanilla) {
-            ClickGUI.text(g, font, value, centerX - ClickGUI.textWidth(font, value, scale) / 2.0f, centerY - ClickGUI.fontPixel() * scale / 2.0f, color, scale);
+            ClickGUIRenderHelper.text(g, font, value, centerX - ClickGUIRenderHelper.textWidth(font, value, scale) / 2.0f, centerY - ClickGUIRenderHelper.fontPixel() * scale / 2.0f, color, scale);
             return;
         }
         TrueTypeFont core = font.getFont();
-        KinematicManager[] data = core.getCharData();
+        Glyph[] data = core.getCharData();
         int index = value.charAt(0) - core.getFrom();
         if (data == null || index < 0 || index >= data.length || data[index] == null) {
-            ClickGUI.text(g, font, value, centerX - ClickGUI.textWidth(font, value, scale) / 2.0f, centerY - (float)font.getHeight() * scale / 2.0f, color, scale);
+            ClickGUIRenderHelper.text(g, font, value, centerX - ClickGUIRenderHelper.textWidth(font, value, scale) / 2.0f, centerY - (float)font.getHeight() * scale / 2.0f, color, scale);
             return;
         }
-        KinematicManager metrics = data[index];
+        Glyph metrics = data[index];
         float inkCenterX = (metrics.x0 + metrics.x1) * 0.5f;
         float inkCenterY = core.getAscent() * core.getScale() + (metrics.y0 + metrics.y1) * 0.5f;
-        ClickGUI.text(g, font, value, centerX - inkCenterX * scale, centerY - inkCenterY * scale, color, scale);
+        ClickGUIRenderHelper.text(g, font, value, centerX - inkCenterX * scale, centerY - inkCenterY * scale, color, scale);
     }
 
     private static float fontPixel() {
@@ -761,14 +764,14 @@ public class ClickGUI {
     }
 
     private static float labelLimit(Setting<?> v, float colWidth) {
-        return ClickGUI.isSlider(v) ? colWidth * 0.42f - 8.0f : colWidth - 78.0f;
+        return ClickGUIRenderHelper.isSlider(v) ? colWidth * 0.42f - 8.0f : colWidth - 78.0f;
     }
 
     private static boolean usesTwoLines(Setting<?> v, float colWidth) {
         if (v instanceof DoubleSetting) {
             return false;
         }
-        return FontManager.smallFont != null && ClickGUI.textWidth(FontManager.smallFont, v.name, 0.78f) > ClickGUI.labelLimit(v, colWidth);
+        return FontManager.smallFont != null && ClickGUIRenderHelper.textWidth(FontManager.smallFont, v.name, 0.78f) > ClickGUIRenderHelper.labelLimit(v, colWidth);
     }
 
     private static List<Module> visibleModules() {
@@ -781,11 +784,11 @@ public class ClickGUI {
     }
 
     private static float sliderValueWidth(String display) {
-        return ClickGUI.textWidth(FontManager.smallFont, display, 0.7f);
+        return ClickGUIRenderHelper.textWidth(FontManager.smallFont, display, 0.7f);
     }
 
     private static Palette midnightPalette() {
-        return ClickGUI.make(-7561729, -435154923, -1944972776, 505553452, -938076644, -13421762, -7039840, -1184270, -7561729, -10461074, 11.0f);
+        return ClickGUIRenderHelper.make(-7561729, -435154923, -1944972776, 505553452, -938076644, -13421762, -7039840, -1184270, -7561729, -10461074, 11.0f);
     }
 
     private static int rgba(int alpha, int rgb) {
@@ -826,7 +829,7 @@ public class ClickGUI {
     }
 
     private static Palette palette() {
-        String name = ClickGUI.themeName();
+        String name = ClickGUIRenderHelper.themeName();
         if (name == null) {
             return MIDNIGHT;
         }
@@ -846,15 +849,15 @@ public class ClickGUI {
     }
 
     private static boolean glassControlInHeader(GuiGraphics g, float cx, float cy, float cw, float ch, float cr, float fade, int tint) {
-        if (!ClickGUI.liquidGlass()) {
+        if (!ClickGUIRenderHelper.liquidGlass()) {
             return false;
         }
         g.flush();
         boolean previous = GL11.glIsEnabled((int)3089);
-        int[] saved = ClickGUI.readScissor();
-        boolean visible = ClickGUI.clipToPanel(cx, cy, cw, ch);
-        boolean drawn = visible && KawaseBlur.control(g.pose().last().pose(), cx, cy, cw, ch, cr, tint, fade, fade, ClickGUI.glassBrightness());
-        ClickGUI.restoreScissor(previous, saved);
+        int[] saved = ClickGUIRenderHelper.readScissor();
+        boolean visible = ClickGUIRenderHelper.clipToPanel(cx, cy, cw, ch);
+        boolean drawn = visible && KawaseBlur.control(g.pose().last().pose(), cx, cy, cw, ch, cr, tint, fade, fade, ClickGUIRenderHelper.glassBrightness());
+        ClickGUIRenderHelper.restoreScissor(previous, saved);
         return drawn;
     }
 
@@ -873,8 +876,8 @@ public class ClickGUI {
             return false;
         }
         bindingValue = null;
-        if (editingValue != null && !ClickGUI.overEditField(mx, my)) {
-            ClickGUI.finishEdit();
+        if (editingValue != null && !ClickGUIRenderHelper.overEditField(mx, my)) {
+            ClickGUIRenderHelper.finishEdit();
         }
         if (button == 0) {
             float searchIconX = x + width - 30.0f;
@@ -890,14 +893,14 @@ public class ClickGUI {
                 float fieldX = x + width - 14.0f - fieldW;
                 int clickedField = RenderUtil.isHovering(fieldX, y + 8.0f, fieldW, 26.0f, mx, my) ? 1 : 0;
                 isSearching = clickedField != 0;
-                if (ClickGUI.clickedSearchIconZone(mx, my) || clickedField != 0) {
+                if (ClickGUIRenderHelper.clickedSearchIconZone(mx, my) || clickedField != 0) {
                     return true;
                 }
             }
             if (RenderUtil.isHovering(x, y, width, 52.0f, mx, my)) {
-                FrameHelper.offer(TOKEN, x, y, width, 52.0f, 100);
-                FrameHelper.updateMouse(mx, my, true);
-                FrameHelper.commitForFrame();
+                DraggedHUDManager.offer(TOKEN, x, y, width, 52.0f, 100);
+                DraggedHUDManager.updateMouse(mx, my, true);
+                DraggedHUDManager.commitForFrame();
                 dragging = true;
                 dragX = (float)mx - x;
                 dragY = (float)my - y;
@@ -915,7 +918,7 @@ public class ClickGUI {
             }
             float contentX = x + railWidth + 14.0f;
             float colW = (width - railWidth - 42.0f) / 2.0f;
-            List<Group> groups = ClickGUI.layoutGroups(contentX, y + 66.0f + scrollY, colW, 14.0f);
+            List<Group> groups = ClickGUIRenderHelper.layoutGroups(contentX, y + 66.0f + scrollY, colW, 14.0f);
             for (Group group : groups) {
                 float rowY = group.y + 15.0f;
                 if (RenderUtil.isHovering(group.x, rowY, group.w, 20.0f, mx, my)) {
@@ -931,11 +934,11 @@ public class ClickGUI {
                 rowY += 20.0f;
                 for (Setting<?> v : group.module.values) {
                     if (!v.isVisible()) continue;
-                    float sHeight = ClickGUI.settingHeight(v, group.w);
-                    boolean twoLines = ClickGUI.usesTwoLines(v, group.w);
+                    float sHeight = ClickGUIRenderHelper.settingHeight(v, group.w);
+                    boolean twoLines = ClickGUIRenderHelper.usesTwoLines(v, group.w);
                     if (v instanceof BooleanSetting) {
                         float toggleX = group.x + group.w - 22.0f;
-                        float toggleY = rowY + (twoLines ? ClickGUI.fontPixel() + 3.0f : (sHeight - 11.0f) / 2.0f);
+                        float toggleY = rowY + (twoLines ? ClickGUIRenderHelper.fontPixel() + 3.0f : (sHeight - 11.0f) / 2.0f);
                         if (RenderUtil.isHovering(toggleX - 4.0f, rowY, 26.0f, sHeight, mx, my)) {
                             v.click(mx, my, (int)group.x, (int)group.w);
                             return true;
@@ -946,7 +949,7 @@ public class ClickGUI {
                             editingValue = v;
                             editBuffer = ((IntSetting)v).getDisplay();
                             editSelectAll = false;
-                            ClickGUI.rememberEditField(group.x + group.w - fieldW, rowY, fieldW, sHeight);
+                            ClickGUIRenderHelper.rememberEditField(group.x + group.w - fieldW, rowY, fieldW, sHeight);
                             return true;
                         }
                     } else if (v instanceof DoubleSetting) {
@@ -957,22 +960,22 @@ public class ClickGUI {
                     } else if (v instanceof ColorSetting) {
                         float dot;
                         String display = ((ColorSetting)v).getDisplay();
-                        strW = ClickGUI.textWidth(FontManager.smallFont, display, 0.78f);
-                        float chipW = Math.min(strW + (dot = ClickGUI.fontPixel()) + 18.0f, group.w);
+                        strW = ClickGUIRenderHelper.textWidth(FontManager.smallFont, display, 0.78f);
+                        float chipW = Math.min(strW + (dot = ClickGUIRenderHelper.fontPixel()) + 18.0f, group.w);
                         if (RenderUtil.isHovering(group.x + group.w - chipW, rowY, chipW, sHeight, mx, my)) {
                             v.click(mx, my, (int)group.x, (int)group.w);
                             return true;
                         }
                     } else if (v instanceof ModeSetting) {
                         String display = ((ModeSetting)v).getDisplay();
-                        strW = ClickGUI.textWidth(FontManager.smallFont, display, 0.78f);
+                        strW = ClickGUIRenderHelper.textWidth(FontManager.smallFont, display, 0.78f);
                         if (RenderUtil.isHovering(group.x + group.w - strW - 10.0f, rowY, strW + 14.0f, sHeight, mx, my)) {
                             v.click(mx, my, (int)group.x, (int)group.w);
                             return true;
                         }
                     } else if (v instanceof EnumSetting) {
                         String display = ((EnumSetting)v).getDisplay();
-                        strW = ClickGUI.textWidth(FontManager.smallFont, display, 0.78f);
+                        strW = ClickGUIRenderHelper.textWidth(FontManager.smallFont, display, 0.78f);
                         float chipW = Math.min(strW + 10.0f, group.w);
                         if (RenderUtil.isHovering(group.x + group.w - chipW, rowY, chipW, sHeight, mx, my)) {
                             bindingValue = v;
@@ -980,10 +983,10 @@ public class ClickGUI {
                         }
                     } else if (v instanceof NumberSetting || v instanceof ListSetting) {
                         String display = v instanceof NumberSetting ? ((NumberSetting)v).getDisplay() : ((ListSetting)v).getDisplay();
-                        strW = ClickGUI.sliderValueWidth(display);
-                        float trackX = ClickGUI.sliderTrackStart(group, twoLines);
-                        float trackW = ClickGUI.sliderTrackWidth(group, display, twoLines);
-                        float trackY = ClickGUI.sliderTrackY(rowY, sHeight, twoLines);
+                        strW = ClickGUIRenderHelper.sliderValueWidth(display);
+                        float trackX = ClickGUIRenderHelper.sliderTrackStart(group, twoLines);
+                        float trackW = ClickGUIRenderHelper.sliderTrackWidth(group, display, twoLines);
+                        float trackY = ClickGUIRenderHelper.sliderTrackY(rowY, sHeight, twoLines);
                         if ((float)mx >= group.x + group.w - strW - 8.0f && (float)mx <= group.x + group.w && (float)my >= rowY && (float)my <= rowY + sHeight) {
                             editingValue = v;
                             editBuffer = display;
@@ -1030,7 +1033,7 @@ public class ClickGUI {
             }
             return;
         }
-        ClickGUI.commitEdit();
+        ClickGUIRenderHelper.commitEdit();
     }
 
     public static void handleScroll(double d, int mx, int my) {
@@ -1050,7 +1053,7 @@ public class ClickGUI {
                     }
                     if (editBuffer.length() < sv.maxLength) {
                         editBuffer = editBuffer + codePoint;
-                        ClickGUI.applyEdit();
+                        ClickGUIRenderHelper.applyEdit();
                     }
                 }
                 return true;
@@ -1068,11 +1071,11 @@ public class ClickGUI {
     }
 
     private static void toggle(GuiGraphics g, float tx, float ty, float alphaMul, float onOffset, float onAlpha, Palette p) {
-        RenderUtil.drawRoundedRect(g, tx, ty, 20.0f, 11.0f, 5.5f, ClickGUI.toggleOffColor(alphaMul));
+        RenderUtil.drawRoundedRect(g, tx, ty, 20.0f, 11.0f, 5.5f, ClickGUIRenderHelper.toggleOffColor(alphaMul));
         if (onAlpha > 0.01f) {
-            RenderUtil.drawRoundedRect(g, tx, ty, 20.0f, 11.0f, 5.5f, ClickGUI.fade(p.accent, alphaMul * onAlpha));
+            RenderUtil.drawRoundedRect(g, tx, ty, 20.0f, 11.0f, 5.5f, ClickGUIRenderHelper.fade(p.accent, alphaMul * onAlpha));
         }
-        RenderUtil.drawRoundedRect(g, ClickGUI.snap(tx + onOffset * 0.75f), ClickGUI.snap(ty + 1.0f), 9.0f, 9.0f, 4.5f, ClickGUI.fade(p.knob, alphaMul));
+        RenderUtil.drawRoundedRect(g, ClickGUIRenderHelper.snap(tx + onOffset * 0.75f), ClickGUIRenderHelper.snap(ty + 1.0f), 9.0f, 9.0f, 4.5f, ClickGUIRenderHelper.fade(p.knob, alphaMul));
     }
 
     public static void onRender2D(GuiGraphics g, int mx, int my) {
@@ -1095,40 +1098,40 @@ public class ClickGUI {
             }
         }
         scrollY = RenderUtil.animateSmooth(scrollY, targetScrollY, 15.0f);
-        Palette p = ClickGUI.palette();
+        Palette p = ClickGUIRenderHelper.palette();
         float radius = p.radius;
         bodyX0 = x + railWidth + 1.0f;
         bodyY0 = y + 62.0f;
         bodyX1 = x + width - 1.0f;
         bodyY1 = y + height - 2.0f;
-        ClickGUI.graphicsShell(g, p, radius);
-        int badge = ClickGUI.scaleTint(ClickGUI.chromeTint(p), ClickGUI.logoBackBrightness());
-        if (ClickGUI.liquidGlass()) {
-            if (!ClickGUI.glassActive() || !ClickGUI.glassControl(g, x + 14.0f, y + 12.0f, 24.0f, 24.0f, 12.0f, anim, ClickGUI.pillTint(96))) {
-                RenderUtil.drawRoundedRect(g, x + 14.0f, y + 12.0f, 24.0f, 24.0f, 12.0f, ClickGUI.fade(badge, anim));
+        ClickGUIRenderHelper.graphicsShell(g, p, radius);
+        int badge = ClickGUIRenderHelper.scaleTint(ClickGUIRenderHelper.chromeTint(p), ClickGUIRenderHelper.logoBackBrightness());
+        if (ClickGUIRenderHelper.liquidGlass()) {
+            if (!ClickGUIRenderHelper.glassActive() || !ClickGUIRenderHelper.glassControl(g, x + 14.0f, y + 12.0f, 24.0f, 24.0f, 12.0f, anim, ClickGUIRenderHelper.pillTint(96))) {
+                RenderUtil.drawRoundedRect(g, x + 14.0f, y + 12.0f, 24.0f, 24.0f, 12.0f, ClickGUIRenderHelper.fade(badge, anim));
             }
         } else {
-            RenderUtil.drawRoundedRect(g, x + 14.0f, y + 12.0f, 24.0f, 24.0f, 12.0f, ClickGUI.fade(badge, anim));
+            RenderUtil.drawRoundedRect(g, x + 14.0f, y + 12.0f, 24.0f, 24.0f, 12.0f, ClickGUIRenderHelper.fade(badge, anim));
         }
-        ClickGUI.glyphCentered(g, FontManager.smallFont, "H", x + 26.0f, y + 24.0f, ClickGUI.fade(ClickGUI.scaleTint(p.title, ClickGUI.logoBrightness()), anim), 0.9f);
-        ClickGUI.text(g, FontManager.regular, "Hachimi", x + 46.0f, y + 10.0f, ClickGUI.fade(p.title, anim), 0.82f);
-        ClickGUI.text(g, FontManager.smallFont, "Minecraft", x + 46.0f, y + 31.0f, ClickGUI.fade(p.label, anim), 0.6f);
+        ClickGUIRenderHelper.glyphCentered(g, FontManager.smallFont, "H", x + 26.0f, y + 24.0f, ClickGUIRenderHelper.fade(ClickGUIRenderHelper.scaleTint(p.title, ClickGUIRenderHelper.logoBrightness()), anim), 0.9f);
+        ClickGUIRenderHelper.text(g, FontManager.regular, "Hachimi", x + 46.0f, y + 10.0f, ClickGUIRenderHelper.fade(p.title, anim), 0.82f);
+        ClickGUIRenderHelper.text(g, FontManager.smallFont, "Minecraft", x + 46.0f, y + 31.0f, ClickGUIRenderHelper.fade(p.label, anim), 0.6f);
         float searchIconX = x + width - 30.0f;
         int searchColor = isSearching ? p.accent : p.label;
-        ClickGUI.text(g, FontManager.materialIcon20, "", searchIconX, y + 15.0f, ClickGUI.fade(searchColor, anim), 0.85f);
+        ClickGUIRenderHelper.text(g, FontManager.materialIcon20, "", searchIconX, y + 15.0f, ClickGUIRenderHelper.fade(searchColor, anim), 0.85f);
         if (isSearching) {
             float fieldW = 200.0f;
             float fieldX = x + width - 14.0f - fieldW;
-            if (!ClickGUI.glassControlInHeader(g, fieldX, y + 8.0f, fieldW, 26.0f, 13.0f, anim, ClickGUI.pillTint(96))) {
-                RenderUtil.drawRoundedRect(g, fieldX, y + 8.0f, fieldW, 26.0f, 13.0f, ClickGUI.fade(p.inset, anim));
+            if (!ClickGUIRenderHelper.glassControlInHeader(g, fieldX, y + 8.0f, fieldW, 26.0f, 13.0f, anim, ClickGUIRenderHelper.pillTint(96))) {
+                RenderUtil.drawRoundedRect(g, fieldX, y + 8.0f, fieldW, 26.0f, 13.0f, ClickGUIRenderHelper.fade(p.inset, anim));
             }
             String displaySearch = searchText;
             if (System.currentTimeMillis() % 1000L > 500L) {
                 displaySearch = displaySearch + "_";
             }
-            ClickGUI.text(g, FontManager.regular, displaySearch, fieldX + 10.0f, y + 13.0f, ClickGUI.fade(p.value, anim), 0.72f);
+            ClickGUIRenderHelper.text(g, FontManager.regular, displaySearch, fieldX + 10.0f, y + 13.0f, ClickGUIRenderHelper.fade(p.value, anim), 0.72f);
         }
-        ClickGUI.text(g, FontManager.smallFont, "MODULE", x + 14.0f, y + 56.0f, ClickGUI.fade(ClickGUI.mix(p.label, p.label, 0.0f), anim * 0.8f), 0.55f);
+        ClickGUIRenderHelper.text(g, FontManager.smallFont, "MODULE", x + 14.0f, y + 56.0f, ClickGUIRenderHelper.fade(ClickGUIRenderHelper.mix(p.label, p.label, 0.0f), anim * 0.8f), 0.55f);
         float railY = y + 74.0f;
         for (Category cat : Category.values()) {
             boolean selected = cat == currentCategory;
@@ -1141,31 +1144,31 @@ public class ClickGUI {
             float hover = categoryHovers.getOrDefault((Object)cat, Float.valueOf(0.0f)).floatValue();
             hover = RenderUtil.animateSmooth(hover, hoverTarget, 12.0f);
             categoryHovers.put(cat, Float.valueOf(hover));
-            if (ClickGUI.liquidGlass()) {
-                int catGlass = ClickGUI.scaleTint(ClickGUI.chromeTint(p), ClickGUI.categoryBrightness());
-                if ((current > 0.01f || hover > 0.01f) && !ClickGUI.glassControl(g, x + 6.0f, railY, railWidth - 12.0f, 22.0f, 7.0f, Math.max(current, hover) * anim, ClickGUI.pillTint(110, catGlass))) {
-                    RenderUtil.drawRoundedRect(g, x + 6.0f, railY, railWidth - 12.0f, 22.0f, 7.0f, ClickGUI.fade(catGlass, Math.max(current, hover) * anim));
+            if (ClickGUIRenderHelper.liquidGlass()) {
+                int catGlass = ClickGUIRenderHelper.scaleTint(ClickGUIRenderHelper.chromeTint(p), ClickGUIRenderHelper.categoryBrightness());
+                if ((current > 0.01f || hover > 0.01f) && !ClickGUIRenderHelper.glassControl(g, x + 6.0f, railY, railWidth - 12.0f, 22.0f, 7.0f, Math.max(current, hover) * anim, ClickGUIRenderHelper.pillTint(110, catGlass))) {
+                    RenderUtil.drawRoundedRect(g, x + 6.0f, railY, railWidth - 12.0f, 22.0f, 7.0f, ClickGUIRenderHelper.fade(catGlass, Math.max(current, hover) * anim));
                 }
                 if (current > 0.01f) {
-                    RenderUtil.drawRoundedRect(g, x + 6.0f, railY + 4.0f, 2.0f, 14.0f, 1.0f, ClickGUI.fade(p.accent, current * anim));
+                    RenderUtil.drawRoundedRect(g, x + 6.0f, railY + 4.0f, 2.0f, 14.0f, 1.0f, ClickGUIRenderHelper.fade(p.accent, current * anim));
                 }
             } else {
-                int catTint = ClickGUI.scaleTint(ClickGUI.chromeTint(p), ClickGUI.categoryBrightness());
+                int catTint = ClickGUIRenderHelper.scaleTint(ClickGUIRenderHelper.chromeTint(p), ClickGUIRenderHelper.categoryBrightness());
                 if (current > 0.01f) {
-                    RenderUtil.drawRoundedRect(g, x + 6.0f, railY, railWidth - 12.0f, 22.0f, 7.0f, ClickGUI.fade(catTint, current * anim));
+                    RenderUtil.drawRoundedRect(g, x + 6.0f, railY, railWidth - 12.0f, 22.0f, 7.0f, ClickGUIRenderHelper.fade(catTint, current * anim));
                 } else if (hover > 0.01f) {
-                    RenderUtil.drawRoundedRect(g, x + 6.0f, railY, railWidth - 12.0f, 22.0f, 7.0f, ClickGUI.fade(catTint, hover * 0.62f * anim));
+                    RenderUtil.drawRoundedRect(g, x + 6.0f, railY, railWidth - 12.0f, 22.0f, 7.0f, ClickGUIRenderHelper.fade(catTint, hover * 0.62f * anim));
                 }
             }
-            int nameColor = ClickGUI.brighten(selected ? p.title : ClickGUI.mix(p.label, p.text, hover), 3.0f);
-            ClickGUI.text(g, FontManager.smallFont, ClickGUI.categoryDisplay(cat), x + 16.0f, railY + (22.0f - ClickGUI.fontPixel()) / 2.0f, ClickGUI.fade(nameColor, anim), 0.78f);
+            int nameColor = ClickGUIRenderHelper.brighten(selected ? p.title : ClickGUIRenderHelper.mix(p.label, p.text, hover), 3.0f);
+            ClickGUIRenderHelper.text(g, FontManager.smallFont, ClickGUIRenderHelper.categoryDisplay(cat), x + 16.0f, railY + (22.0f - ClickGUIRenderHelper.fontPixel()) / 2.0f, ClickGUIRenderHelper.fade(nameColor, anim), 0.78f);
             railY += 24.0f;
         }
         Minecraft mc = Minecraft.getInstance();
         float avatarY = y + height - 40.0f;
         float avatarSize = 24.0f;
         float avatarRadius = 7.0f;
-        RenderUtil.drawRoundedRect(g, x + 14.0f, avatarY, 24.0f, 24.0f, 7.0f, ClickGUI.fade(ClickGUI.rgba(40, 0xFFFFFF), anim));
+        RenderUtil.drawRoundedRect(g, x + 14.0f, avatarY, 24.0f, 24.0f, 7.0f, ClickGUIRenderHelper.fade(ClickGUIRenderHelper.rgba(40, 0xFFFFFF), anim));
         if (mc != null && mc.player instanceof AbstractClientPlayer) {
             g.flush();
             ResourceLocation skin = mc.player.getSkinTextureLocation();
@@ -1174,35 +1177,35 @@ public class ClickGUI {
             RoundRectRender.roundedTexture(avatarPose, skin, x + 15.0f, avatarY + 1.0f, 22.0f, 6.0f, 0.625f, 0.125f, 0.125f, 1.0f, 1.0f, 1.0f, 1.0f);
         }
         if (mc != null && mc.getUser() != null) {
-            ClickGUI.text(g, FontManager.smallFont, mc.getUser().getName(), x + 44.0f, avatarY + (24.0f - ClickGUI.fontPixel() * 0.72f) / 2.0f, ClickGUI.fade(p.text, anim), 0.72f);
+            ClickGUIRenderHelper.text(g, FontManager.smallFont, mc.getUser().getName(), x + 44.0f, avatarY + (24.0f - ClickGUIRenderHelper.fontPixel() * 0.72f) / 2.0f, ClickGUIRenderHelper.fade(p.text, anim), 0.72f);
         }
-        RenderUtil.drawRect(g, x + railWidth, y + 1.0f, 1.0f, height - 2.0f, ClickGUI.fade(p.hairline, anim));
+        RenderUtil.drawRect(g, x + railWidth, y + 1.0f, 1.0f, height - 2.0f, ClickGUIRenderHelper.fade(p.hairline, anim));
         g.enableScissor((int)bodyX0, (int)bodyY0, (int)bodyX1, (int)bodyY1);
         float contentX = x + railWidth + 14.0f;
         float colW = (width - railWidth - 42.0f) / 2.0f;
-        List<Group> groups = ClickGUI.layoutGroups(contentX, y + 66.0f + scrollY, colW, 14.0f);
+        List<Group> groups = ClickGUIRenderHelper.layoutGroups(contentX, y + 66.0f + scrollY, colW, 14.0f);
         for (Group group : groups) {
             float hoverTarget = RenderUtil.isHovering(group.x, group.y, group.w, group.h, mx, my) ? 1.0f : 0.0f;
             Float prevHover = hoverAlphas.get(group.module);
             float hover = RenderUtil.animateSmooth(prevHover == null ? 0.0f : prevHover.floatValue(), hoverTarget, 14.0f);
             hoverAlphas.put(group.module, Float.valueOf(hover));
             String header = group.module.name.toUpperCase();
-            int headerColor = ClickGUI.mix(p.label, p.placeholder, 0.55f);
-            ClickGUI.text(g, FontManager.smallFont, header, group.x, group.y + 2.0f, ClickGUI.fade(headerColor, anim), 0.62f);
+            int headerColor = ClickGUIRenderHelper.mix(p.label, p.placeholder, 0.55f);
+            ClickGUIRenderHelper.text(g, FontManager.smallFont, header, group.x, group.y + 2.0f, ClickGUIRenderHelper.fade(headerColor, anim), 0.62f);
             float rowY = group.y + 15.0f;
-            int rowColor = ClickGUI.fade(ClickGUI.rgba((int)(10.0f * hover), 0xFFFFFF), anim);
+            int rowColor = ClickGUIRenderHelper.fade(ClickGUIRenderHelper.rgba((int)(10.0f * hover), 0xFFFFFF), anim);
             if (hover > 0.02f) {
                 RenderUtil.drawRoundedRect(g, group.x - 4.0f, group.y - 2.0f, group.w + 8.0f, group.h + 4.0f, 8.0f, rowColor);
             }
             group.module.animOffset = RenderUtil.animateSmooth(group.module.animOffset, group.module.enabled ? 12.0f : 0.0f, 15.0f);
             group.module.animAlpha = RenderUtil.animateSmooth(group.module.animAlpha, group.module.enabled ? 1.0f : 0.0f, 10.0f);
-            ClickGUI.text(g, FontManager.smallFont, "Enabled", group.x, rowY + (20.0f - ClickGUI.fontPixel()) / 2.0f, ClickGUI.fade(group.module.enabled ? p.title : p.label, anim), 0.78f);
-            ClickGUI.toggle(g, group.x + group.w - 22.0f, rowY + 4.5f, anim, group.module.animOffset, group.module.animAlpha, p);
+            ClickGUIRenderHelper.text(g, FontManager.smallFont, "Enabled", group.x, rowY + (20.0f - ClickGUIRenderHelper.fontPixel()) / 2.0f, ClickGUIRenderHelper.fade(group.module.enabled ? p.title : p.label, anim), 0.78f);
+            ClickGUIRenderHelper.toggle(g, group.x + group.w - 22.0f, rowY + 4.5f, anim, group.module.animOffset, group.module.animAlpha, p);
             rowY += 20.0f;
             for (Setting<?> v : group.module.values) {
                 if (!v.isVisible()) continue;
-                float sHeight = ClickGUI.settingHeight(v, group.w);
-                boolean twoLines = ClickGUI.usesTwoLines(v, group.w);
+                float sHeight = ClickGUIRenderHelper.settingHeight(v, group.w);
+                boolean twoLines = ClickGUIRenderHelper.usesTwoLines(v, group.w);
                 float alphaMul = anim;
                 if (!(v instanceof DoubleSetting)) {
                     if (twoLines) {
@@ -1210,18 +1213,18 @@ public class ClickGUI {
                         if (splitIdx == -1) {
                             splitIdx = v.name.length() / 2;
                         }
-                        ClickGUI.text(g, FontManager.smallFont, v.name.substring(0, splitIdx), group.x, rowY + 1.0f, ClickGUI.fade(p.label, alphaMul), 0.78f);
-                        ClickGUI.text(g, FontManager.smallFont, v.name.substring(splitIdx).trim(), group.x, rowY + 1.0f + ClickGUI.fontPixel() + 1.0f, ClickGUI.fade(p.label, alphaMul), 0.78f);
+                        ClickGUIRenderHelper.text(g, FontManager.smallFont, v.name.substring(0, splitIdx), group.x, rowY + 1.0f, ClickGUIRenderHelper.fade(p.label, alphaMul), 0.78f);
+                        ClickGUIRenderHelper.text(g, FontManager.smallFont, v.name.substring(splitIdx).trim(), group.x, rowY + 1.0f + ClickGUIRenderHelper.fontPixel() + 1.0f, ClickGUIRenderHelper.fade(p.label, alphaMul), 0.78f);
                     } else {
-                        ClickGUI.text(g, FontManager.smallFont, v.name, group.x, rowY + (20.0f - ClickGUI.fontPixel()) / 2.0f, ClickGUI.fade(p.label, alphaMul), 0.78f);
+                        ClickGUIRenderHelper.text(g, FontManager.smallFont, v.name, group.x, rowY + (20.0f - ClickGUIRenderHelper.fontPixel()) / 2.0f, ClickGUIRenderHelper.fade(p.label, alphaMul), 0.78f);
                     }
                 }
                 if (v instanceof BooleanSetting) {
                     BooleanSetting bv = (BooleanSetting)v;
                     bv.animOffset = RenderUtil.animateSmooth(bv.animOffset, (Boolean)bv.get() != false ? 12.0f : 0.0f, 15.0f);
                     bv.animAlpha = RenderUtil.animateSmooth(bv.animAlpha, (Boolean)bv.get() != false ? 1.0f : 0.0f, 10.0f);
-                    float toggleY = rowY + (twoLines ? ClickGUI.fontPixel() + 3.0f : (sHeight - 11.0f) / 2.0f);
-                    ClickGUI.toggle(g, group.x + group.w - 22.0f, toggleY, alphaMul, bv.animOffset, bv.animAlpha, p);
+                    float toggleY = rowY + (twoLines ? ClickGUIRenderHelper.fontPixel() + 3.0f : (sHeight - 11.0f) / 2.0f);
+                    ClickGUIRenderHelper.toggle(g, group.x + group.w - 22.0f, toggleY, alphaMul, bv.animOffset, bv.animAlpha, p);
                 } else if (v instanceof IntSetting) {
                     float shownScale;
                     float shownW;
@@ -1231,95 +1234,95 @@ public class ClickGUI {
                     String display = editingNow ? editBuffer : sv.getDisplay();
                     float fieldW = Math.min(96.0f, group.w);
                     float fieldX = group.x + group.w - fieldW;
-                    float fieldH = ClickGUI.fontPixel() + 6.0f;
+                    float fieldH = ClickGUIRenderHelper.fontPixel() + 6.0f;
                     float fieldY = rowY + (sHeight - fieldH) / 2.0f;
                     if (editingNow) {
-                        ClickGUI.rememberEditField(fieldX, rowY + 1.0f, fieldW, Math.max(sHeight, fieldH) - 2.0f);
+                        ClickGUIRenderHelper.rememberEditField(fieldX, rowY + 1.0f, fieldW, Math.max(sHeight, fieldH) - 2.0f);
                     }
-                    if (!ClickGUI.glassControl(g, fieldX, fieldY, fieldW, fieldH, 3.0f, alphaMul, ClickGUI.pillTint(editingNow ? 200 : 150))) {
-                        RenderUtil.drawRoundedRect(g, fieldX, fieldY, fieldW, fieldH, 3.0f, ClickGUI.pillFallback(editingNow ? p.inset : p.chip, Math.round(alphaMul * (float)(editingNow ? 200 : 150))));
+                    if (!ClickGUIRenderHelper.glassControl(g, fieldX, fieldY, fieldW, fieldH, 3.0f, alphaMul, ClickGUIRenderHelper.pillTint(editingNow ? 200 : 150))) {
+                        RenderUtil.drawRoundedRect(g, fieldX, fieldY, fieldW, fieldH, 3.0f, ClickGUIRenderHelper.pillFallback(editingNow ? p.inset : p.chip, Math.round(alphaMul * (float)(editingNow ? 200 : 150))));
                     }
                     String string = display.isEmpty() ? (editingNow ? "" : "type...") : (shown = display);
                     if (editingNow) {
                         shown = shown + "_";
                     }
-                    if ((shownW = ClickGUI.textWidth(FontManager.smallFont, shown, shownScale = 0.78f)) > fieldW - 8.0f && shownW > 0.0f) {
+                    if ((shownW = ClickGUIRenderHelper.textWidth(FontManager.smallFont, shown, shownScale = 0.78f)) > fieldW - 8.0f && shownW > 0.0f) {
                         shownScale = Math.max(0.4f, shownScale * (fieldW - 8.0f) / shownW);
                     }
-                    ClickGUI.text(g, FontManager.smallFont, shown, fieldX + 4.0f, fieldY + (fieldH - ClickGUI.fontPixel()) * 0.5f, ClickGUI.fade(editingNow ? p.title : p.value, alphaMul), shownScale);
+                    ClickGUIRenderHelper.text(g, FontManager.smallFont, shown, fieldX + 4.0f, fieldY + (fieldH - ClickGUIRenderHelper.fontPixel()) * 0.5f, ClickGUIRenderHelper.fade(editingNow ? p.title : p.value, alphaMul), shownScale);
                 } else if (v instanceof DoubleSetting) {
                     DoubleSetting av = (DoubleSetting)v;
                     String display = av.getDisplay();
-                    float btnH = Math.min(Math.max(18.0f, ClickGUI.fontPixel() + 7.0f), Math.max(18.0f, sHeight - 2.0f));
+                    float btnH = Math.min(Math.max(18.0f, ClickGUIRenderHelper.fontPixel() + 7.0f), Math.max(18.0f, sHeight - 2.0f));
                     float btnY = rowY + (sHeight - btnH) * 0.5f;
                     float btnX = group.x + 1.0f;
                     float btnW = group.w - 2.0f;
                     boolean hovered = RenderUtil.isHovering(btnX, btnY, btnW, btnH, mx, my);
                     av.animHover = RenderUtil.animateSmooth(av.animHover, hovered ? 1.0f : 0.0f, 14.0f);
-                    int base = ClickGUI.mix(p.accentSoft, p.accent, 0.1f + 0.28f * av.animHover);
-                    if (!ClickGUI.glassControl(g, btnX, btnY, btnW, btnH, 5.0f, alphaMul, ClickGUI.pillTint(140))) {
-                        RenderUtil.drawRoundedRect(g, btnX, btnY, btnW, btnH, 5.0f, ClickGUI.pillFallback(base, Math.round(alphaMul * 140.0f)));
+                    int base = ClickGUIRenderHelper.mix(p.accentSoft, p.accent, 0.1f + 0.28f * av.animHover);
+                    if (!ClickGUIRenderHelper.glassControl(g, btnX, btnY, btnW, btnH, 5.0f, alphaMul, ClickGUIRenderHelper.pillTint(140))) {
+                        RenderUtil.drawRoundedRect(g, btnX, btnY, btnW, btnH, 5.0f, ClickGUIRenderHelper.pillFallback(base, Math.round(alphaMul * 140.0f)));
                     }
                     float barH = btnH - 6.0f;
                     float barW = 2.0f + 1.0f * av.animHover;
-                    RenderUtil.drawRoundedRect(g, btnX + 1.0f, btnY + (btnH - barH) * 0.5f, barW, barH, barW * 0.5f, ClickGUI.fade(p.accent, alphaMul * (0.45f + 0.55f * av.animHover)));
-                    float textW = ClickGUI.textWidth(FontManager.smallFont, display, 0.78f);
+                    RenderUtil.drawRoundedRect(g, btnX + 1.0f, btnY + (btnH - barH) * 0.5f, barW, barH, barW * 0.5f, ClickGUIRenderHelper.fade(p.accent, alphaMul * (0.45f + 0.55f * av.animHover)));
+                    float textW = ClickGUIRenderHelper.textWidth(FontManager.smallFont, display, 0.78f);
                     float textScale = 0.78f;
                     if (textW > btnW - 14.0f && textW > 0.0f) {
                         textScale = Math.max(0.5f, 0.78f * (btnW - 14.0f) / textW);
-                        textW = ClickGUI.textWidth(FontManager.smallFont, display, textScale);
+                        textW = ClickGUIRenderHelper.textWidth(FontManager.smallFont, display, textScale);
                     }
-                    ClickGUI.text(g, FontManager.smallFont, display, btnX + (btnW - textW) * 0.5f, btnY + (btnH - ClickGUI.fontPixel()) * 0.5f, ClickGUI.fade(ClickGUI.mix(p.accent, p.title, av.animHover), alphaMul), textScale);
+                    ClickGUIRenderHelper.text(g, FontManager.smallFont, display, btnX + (btnW - textW) * 0.5f, btnY + (btnH - ClickGUIRenderHelper.fontPixel()) * 0.5f, ClickGUIRenderHelper.fade(ClickGUIRenderHelper.mix(p.accent, p.title, av.animHover), alphaMul), textScale);
                 } else if (v instanceof ColorSetting) {
                     ColorSetting pv = (ColorSetting)v;
                     String display = pv.getDisplay();
-                    strW = ClickGUI.textWidth(FontManager.smallFont, display, 0.78f);
-                    valueY = rowY + (sHeight - ClickGUI.fontPixel()) / 2.0f;
-                    chipH = ClickGUI.fontPixel() + 4.0f;
+                    strW = ClickGUIRenderHelper.textWidth(FontManager.smallFont, display, 0.78f);
+                    valueY = rowY + (sHeight - ClickGUIRenderHelper.fontPixel()) / 2.0f;
+                    chipH = ClickGUIRenderHelper.fontPixel() + 4.0f;
                     float dot = chipH - 6.0f;
                     chipW = Math.min(strW + dot + 18.0f, group.w);
                     float chipX = group.x + group.w - chipW;
-                    if (!ClickGUI.glassControl(g, chipX, valueY - 2.0f, chipW, chipH, chipH * 0.5f, alphaMul, ClickGUI.pillTint(150))) {
-                        RenderUtil.drawRoundedRect(g, chipX, valueY - 2.0f, chipW, chipH, chipH * 0.5f, ClickGUI.pillFallback(p.chip, Math.round(alphaMul * 150.0f)));
+                    if (!ClickGUIRenderHelper.glassControl(g, chipX, valueY - 2.0f, chipW, chipH, chipH * 0.5f, alphaMul, ClickGUIRenderHelper.pillTint(150))) {
+                        RenderUtil.drawRoundedRect(g, chipX, valueY - 2.0f, chipW, chipH, chipH * 0.5f, ClickGUIRenderHelper.pillFallback(p.chip, Math.round(alphaMul * 150.0f)));
                     }
-                    RenderUtil.drawRoundedRect(g, chipX + 5.0f, valueY + 1.0f, dot, dot, dot * 0.5f, ClickGUI.fade(ClickGUI.rgba(255, pv.rgb()), alphaMul));
-                    float labelY = valueY - 2.0f + (chipH - ClickGUI.fontPixel()) * 0.5f;
-                    ClickGUI.text(g, FontManager.smallFont, display, chipX + 8.0f + dot, labelY, ClickGUI.fade(p.accent, alphaMul), 0.78f);
+                    RenderUtil.drawRoundedRect(g, chipX + 5.0f, valueY + 1.0f, dot, dot, dot * 0.5f, ClickGUIRenderHelper.fade(ClickGUIRenderHelper.rgba(255, pv.rgb()), alphaMul));
+                    float labelY = valueY - 2.0f + (chipH - ClickGUIRenderHelper.fontPixel()) * 0.5f;
+                    ClickGUIRenderHelper.text(g, FontManager.smallFont, display, chipX + 8.0f + dot, labelY, ClickGUIRenderHelper.fade(p.accent, alphaMul), 0.78f);
                 } else if (v instanceof ModeSetting) {
                     ModeSetting mv = (ModeSetting)v;
                     String display = mv.getDisplay();
-                    strW = ClickGUI.textWidth(FontManager.smallFont, display, 0.78f);
-                    valueY = rowY + (sHeight - ClickGUI.fontPixel()) / 2.0f;
-                    chipH = ClickGUI.fontPixel() + 4.0f;
+                    strW = ClickGUIRenderHelper.textWidth(FontManager.smallFont, display, 0.78f);
+                    valueY = rowY + (sHeight - ClickGUIRenderHelper.fontPixel()) / 2.0f;
+                    chipH = ClickGUIRenderHelper.fontPixel() + 4.0f;
                     chipW = Math.min(strW + 10.0f, group.w);
                     float chipX = group.x + group.w - chipW;
                     float labelX = chipX + Math.max(0.0f, (chipW - strW) * 0.5f);
                     boolean mvHovered = RenderUtil.isHovering(chipX, valueY - 2.0f, chipW, chipH, mx, my);
                     mv.animHover = RenderUtil.animateSmooth(mv.animHover, mvHovered ? 1.0f : 0.0f, 14.0f);
-                    int mvBase = ClickGUI.scaleTint(ClickGUI.chromeTint(p), ClickGUI.chipBrightness() + 0.18f * mv.animHover);
-                    if (!ClickGUI.glassControl(g, chipX, valueY - 2.0f, chipW, chipH, chipH * 0.5f, alphaMul * (0.88f + 0.12f * mv.animHover), ClickGUI.pillTint(150, mvBase))) {
-                        RenderUtil.drawRoundedRect(g, chipX, valueY - 2.0f, chipW, chipH, chipH * 0.5f, ClickGUI.fade(mvBase, alphaMul));
+                    int mvBase = ClickGUIRenderHelper.scaleTint(ClickGUIRenderHelper.chromeTint(p), ClickGUIRenderHelper.chipBrightness() + 0.18f * mv.animHover);
+                    if (!ClickGUIRenderHelper.glassControl(g, chipX, valueY - 2.0f, chipW, chipH, chipH * 0.5f, alphaMul * (0.88f + 0.12f * mv.animHover), ClickGUIRenderHelper.pillTint(150, mvBase))) {
+                        RenderUtil.drawRoundedRect(g, chipX, valueY - 2.0f, chipW, chipH, chipH * 0.5f, ClickGUIRenderHelper.fade(mvBase, alphaMul));
                     }
-                    float labelY = valueY - 2.0f + (chipH - ClickGUI.fontPixel()) * 0.5f;
-                    ClickGUI.text(g, FontManager.smallFont, display, labelX, labelY, ClickGUI.fade(ClickGUI.mix(p.accent, p.title, mv.animHover), alphaMul), 0.78f);
+                    float labelY = valueY - 2.0f + (chipH - ClickGUIRenderHelper.fontPixel()) * 0.5f;
+                    ClickGUIRenderHelper.text(g, FontManager.smallFont, display, labelX, labelY, ClickGUIRenderHelper.fade(ClickGUIRenderHelper.mix(p.accent, p.title, mv.animHover), alphaMul), 0.78f);
                 } else if (v instanceof EnumSetting) {
                     EnumSetting kv = (EnumSetting)v;
                     boolean binding = bindingValue == v;
                     String display = binding ? "..." : kv.getDisplay();
-                    strW = ClickGUI.textWidth(FontManager.smallFont, display, 0.78f);
-                    valueY = rowY + (sHeight - ClickGUI.fontPixel()) / 2.0f;
-                    chipH = ClickGUI.fontPixel() + 4.0f;
+                    strW = ClickGUIRenderHelper.textWidth(FontManager.smallFont, display, 0.78f);
+                    valueY = rowY + (sHeight - ClickGUIRenderHelper.fontPixel()) / 2.0f;
+                    chipH = ClickGUIRenderHelper.fontPixel() + 4.0f;
                     chipW = Math.min(strW + 10.0f, group.w);
                     float chipX = group.x + group.w - chipW;
                     float labelX = chipX + Math.max(0.0f, (chipW - strW) * 0.5f);
                     boolean kvHovered = binding || RenderUtil.isHovering(chipX, valueY - 2.0f, chipW, chipH, mx, my);
                     kv.animHover = RenderUtil.animateSmooth(kv.animHover, kvHovered ? 1.0f : 0.0f, 14.0f);
-                    int kvBase = ClickGUI.scaleTint(ClickGUI.chromeTint(p), ClickGUI.chipBrightness() + 0.18f * kv.animHover);
-                    if (!ClickGUI.glassControl(g, chipX, valueY - 2.0f, chipW, chipH, chipH * 0.5f, alphaMul * (0.88f + 0.12f * kv.animHover), ClickGUI.pillTint(150, kvBase))) {
-                        RenderUtil.drawRoundedRect(g, chipX, valueY - 2.0f, chipW, chipH, chipH * 0.5f, ClickGUI.fade(kvBase, alphaMul));
+                    int kvBase = ClickGUIRenderHelper.scaleTint(ClickGUIRenderHelper.chromeTint(p), ClickGUIRenderHelper.chipBrightness() + 0.18f * kv.animHover);
+                    if (!ClickGUIRenderHelper.glassControl(g, chipX, valueY - 2.0f, chipW, chipH, chipH * 0.5f, alphaMul * (0.88f + 0.12f * kv.animHover), ClickGUIRenderHelper.pillTint(150, kvBase))) {
+                        RenderUtil.drawRoundedRect(g, chipX, valueY - 2.0f, chipW, chipH, chipH * 0.5f, ClickGUIRenderHelper.fade(kvBase, alphaMul));
                     }
-                    float labelY = valueY - 2.0f + (chipH - ClickGUI.fontPixel()) * 0.5f;
-                    ClickGUI.text(g, FontManager.smallFont, display, labelX, labelY, ClickGUI.fade(ClickGUI.mix(p.accent, p.title, kv.animHover), alphaMul), 0.78f);
+                    float labelY = valueY - 2.0f + (chipH - ClickGUIRenderHelper.fontPixel()) * 0.5f;
+                    ClickGUIRenderHelper.text(g, FontManager.smallFont, display, labelX, labelY, ClickGUIRenderHelper.fade(ClickGUIRenderHelper.mix(p.accent, p.title, kv.animHover), alphaMul), 0.78f);
                 } else if (v instanceof NumberSetting || v instanceof ListSetting) {
                     boolean editingNow;
                     float percent = 0.0f;
@@ -1337,22 +1340,22 @@ public class ClickGUI {
                         display = editBuffer + "_";
                     }
                     percent = Math.max(0.0f, Math.min(1.0f, percent));
-                    strW = ClickGUI.sliderValueWidth(display);
-                    float trackX = ClickGUI.sliderTrackStart(group, twoLines);
-                    float trackW = ClickGUI.sliderTrackWidth(group, display, twoLines);
-                    float trackY = ClickGUI.sliderTrackY(rowY, sHeight, twoLines);
-                    RenderUtil.drawRoundedRect(g, trackX, trackY, trackW, 3.0f, 1.5f, ClickGUI.fade(p.track, alphaMul));
-                    RenderUtil.drawRoundedRect(g, trackX, trackY, trackW * percent, 3.0f, 1.5f, ClickGUI.fade(p.accent, alphaMul));
-                    RenderUtil.drawRoundedRect(g, ClickGUI.snap(trackX + trackW * percent - 3.5f), ClickGUI.snap(trackY - 2.0f), 7.0f, 7.0f, 3.5f, ClickGUI.fade(p.knob, alphaMul));
-                    valueY = twoLines ? trackY - (ClickGUI.fontPixel() - 3.0f) / 2.0f : rowY + (sHeight - ClickGUI.fontPixel()) / 2.0f;
-                    ClickGUI.text(g, FontManager.smallFont, display, group.x + group.w - strW, valueY, ClickGUI.fade(editingNow ? p.title : p.value, alphaMul), 0.7f);
+                    strW = ClickGUIRenderHelper.sliderValueWidth(display);
+                    float trackX = ClickGUIRenderHelper.sliderTrackStart(group, twoLines);
+                    float trackW = ClickGUIRenderHelper.sliderTrackWidth(group, display, twoLines);
+                    float trackY = ClickGUIRenderHelper.sliderTrackY(rowY, sHeight, twoLines);
+                    RenderUtil.drawRoundedRect(g, trackX, trackY, trackW, 3.0f, 1.5f, ClickGUIRenderHelper.fade(p.track, alphaMul));
+                    RenderUtil.drawRoundedRect(g, trackX, trackY, trackW * percent, 3.0f, 1.5f, ClickGUIRenderHelper.fade(p.accent, alphaMul));
+                    RenderUtil.drawRoundedRect(g, ClickGUIRenderHelper.snap(trackX + trackW * percent - 3.5f), ClickGUIRenderHelper.snap(trackY - 2.0f), 7.0f, 7.0f, 3.5f, ClickGUIRenderHelper.fade(p.knob, alphaMul));
+                    valueY = twoLines ? trackY - (ClickGUIRenderHelper.fontPixel() - 3.0f) / 2.0f : rowY + (sHeight - ClickGUIRenderHelper.fontPixel()) / 2.0f;
+                    ClickGUIRenderHelper.text(g, FontManager.smallFont, display, group.x + group.w - strW, valueY, ClickGUIRenderHelper.fade(editingNow ? p.title : p.value, alphaMul), 0.7f);
                 }
                 rowY += sHeight;
             }
         }
         g.disableScissor();
         float viewport = height - 74.0f;
-        float maxContentY = ClickGUI.contentHeight(groups, y + 66.0f + scrollY);
+        float maxContentY = ClickGUIRenderHelper.contentHeight(groups, y + 66.0f + scrollY);
         float maxScroll = Math.max(0.0f, maxContentY - viewport);
         if (targetScrollY > 20.0f) {
             targetScrollY = 20.0f;
@@ -1377,7 +1380,7 @@ public class ClickGUI {
             float thumbH = Math.max(18.0f, trackH * ratio);
             float progress = Math.min(1.0f, Math.max(0.0f, -scrollY / maxScroll));
             float thumbY = trackY + (trackH - thumbH) * progress;
-            RenderUtil.drawRoundedRect(g, trackX, thumbY, 2.0f, thumbH, 1.0f, ClickGUI.fade(p.accent, anim * 0.8f));
+            RenderUtil.drawRoundedRect(g, trackX, thumbY, 2.0f, thumbH, 1.0f, ClickGUIRenderHelper.fade(p.accent, anim * 0.8f));
         }
     }
 
@@ -1398,7 +1401,7 @@ public class ClickGUI {
             return true;
         }
         if (editingValue != null) {
-            boolean ctrl = ClickGUI.isCtrlDown();
+            boolean ctrl = ClickGUIRenderHelper.isCtrlDown();
             if (ctrl && keyCode == 65) {
                 editSelectAll = !editBuffer.isEmpty();
                 return true;
@@ -1411,13 +1414,13 @@ public class ClickGUI {
                 Minecraft.getInstance().keyboardHandler.setClipboard(editBuffer == null ? "" : editBuffer);
                 editBuffer = "";
                 editSelectAll = false;
-                ClickGUI.applyEdit();
+                ClickGUIRenderHelper.applyEdit();
                 return true;
             }
             if (ctrl && keyCode == 86) {
                 String clip = Minecraft.getInstance().keyboardHandler.getClipboard();
                 if (clip != null && !clip.isEmpty()) {
-                    int max = editingValue instanceof IntSetting ? ((IntSetting) ClickGUI.editingValue).maxLength : 32;
+                    int max = editingValue instanceof IntSetting ? ((IntSetting) ClickGUIRenderHelper.editingValue).maxLength : 32;
                     StringBuilder sb = new StringBuilder(editSelectAll ? "" : editBuffer);
                     for (int i = 0; i < clip.length() && sb.length() < max; ++i) {
                         char ch = clip.charAt(i);
@@ -1426,7 +1429,7 @@ public class ClickGUI {
                     }
                     editBuffer = sb.toString();
                     editSelectAll = false;
-                    ClickGUI.applyEdit();
+                    ClickGUIRenderHelper.applyEdit();
                 }
                 return true;
             }
@@ -1437,11 +1440,11 @@ public class ClickGUI {
                 } else if (!editBuffer.isEmpty()) {
                     editBuffer = editBuffer.substring(0, editBuffer.length() - 1);
                 }
-                ClickGUI.applyEdit();
+                ClickGUIRenderHelper.applyEdit();
             } else if (keyCode == 257) {
-                ClickGUI.commitEdit();
+                ClickGUIRenderHelper.commitEdit();
             } else if (keyCode == 256) {
-                ClickGUI.finishEdit();
+                ClickGUIRenderHelper.finishEdit();
             }
             return true;
         }

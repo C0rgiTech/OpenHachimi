@@ -15,8 +15,7 @@ import java.nio.ByteBuffer;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-import dev.openhachimi.utils.KinematicManager;
-import dev.openhachimi.utils.ModuleManager;
+import dev.openhachimi.modules.ModuleManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
@@ -110,7 +109,7 @@ public class Font {
                 continue;
             }
             TrueTypeFont blk = this.blockFor(code);
-            KinematicManager c = blk.metricsFor(code);
+            Glyph c = blk.metricsFor(code);
             if (c == null) continue;
             if (blk != boundBlock) {
                 if (boundBlock != null) {
@@ -176,7 +175,7 @@ public class Font {
         }
         double width = 0.0;
         for (int i = 0; i < text.length(); ++i) {
-            KinematicManager m = this.blockFor(text.charAt(i)).metricsFor(text.charAt(i));
+            Glyph m = this.blockFor(text.charAt(i)).metricsFor(text.charAt(i));
             if (m == null) continue;
             width += (double)m.xAdvance;
         }

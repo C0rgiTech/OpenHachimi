@@ -5,6 +5,7 @@ package dev.openhachimi.utils;
 
 import dev.openhachimi.config.ConfigLoadManager;
 import dev.openhachimi.event.EventRegistrar;
+import dev.openhachimi.modules.ModuleManager;
 import dev.openhachimi.security.AntiDebug;
 
 import java.io.File;

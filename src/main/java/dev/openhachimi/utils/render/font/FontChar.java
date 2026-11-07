@@ -9,7 +9,6 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.HashMap;
 
-import dev.openhachimi.utils.player.AttributeManager;
 import net.minecraft.client.renderer.texture.AbstractTexture;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.stb.STBTTFontinfo;
@@ -23,7 +22,7 @@ public class FontChar {
     private final int height;
     private final float scale;
     private final float ascent;
-    private final AttributeManager[] charData;
+    private final GlyphLayout[] charData;
     private final int from;
     private final HashMap<String, Double> widthCache;
 
@@ -33,7 +32,7 @@ public class FontChar {
         this.widthCache = new HashMap();
         STBTTFontinfo fontInfo = STBTTFontinfo.create();
         STBTruetype.stbtt_InitFont((STBTTFontinfo)fontInfo, (ByteBuffer)fontBuffer);
-        this.charData = new AttributeManager[to - from + 1];
+        this.charData = new GlyphLayout[to - from + 1];
         STBTTPackedchar.Buffer packedChars = STBTTPackedchar.create((int)this.charData.length);
         ByteBuffer atlas = BufferUtils.createByteBuffer((int)(atlasSize * atlasSize));
         STBTTPackContext packContext = STBTTPackContext.create();
@@ -51,7 +50,7 @@ public class FontChar {
         float invAtlas = 1.0f / (float)atlasSize;
         for (int i = 0; i < this.charData.length; ++i) {
             STBTTPackedchar pc = (STBTTPackedchar)packedChars.get(i);
-            this.charData[i] = new AttributeManager(pc.xoff(), pc.yoff(), pc.xoff2(), pc.yoff2(), (float)pc.x0() * invAtlas, (float)pc.y0() * invAtlas, (float)pc.x1() * invAtlas, (float)pc.y1() * invAtlas, pc.xadvance());
+            this.charData[i] = new GlyphLayout(pc.xoff(), pc.yoff(), pc.xoff2(), pc.yoff2(), (float)pc.x0() * invAtlas, (float)pc.y0() * invAtlas, (float)pc.x1() * invAtlas, (float)pc.y1() * invAtlas, pc.xadvance());
         }
     }
 
@@ -73,7 +72,7 @@ public class FontChar {
         }
         double width = 0.0;
         for (int i = 0; i < text.length(); ++i) {
-            AttributeManager m;
+            GlyphLayout m;
             int idx = text.charAt(i) - this.from;
             if (idx < 0 || idx >= this.charData.length) {
                 idx = 0;
@@ -89,7 +88,7 @@ public class FontChar {
         return this.ascent;
     }
 
-    public AttributeManager[] getCharData() {
+    public GlyphLayout[] getCharData() {
         return this.charData;
     }
 

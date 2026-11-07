@@ -130,7 +130,7 @@ public final class NativeLoader {
             // empty catch block
         }
         try {
-            NativeLoader.registerCrypt(Class.forName("dev.openhachimi.render.Render2D"));
+            NativeLoader.registerCrypt(Class.forName("dev.openhachimi.security.NativeStringUtil"));
         }
         catch (Throwable throwable) {
             // empty catch block

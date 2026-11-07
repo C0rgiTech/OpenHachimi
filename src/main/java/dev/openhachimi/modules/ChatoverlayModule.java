@@ -8,7 +8,7 @@ import dev.openhachimi.settings.NumberSetting;
 import dev.openhachimi.utils.render.shader.Shader;
 import dev.openhachimi.utils.render.font.Font;
 import dev.openhachimi.utils.render.RenderUtil;
-import dev.openhachimi.utils.RegistryManager;
+import dev.openhachimi.utils.ColorValue;
 import dev.openhachimi.utils.render.font.FontManager;
 
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -66,9 +66,9 @@ extends Module {
     private final NumberSetting fontSize = new NumberSetting("Font Size", 7.5f, 4.0f, 20.0f);
     private final NumberSetting fontBrightness = new NumberSetting("Font Brightness", 1.0f, 0.0f, 1.0f);
     private final NumberSetting lineGap = new NumberSetting("Line Gap", 2.0f, 0.0f, 10.0f);
-    private final RegistryManager bgColor = new RegistryManager("Background", 658449);
+    private final ColorValue bgColor = new ColorValue("Background", 658449);
     private final NumberSetting bgAlpha = new NumberSetting("BG Alpha", 0.82f, 0.0f, 1.0f);
-    private final RegistryManager inputColor = new RegistryManager("Input BG", 0);
+    private final ColorValue inputColor = new ColorValue("Input BG", 0);
     private final NumberSetting inputAlpha = new NumberSetting("Input Alpha", 0.6f, 0.0f, 1.0f);
     private final BooleanSetting alwaysShow = new BooleanSetting("Always Show", true);
     private final BooleanSetting textShadow = new BooleanSetting("Text Shadow", true);

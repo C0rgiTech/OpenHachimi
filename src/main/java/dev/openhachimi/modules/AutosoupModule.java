@@ -3,11 +3,10 @@
  */
 package dev.openhachimi.modules;
 
-import dev.openhachimi.render.StencilBuffer;
+import dev.openhachimi.utils.rotation.RotationManager;
 import dev.openhachimi.settings.BooleanSetting;
 import dev.openhachimi.settings.ListSetting;
 import dev.openhachimi.settings.NumberSetting;
-import dev.openhachimi.utils.ModuleManager;
 import dev.openhachimi.utils.rotation.Rotation;
 
 import java.util.ArrayList;
@@ -84,7 +83,7 @@ extends Module {
     private void dropRotationHold() {
         this.rotationHeld = false;
         hasTargetRotation = false;
-        StencilBuffer.clear();
+        RotationManager.clear();
     }
 
     private void beginRestockFinish() {
@@ -176,7 +175,7 @@ extends Module {
         if (this.rotationHeld) {
             return;
         }
-        Rotation last = StencilBuffer.getLastRotation();
+        Rotation last = RotationManager.getLastRotation();
         targetYaw = last.getYaw();
         targetPitch = last.getPitch();
         hasTargetRotation = true;
@@ -253,7 +252,7 @@ extends Module {
     private void releaseRotationForMovement() {
         this.rotationHeld = false;
         hasTargetRotation = false;
-        StencilBuffer.clear();
+        RotationManager.clear();
     }
 
     @Override

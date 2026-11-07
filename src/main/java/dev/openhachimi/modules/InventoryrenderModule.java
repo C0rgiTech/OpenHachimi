@@ -7,7 +7,7 @@ import dev.openhachimi.settings.BooleanSetting;
 import dev.openhachimi.settings.ListSetting;
 import dev.openhachimi.settings.NumberSetting;
 import dev.openhachimi.utils.render.shader.Shader;
-import dev.openhachimi.utils.FrameHelper;
+import dev.openhachimi.hud.DraggedHUDManager;
 import dev.openhachimi.utils.render.RenderUtil;
 
 import net.minecraft.client.Minecraft;
@@ -40,7 +40,7 @@ extends Module {
     public final NumberSetting opacity = new NumberSetting("Opacity", 0.45f, 0.05f, 1.0f);
     public final BooleanSetting lightTheme = new BooleanSetting("Light Background", false);
     public final BooleanSetting showCounts = new BooleanSetting("Show Item Counts", true);
-    private static final FrameHelper.Draggable OWNER = new FrameHelper.Draggable(){};
+    private static final DraggedHUDManager.Draggable OWNER = new DraggedHUDManager.Draggable(){};
 
     public InventoryrenderModule() {
         super("InventoryRender", Category.RENDER);
@@ -104,12 +104,12 @@ extends Module {
         double mouseX = mc.mouseHandler.xpos() * (double)mc.getWindow().getGuiScaledWidth() / (double)mc.getWindow().getScreenWidth();
         double mouseY = mc.mouseHandler.ypos() * (double)mc.getWindow().getGuiScaledHeight() / (double)mc.getWindow().getScreenHeight();
         boolean down = GLFW.glfwGetMouseButton((long)mc.getWindow().getWindow(), (int)0) == 1;
-        FrameHelper.updateMouse(mouseX, mouseY, down);
-        FrameHelper.offer(OWNER, x - 5.0f, y - 5.0f, width + 10.0f, height + 10.0f);
-        if (!FrameHelper.isActive(OWNER)) {
+        DraggedHUDManager.updateMouse(mouseX, mouseY, down);
+        DraggedHUDManager.offer(OWNER, x - 5.0f, y - 5.0f, width + 10.0f, height + 10.0f);
+        if (!DraggedHUDManager.isActive(OWNER)) {
             return new float[]{x, y};
         }
-        return new float[]{(float)mouseX - FrameHelper.grabOffsetX(), (float)mouseY - FrameHelper.grabOffsetY()};
+        return new float[]{(float)mouseX - DraggedHUDManager.grabOffsetX(), (float)mouseY - DraggedHUDManager.grabOffsetY()};
     }
 
     private static void rounded(GuiGraphics graphics, float x, float y, float width, float height, float radius, int color) {
@@ -143,7 +143,7 @@ extends Module {
             this.posX.set(Math.round(x));
             this.posY.set(Math.round(y));
         } else {
-            FrameHelper.release();
+            DraggedHUDManager.release();
         }
         int panelAlpha = Math.round(255.0f * op);
         int panelRgb = light ? 0xECECEC : 0x101010;

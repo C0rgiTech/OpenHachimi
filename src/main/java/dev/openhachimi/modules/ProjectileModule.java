@@ -3,13 +3,12 @@
  */
 package dev.openhachimi.modules;
 
-import dev.openhachimi.render.StencilBuffer;
+import dev.openhachimi.utils.rotation.RotationManager;
 import dev.openhachimi.settings.BooleanSetting;
-import dev.openhachimi.utils.ModuleManager;
 import dev.openhachimi.utils.ExecutorHelper;
 import dev.openhachimi.utils.player.RayTraceUtil;
 import dev.openhachimi.utils.PotionData;
-import dev.openhachimi.utils.TransactionHelper;
+import dev.openhachimi.utils.ThrowableData;
 import dev.openhachimi.utils.TargetHelper;
 
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -122,9 +121,9 @@ extends Module {
             double arrowPosX = player.xOld + (player.getX() - player.xOld) * (double)partialTicks;
             double arrowPosY = player.yOld + (player.getY() - player.yOld) * (double)partialTicks + (double)player.getEyeHeight() - 0.1;
             double arrowPosZ = player.zOld + (player.getZ() - player.zOld) * (double)partialTicks;
-            if (StencilBuffer.isRotating) {
-                yaw = Math.toRadians(StencilBuffer.targetYaw);
-                pitch = Math.toRadians(StencilBuffer.targetPitch);
+            if (RotationManager.isRotating) {
+                yaw = Math.toRadians(RotationManager.targetYaw);
+                pitch = Math.toRadians(RotationManager.targetPitch);
             } else {
                 yaw = Math.toRadians(Mth.lerp((float)partialTicks, (float)player.yRotO, (float)player.getYRot()));
                 pitch = Math.toRadians(Mth.lerp((float)partialTicks, (float)player.xRotO, (float)player.getXRot()));
@@ -204,8 +203,8 @@ extends Module {
         }
     }
 
-    private List<TransactionHelper> getProjectileInfos() {
-        ArrayList<TransactionHelper> infos = new ArrayList<TransactionHelper>();
+    private List<ThrowableData> getProjectileInfos() {
+        ArrayList<ThrowableData> infos = new ArrayList<ThrowableData>();
         if (((Boolean)this.showArrows.get()).booleanValue()) {
             infos.add(this.arrowsColor);
         }
@@ -224,7 +223,7 @@ extends Module {
         return infos;
     }
 
-    private Path calculateActiveProjectilePath(Entity entity, TransactionHelper projectileInfo, Minecraft mc) {
+    private Path calculateActiveProjectilePath(Entity entity, ThrowableData projectileInfo, Minecraft mc) {
         ArrayList<Vec3> out = new ArrayList<Vec3>();
         double posX = entity.getX();
         double posY = entity.getY();
@@ -317,14 +316,14 @@ extends Module {
         BufferUploader.drawWithShader((BufferBuilder.RenderedBuffer)builder.end());
     }
 
-    private TransactionHelper getProjectileDataByEntity(Entity entity) {
+    private ThrowableData getProjectileDataByEntity(Entity entity) {
         if (entity.onGround()) {
             return null;
         }
         if (entity.getX() == entity.xOld && entity.getZ() == entity.zOld) {
             return null;
         }
-        for (TransactionHelper data : this.getProjectileInfos()) {
+        for (ThrowableData data : this.getProjectileInfos()) {
             if (!data.isTargetEntity(entity)) continue;
             return data;
         }
@@ -376,7 +375,7 @@ extends Module {
         BufferBuilder builder = tess.getBuilder();
         for (Entity entity : mc.level.entitiesForRendering()) {
             Path activePathResult;
-            TransactionHelper data;
+            ThrowableData data;
             if (!(entity instanceof Projectile) || (data = this.getProjectileDataByEntity(entity)) == null) continue;
             Color c = data.getColor(entity);
             if (c == null) {

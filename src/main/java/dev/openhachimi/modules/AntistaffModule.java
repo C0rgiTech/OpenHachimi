@@ -5,7 +5,6 @@ package dev.openhachimi.modules;
 
 import dev.openhachimi.hud.Notifications;
 import dev.openhachimi.settings.BooleanSetting;
-import dev.openhachimi.utils.ModuleManager;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

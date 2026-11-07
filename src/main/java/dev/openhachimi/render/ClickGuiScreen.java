@@ -4,9 +4,9 @@
 package dev.openhachimi.render;
 
 import dev.openhachimi.modules.Module;
-import dev.openhachimi.utils.ModuleManager;
+import dev.openhachimi.modules.ModuleManager;
 import dev.openhachimi.config.ConfigLoadManager;
-import dev.openhachimi.utils.ClickGUI;
+import dev.openhachimi.utils.ClickGUIRenderHelper;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -24,19 +24,19 @@ extends Screen {
     public void render(GuiGraphics g, int mouseX, int mouseY, float partialTicks) {
         try {
             if (this.minecraft == null) {
-                ClickGUI.isOpen = false;
+                ClickGUIRenderHelper.isOpen = false;
                 return;
             }
             super.render(g, mouseX, mouseY, partialTicks);
-            ClickGUI.onRender2D(g, mouseX, mouseY);
+            ClickGUIRenderHelper.onRender2D(g, mouseX, mouseY);
         }
         catch (Throwable error) {
-            ClickGUI.isOpen = false;
+            ClickGUIRenderHelper.isOpen = false;
         }
     }
 
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (ClickGUI.onKeyPressed(keyCode)) {
+        if (ClickGUIRenderHelper.onKeyPressed(keyCode)) {
             return true;
         }
         return super.keyPressed(keyCode, scanCode, modifiers);
@@ -44,8 +44,8 @@ extends Screen {
 
     public void onClose() {
         super.onClose();
-        ClickGUI.finishEdit();
-        ClickGUI.isOpen = false;
+        ClickGUIRenderHelper.finishEdit();
+        ClickGUIRenderHelper.isOpen = false;
         Module clickGui = ModuleManager.getModule("ClickGui");
         if (clickGui != null && clickGui.enabled) {
             clickGui.enabled = false;
@@ -54,24 +54,24 @@ extends Screen {
     }
 
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        ClickGUI.handleMouseReleased(button, (int)mouseX, (int)mouseY);
+        ClickGUIRenderHelper.handleMouseReleased(button, (int)mouseX, (int)mouseY);
         return super.mouseReleased(mouseX, mouseY, button);
     }
 
     public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
-        ClickGUI.handleScroll(delta, (int)mouseX, (int)mouseY);
+        ClickGUIRenderHelper.handleScroll(delta, (int)mouseX, (int)mouseY);
         return super.mouseScrolled(mouseX, mouseY, delta);
     }
 
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (ClickGUI.handleMousePressed(button, (int)mouseX, (int)mouseY)) {
+        if (ClickGUIRenderHelper.handleMousePressed(button, (int)mouseX, (int)mouseY)) {
             return true;
         }
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
     public boolean charTyped(char codePoint, int modifiers) {
-        if (ClickGUI.onCharTyped(codePoint)) {
+        if (ClickGUIRenderHelper.onCharTyped(codePoint)) {
             return true;
         }
         return super.charTyped(codePoint, modifiers);

@@ -7,8 +7,8 @@ import dev.openhachimi.render.ClickGuiScreen;
 import dev.openhachimi.settings.BooleanSetting;
 import dev.openhachimi.settings.ModeSetting;
 import dev.openhachimi.settings.NumberSetting;
-import dev.openhachimi.utils.ClickGUI;
-import dev.openhachimi.utils.RegistryManager;
+import dev.openhachimi.utils.ClickGUIRenderHelper;
+import dev.openhachimi.utils.ColorValue;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -31,14 +31,14 @@ extends Module {
     private static final byte[] S_3D8E045C = new byte[]{1, 35, 54, 39, 37, 45, 48, 59, 98, 0, 48, 43, 37, 42, 54};  // XOR0x42 "Category Bright"
     private static final byte[] S_C24E94E = new byte[]{1, 42, 43, 50, 98, 0, 48, 43, 37, 42, 54};  // XOR0x42 "Chip Bright"
     private static final byte[] S_5F42D523 = new byte[]{0, 35, 48, 98, 10, 45, 45, 41, 49};  // XOR0x42 "Bar Hooks"
-    public final ModeSetting theme = new ModeSetting("Theme", ClickGUI.THEMES, ClickGUI.THEMES[0]);
+    public final ModeSetting theme = new ModeSetting("Theme", ClickGUIRenderHelper.THEMES, ClickGUIRenderHelper.THEMES[0]);
     public final ModeSetting fontMode = new ModeSetting("Font", new String[]{"Custom", "Vanilla"}, "Custom");
     public final NumberSetting blur = new NumberSetting("Blur", 3.0f, 0.1f, 8.0f);
     public final NumberSetting opacity = new NumberSetting("Opacity", 1.0f, 0.0f, 1.0f);
     public final NumberSetting brightness = new NumberSetting("Brightness", 1.0f, 0.2f, 2.0f);
-    public final RegistryManager pillColor = new RegistryManager("Pill Color", 0xF2FBFF);
+    public final ColorValue pillColor = new ColorValue("Pill Color", 0xF2FBFF);
     public final NumberSetting pillAlpha = new NumberSetting("Pill Alpha", 1.0f, 0.0f, 1.0f);
-    public final RegistryManager toggleOffColor = new RegistryManager("Toggle Off", 10134445);
+    public final ColorValue toggleOffColor = new ColorValue("Toggle Off", 10134445);
     public final NumberSetting logoBrightness = new NumberSetting("Logo Brightness", 1.0f, 0.2f, 2.5f);
     public final NumberSetting logoBackBrightness = new NumberSetting("Logo Back", 1.0f, 0.2f, 2.5f);
     public final NumberSetting categoryBrightness = new NumberSetting("Category Bright", 1.0f, 0.2f, 2.5f);
@@ -74,7 +74,7 @@ extends Module {
                     mc.setScreen((Screen)new ClickGuiScreen());
                 }
                 catch (Throwable error) {
-                    ClickGUI.isOpen = false;
+                    ClickGUIRenderHelper.isOpen = false;
                     ClickguiModule.this.enabled = false;
                 }
             }
@@ -89,7 +89,7 @@ extends Module {
     @Override
     public void onDisable() {
         final Minecraft mc = Minecraft.getInstance();
-        ClickGUI.isOpen = false;
+        ClickGUIRenderHelper.isOpen = false;
         if (mc == null) {
             return;
         }
@@ -121,7 +121,7 @@ extends Module {
             this.enabled = false;
             return;
         }
-        ClickGUI.isOpen = true;
+        ClickGUIRenderHelper.isOpen = true;
         if (mc.screen instanceof ClickGuiScreen) {
             return;
         }

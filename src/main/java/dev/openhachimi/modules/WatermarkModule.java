@@ -4,15 +4,14 @@
 package dev.openhachimi.modules;
 
 import dev.openhachimi.hud.Notifications;
-import dev.openhachimi.render.Render2D;
+import dev.openhachimi.security.NativeStringUtil;
 import dev.openhachimi.settings.BooleanSetting;
 import dev.openhachimi.settings.NumberSetting;
-import dev.openhachimi.utils.ModuleManager;
 import dev.openhachimi.utils.render.shader.Shader;
 import dev.openhachimi.utils.render.font.Font;
 import dev.openhachimi.utils.EventDispatcherImpl;
 import dev.openhachimi.utils.render.RenderUtil;
-import dev.openhachimi.utils.ClickGUI;
+import dev.openhachimi.utils.ClickGUIRenderHelper;
 import dev.openhachimi.utils.render.font.FontManager;
 
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -555,7 +554,7 @@ extends Module {
         int accent = fade << 24 | 0xBBC3FF;
         float centerY = y + this.islandHeight / 2.0f;
         float cursor = x + 9.0f * scale;
-        this.symbol(graphics, 0, cursor, centerY, 10.5f * scale, ClickGUI.brighten(accent, 3.0f));
+        this.symbol(graphics, 0, cursor, centerY, 10.5f * scale, ClickGUIRenderHelper.brighten(accent, 3.0f));
         cursor += 14.0f * scale;
         cursor = this.label(graphics, font, brand, accent, cursor, centerY, fontScale);
         cursor = this.separator(graphics, font, cursor, centerY, fontScale, scale, fg);
@@ -629,7 +628,7 @@ extends Module {
     }
 
     private static String separatorText() {
-        return Render2D.d(new byte[]{98, 98, -11, 98, 98});
+        return NativeStringUtil.d(new byte[]{98, 98, -11, 98, 98});
     }
 
     private static int pingColor(int ping) {

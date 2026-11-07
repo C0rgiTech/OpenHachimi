@@ -4,7 +4,7 @@
 package dev.openhachimi.config;
 
 import dev.openhachimi.modules.Module;
-import dev.openhachimi.render.Render2D;
+import dev.openhachimi.security.NativeStringUtil;
 import dev.openhachimi.settings.BooleanSetting;
 import dev.openhachimi.settings.EnumSetting;
 import dev.openhachimi.settings.IntSetting;
@@ -12,7 +12,7 @@ import dev.openhachimi.settings.ListSetting;
 import dev.openhachimi.settings.ModeSetting;
 import dev.openhachimi.settings.NumberSetting;
 import dev.openhachimi.settings.Setting;
-import dev.openhachimi.utils.ModuleManager;
+import dev.openhachimi.modules.ModuleManager;
 import dev.openhachimi.utils.EventDispatcherImpl;
 
 import com.google.gson.Gson;
@@ -78,7 +78,7 @@ public class ConfigManager {
             if (encryptedContent.isEmpty()) {
                 return;
             }
-            String decryptedJson = Render2D.decryptFromBase64(encryptedContent, "LaXmg9Smo!PQsb!roPbz@OmsAhczxaAdobeEbnmAZfg+@=Hx!");
+            String decryptedJson = NativeStringUtil.decryptFromBase64(encryptedContent, "LaXmg9Smo!PQsb!roPbz@OmsAhczxaAdobeEbnmAZfg+@=Hx!");
             JsonObject jsonObject = (JsonObject)this.gson.fromJson(decryptedJson, JsonObject.class);
             if (jsonObject == null || !jsonObject.has("Modules")) {
                 return;
@@ -182,7 +182,7 @@ public class ConfigManager {
                 }
                 jsonObject.add("Modules", (JsonElement)modulesObject);
                 String jsonStr = this.gson.toJson((JsonElement)jsonObject);
-                String sealed = Render2D.encryptToBase64(jsonStr, "LaXmg9Smo!PQsb!roPbz@OmsAhczxaAdobeEbnmAZfg+@=Hx!");
+                String sealed = NativeStringUtil.encryptToBase64(jsonStr, "LaXmg9Smo!PQsb!roPbz@OmsAhczxaAdobeEbnmAZfg+@=Hx!");
                 if (sealed == null || sealed.isEmpty()) {
                     return;
                 }

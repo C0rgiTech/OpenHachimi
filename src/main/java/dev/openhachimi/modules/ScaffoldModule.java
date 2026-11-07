@@ -3,15 +3,14 @@
  */
 package dev.openhachimi.modules;
 
-import dev.openhachimi.render.StencilBuffer;
+import dev.openhachimi.utils.rotation.RotationManager;
 import dev.openhachimi.settings.BooleanSetting;
 import dev.openhachimi.settings.ModeSetting;
 import dev.openhachimi.settings.NumberSetting;
-import dev.openhachimi.utils.ModuleManager;
 import dev.openhachimi.utils.rotation.Rotation;
 import dev.openhachimi.utils.player.InventoryUtil;
 import dev.openhachimi.utils.player.PlayerData;
-import dev.openhachimi.utils.MemoryHelper;
+import dev.openhachimi.render.BlockCounterDisplay;
 import dev.openhachimi.utils.player.MoveUtil;
 import dev.openhachimi.utils.player.RaytraceUtil2;
 import dev.openhachimi.utils.rotation.RotationUtil;
@@ -87,7 +86,7 @@ extends Module {
     private final BooleanSetting autoStuck = new BooleanSetting("AutoStuck", false);
     private final ModeSetting stuckMode = new ModeSetting("Stuck Mode", new String[]{"Stop Move", "Skip Ticks"}, "Stop Move");
     public final BooleanSetting block = new BooleanSetting("Block", false);
-    private final MemoryHelper blockCounterDisplay = new MemoryHelper();
+    private final BlockCounterDisplay blockCounterDisplay = new BlockCounterDisplay();
     private double baseY = -1.0;
     private int bigVelocityTick;
     private int morekbStuckTick;
@@ -371,7 +370,7 @@ extends Module {
                 mc.options.setCameraType(CameraType.FIRST_PERSON);
             }
         }
-        StencilBuffer.clear();
+        RotationManager.clear();
         hasTargetRotation = false;
         if (mc.player != null && stopMoveActive) {
             mc.player.setNoGravity(false);

@@ -1,8 +1,9 @@
 /*
  * Decompiled with CFR 0.152.
  */
-package dev.openhachimi.utils;
+package dev.openhachimi.render.targethuds;
 
+import dev.openhachimi.hud.DraggedHUDManager;
 import dev.openhachimi.hud.RenderableHud;
 import dev.openhachimi.modules.AimassistModule;
 import dev.openhachimi.modules.KillauraModule;
@@ -12,6 +13,7 @@ import dev.openhachimi.modules.TargethudModule;
 import com.mojang.blaze3d.systems.RenderSystem;
 import java.util.function.DoubleUnaryOperator;
 
+import dev.openhachimi.modules.ModuleManager;
 import dev.openhachimi.utils.render.RenderUtil;
 import dev.openhachimi.utils.render.font.Font;
 import dev.openhachimi.utils.render.font.FontManager;
@@ -27,7 +29,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import org.lwjgl.glfw.GLFW;
 
-public class TargetHUDRenderHelper
+public class SimpleTargetHUD
 implements RenderableHud {
     private float lastHealth;
     private float healthDelta;
@@ -43,9 +45,9 @@ implements RenderableHud {
     private final Timer healthLagAnim = new Timer();
     private boolean slideStarted;
     private boolean contentStarted;
-    private static final FrameHelper.Draggable OWNER = new FrameHelper.Draggable(){};
+    private static final DraggedHUDManager.Draggable OWNER = new DraggedHUDManager.Draggable(){};
 
-    public TargetHUDRenderHelper() {
+    public SimpleTargetHUD() {
         this.scaleAnim.setCurrent(1.0f);
         this.fadeAnim.setCurrent(0.0f);
         this.slideAnim.setCurrent(5.0f);
@@ -98,19 +100,19 @@ implements RenderableHud {
         if (shouldShow != this.visible || shouldShow && this.fadeAnim.value() <= 0.01f) {
             this.visible = shouldShow;
             if (this.visible) {
-                this.fadeAnim.animate(1.0f, 0.35f, TargetHUDRenderHelper::easeOutPow3);
+                this.fadeAnim.animate(1.0f, 0.35f, SimpleTargetHUD::easeOutPow3);
                 this.slideAnim.setCurrent(5.0f);
                 this.contentAnim.setCurrent(0.0f);
                 this.scaleAnim.setCurrent(1.0f);
                 this.slideStarted = false;
                 this.contentStarted = false;
             } else {
-                this.fadeAnim.animate(0.0f, 0.15f, TargetHUDRenderHelper::easeInPow3);
-                this.slideAnim.animate(5.0f, 0.15f, TargetHUDRenderHelper::easeInPow3);
-                this.contentAnim.animate(0.0f, 0.15f, TargetHUDRenderHelper::easeInPow3);
+                this.fadeAnim.animate(0.0f, 0.15f, SimpleTargetHUD::easeInPow3);
+                this.slideAnim.animate(5.0f, 0.15f, SimpleTargetHUD::easeInPow3);
+                this.contentAnim.animate(0.0f, 0.15f, SimpleTargetHUD::easeInPow3);
             }
         } else if (hasTarget && this.currentTarget != target && this.visible) {
-            this.fadeAnim.animate(1.0f, 0.35f, TargetHUDRenderHelper::easeOutPow3);
+            this.fadeAnim.animate(1.0f, 0.35f, SimpleTargetHUD::easeOutPow3);
             this.slideAnim.setCurrent(5.0f);
             this.contentAnim.setCurrent(0.0f);
             this.slideStarted = false;
@@ -120,11 +122,11 @@ implements RenderableHud {
         if (this.visible) {
             if (this.fadeAnim.value() >= 0.08f && !this.slideStarted) {
                 this.slideStarted = true;
-                this.slideAnim.animate(0.0f, 0.3f, TargetHUDRenderHelper::easeOutPow3);
+                this.slideAnim.animate(0.0f, 0.3f, SimpleTargetHUD::easeOutPow3);
             }
             if (this.fadeAnim.value() >= 0.15f && !this.contentStarted) {
                 this.contentStarted = true;
-                this.contentAnim.animate(1.0f, 0.4f, TargetHUDRenderHelper::easeOutPow3);
+                this.contentAnim.animate(1.0f, 0.4f, SimpleTargetHUD::easeOutPow3);
             }
         }
         if (this.slideStarted) {
@@ -148,8 +150,8 @@ implements RenderableHud {
             float currentHealth = Math.min(drawTarget.getHealth(), 20.0f);
             float maxHealth = Math.min(drawTarget.getMaxHealth(), 20.0f);
             float ratio = maxHealth > 0.0f ? currentHealth / maxHealth : 0.0f;
-            this.healthAnim.animate(ratio, 0.5f, TargetHUDRenderHelper::easeOutPow4);
-            this.healthLagAnim.animate(ratio, 1.5f, TargetHUDRenderHelper::easeOutPow5);
+            this.healthAnim.animate(ratio, 0.5f, SimpleTargetHUD::easeOutPow4);
+            this.healthLagAnim.animate(ratio, 1.5f, SimpleTargetHUD::easeOutPow5);
         } else {
             this.healthDelta = 0.0f;
         }
@@ -157,7 +159,7 @@ implements RenderableHud {
         this.healthLagAnim.tick();
         if (hasTarget && drawTarget.hurtTime > this.lastHurtTime) {
             this.scaleAnim.setCurrent(0.7f);
-            this.scaleAnim.animate(1.0f, 1.5f, TargetHUDRenderHelper::easeOutElastic);
+            this.scaleAnim.animate(1.0f, 1.5f, SimpleTargetHUD::easeOutElastic);
         }
         if (hasTarget) {
             this.lastHurtTime = drawTarget.hurtTime;
@@ -166,7 +168,7 @@ implements RenderableHud {
         float x = ((Integer)config.posX.get()).intValue();
         float y = ((Integer)config.posY.get()).intValue();
         if (mc.screen instanceof ChatScreen) {
-            float[] drag = TargetHUDRenderHelper.handleDrag(mc, x, y, 120.0f, 38.0f);
+            float[] drag = SimpleTargetHUD.handleDrag(mc, x, y, 120.0f, 38.0f);
             x = drag[0];
             y = drag[1];
             config.posX.set((int)x);
@@ -186,7 +188,7 @@ implements RenderableHud {
         RenderSystem.disableDepthTest();
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
-        TargetHUDRenderHelper.drawBlurBackdrop(graphics, x, y, fade);
+        SimpleTargetHUD.drawBlurBackdrop(graphics, x, y, fade);
         RenderUtil.drawRoundedRect(graphics, x, y, 120.0f, 38.0f, 5.0f, (int)(70.0f * fade) << 24);
         graphics.flush();
         float scaleValue = this.scaleAnim.value();
@@ -198,8 +200,8 @@ implements RenderableHud {
         if (drawTarget instanceof AbstractClientPlayer) {
             AbstractClientPlayer player = (AbstractClientPlayer)drawTarget;
             ResourceLocation skin = player.getSkinTextureLocation();
-            TargetHUDRenderHelper.drawRoundedTexture(graphics, skin, headX, headY, headSize, 5.0f * combinedScale, 0.125f, 0.125f, 0.125f, fade);
-            TargetHUDRenderHelper.drawRoundedTexture(graphics, skin, headX, headY, headSize, 5.0f * combinedScale, 0.625f, 0.125f, 0.125f, fade);
+            SimpleTargetHUD.drawRoundedTexture(graphics, skin, headX, headY, headSize, 5.0f * combinedScale, 0.125f, 0.125f, 0.125f, fade);
+            SimpleTargetHUD.drawRoundedTexture(graphics, skin, headX, headY, headSize, 5.0f * combinedScale, 0.625f, 0.125f, 0.125f, fade);
         }
         float slideOff = this.slideAnim.value();
         float contentVal = this.contentAnim.value();
@@ -235,12 +237,12 @@ implements RenderableHud {
         double mouseX = mc.mouseHandler.xpos() * (double)mc.getWindow().getGuiScaledWidth() / (double)mc.getWindow().getScreenWidth();
         double mouseY = mc.mouseHandler.ypos() * (double)mc.getWindow().getGuiScaledHeight() / (double)mc.getWindow().getScreenHeight();
         boolean mouseDown = GLFW.glfwGetMouseButton((long)mc.getWindow().getWindow(), (int)0) == 1;
-        FrameHelper.updateMouse(mouseX, mouseY, mouseDown);
-        FrameHelper.offer(OWNER, x, y, width, height);
-        if (!FrameHelper.isActive(OWNER)) {
+        DraggedHUDManager.updateMouse(mouseX, mouseY, mouseDown);
+        DraggedHUDManager.offer(OWNER, x, y, width, height);
+        if (!DraggedHUDManager.isActive(OWNER)) {
             return new float[]{x, y};
         }
-        return new float[]{(float)mouseX - FrameHelper.grabOffsetX(), (float)mouseY - FrameHelper.grabOffsetY()};
+        return new float[]{(float)mouseX - DraggedHUDManager.grabOffsetX(), (float)mouseY - DraggedHUDManager.grabOffsetY()};
     }
 
     private static float easeOutPow3(double t) {

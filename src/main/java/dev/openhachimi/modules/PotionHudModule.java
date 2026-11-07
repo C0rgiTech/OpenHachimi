@@ -6,7 +6,7 @@ package dev.openhachimi.modules;
 import dev.openhachimi.settings.ListSetting;
 import dev.openhachimi.utils.render.shader.Shader;
 import dev.openhachimi.utils.render.font.Font;
-import dev.openhachimi.utils.FrameHelper;
+import dev.openhachimi.hud.DraggedHUDManager;
 import dev.openhachimi.utils.render.font.FontManager;
 
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -52,7 +52,7 @@ extends Module {
     public final ListSetting posY = new ListSetting("Y", 0, 0, 4000);
     public final ListSetting textOffset = new ListSetting("Text X", 0, 0, 40);
     private final List<EffectEntry> entries = new ArrayList<EffectEntry>();
-    private static final FrameHelper.Draggable OWNER = new FrameHelper.Draggable(){};
+    private static final DraggedHUDManager.Draggable OWNER = new DraggedHUDManager.Draggable(){};
 
     private static float ease(int easing, float t) {
         switch (easing) {
@@ -171,7 +171,7 @@ extends Module {
             this.posX.set((int)originX);
             this.posY.set((int)originY);
         } else {
-            FrameHelper.release();
+            DraggedHUDManager.release();
         }
         for (EffectEntry entry4 : this.entries) {
             float pct;
@@ -217,12 +217,12 @@ extends Module {
         double mouseX = mc.mouseHandler.xpos() * (double)mc.getWindow().getGuiScaledWidth() / (double)mc.getWindow().getScreenWidth();
         double mouseY = mc.mouseHandler.ypos() * (double)mc.getWindow().getGuiScaledHeight() / (double)mc.getWindow().getScreenHeight();
         boolean mouseDown = GLFW.glfwGetMouseButton((long)mc.getWindow().getWindow(), (int)0) == 1;
-        FrameHelper.updateMouse(mouseX, mouseY, mouseDown);
-        FrameHelper.offer(OWNER, x - 5.0f, y - 5.0f, width + 10.0f, height + 10.0f);
-        if (!FrameHelper.isActive(OWNER)) {
+        DraggedHUDManager.updateMouse(mouseX, mouseY, mouseDown);
+        DraggedHUDManager.offer(OWNER, x - 5.0f, y - 5.0f, width + 10.0f, height + 10.0f);
+        if (!DraggedHUDManager.isActive(OWNER)) {
             return new float[]{x, y};
         }
-        return new float[]{(float)mouseX - FrameHelper.grabOffsetX(), (float)mouseY - FrameHelper.grabOffsetY()};
+        return new float[]{(float)mouseX - DraggedHUDManager.grabOffsetX(), (float)mouseY - DraggedHUDManager.grabOffsetY()};
     }
 
     @Override

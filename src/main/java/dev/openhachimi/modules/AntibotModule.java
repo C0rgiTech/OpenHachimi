@@ -3,8 +3,6 @@
  */
 package dev.openhachimi.modules;
 
-import dev.openhachimi.utils.ModuleManager;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;

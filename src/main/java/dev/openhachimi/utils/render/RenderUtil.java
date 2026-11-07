@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.function.Supplier;
 
-import dev.openhachimi.utils.FrameHelper;
+import dev.openhachimi.hud.DraggedHUDManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.ChatScreen;
@@ -28,12 +28,12 @@ import org.lwjgl.glfw.GLFW;
 
 public class RenderUtil {
     public static Object hudHover;
-    private static final Map<Object, FrameHelper.Draggable> DRAG_TOKENS;
+    private static final Map<Object, DraggedHUDManager.Draggable> DRAG_TOKENS;
     public static float deltaTime;
     private static long lastFrameTime;
 
     static {
-        DRAG_TOKENS = new WeakHashMap<Object, FrameHelper.Draggable>();
+        DRAG_TOKENS = new WeakHashMap<Object, DraggedHUDManager.Draggable>();
         deltaTime = 0.016f;
         lastFrameTime = System.currentTimeMillis();
     }
@@ -138,22 +138,22 @@ public class RenderUtil {
         boolean bl = screenOk = mc.screen instanceof ChatScreen || mc.screen instanceof ClickGuiScreen;
         if (!screenOk) {
             hudHover = null;
-            FrameHelper.release();
+            DraggedHUDManager.release();
             return new float[]{x, y};
         }
         double rawX = mc.mouseHandler.xpos() * (double)mc.getWindow().getGuiScaledWidth() / (double)mc.getWindow().getScreenWidth();
         double rawY = mc.mouseHandler.ypos() * (double)mc.getWindow().getGuiScaledHeight() / (double)mc.getWindow().getScreenHeight();
         boolean down = GLFW.glfwGetMouseButton((long)mc.getWindow().getWindow(), (int)0) == 1;
-        FrameHelper.updateMouse(rawX, rawY, down);
-        FrameHelper.Draggable token = RenderUtil.dragToken(owner);
-        FrameHelper.offer(token, x, y, width, height);
+        DraggedHUDManager.updateMouse(rawX, rawY, down);
+        DraggedHUDManager.Draggable token = RenderUtil.dragToken(owner);
+        DraggedHUDManager.offer(token, x, y, width, height);
         boolean bl2 = inside = rawX >= (double)x && rawX <= (double)(x + width) && rawY >= (double)y && rawY <= (double)(y + height);
         Object object = inside ? owner : (hudHover = hudHover == owner ? null : hudHover);
-        if (!FrameHelper.isActive(token)) {
+        if (!DraggedHUDManager.isActive(token)) {
             return new float[]{x, y};
         }
-        float nx = (float)rawX - FrameHelper.grabOffsetX();
-        float ny = (float)rawY - FrameHelper.grabOffsetY();
+        float nx = (float)rawX - DraggedHUDManager.grabOffsetX();
+        float ny = (float)rawY - DraggedHUDManager.grabOffsetY();
         float maxX = (float)mc.getWindow().getGuiScaledWidth() - width - 2.0f;
         float maxY = (float)mc.getWindow().getGuiScaledHeight() - height - 2.0f;
         nx = Math.max(2.0f, Math.min(maxX, nx));
@@ -191,12 +191,12 @@ public class RenderUtil {
     /*
      * WARNING - Removed try catching itself - possible behaviour change.
      */
-    private static FrameHelper.Draggable dragToken(Object owner) {
-        Map<Object, FrameHelper.Draggable> map = DRAG_TOKENS;
+    private static DraggedHUDManager.Draggable dragToken(Object owner) {
+        Map<Object, DraggedHUDManager.Draggable> map = DRAG_TOKENS;
         synchronized (map) {
-            FrameHelper.Draggable token = DRAG_TOKENS.get(owner);
+            DraggedHUDManager.Draggable token = DRAG_TOKENS.get(owner);
             if (token == null) {
-                token = new FrameHelper.Draggable(){};
+                token = new DraggedHUDManager.Draggable(){};
                 DRAG_TOKENS.put(owner, token);
             }
             return token;

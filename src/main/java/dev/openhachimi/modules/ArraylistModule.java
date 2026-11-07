@@ -6,10 +6,9 @@ package dev.openhachimi.modules;
 import dev.openhachimi.settings.BooleanSetting;
 import dev.openhachimi.settings.ModeSetting;
 import dev.openhachimi.settings.NumberSetting;
-import dev.openhachimi.utils.ModuleManager;
 import dev.openhachimi.utils.render.shader.Shader;
 import dev.openhachimi.utils.render.font.Font;
-import dev.openhachimi.utils.player.EnvironmentHelper;
+import dev.openhachimi.utils.render.shader.ShaderUtil;
 import dev.openhachimi.utils.render.RenderUtil;
 import dev.openhachimi.utils.render.font.FontManager;
 
@@ -206,7 +205,7 @@ extends Module {
         int fill = (Boolean)this.background.get() != false ? -871362544 : 0x101010;
         int shadow = (Boolean)this.glow.get() != false ? 0x42000000 : 0;
         float sigma = 2.7f * scale / 1.86f;
-        return EnvironmentHelper.stairs(graphics.pose().last().pose(), rows, count, sigma, 2.0f * scale, fill, shadow, -4471809, 1.0f * scale);
+        return ShaderUtil.stairs(graphics.pose().last().pose(), rows, count, sigma, 2.0f * scale, fill, shadow, -4471809, 1.0f * scale);
     }
 
     private List<Row> updateRows(float scale, float fontScale, boolean opai) {

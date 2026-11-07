@@ -6,7 +6,7 @@ package dev.openhachimi.utils;
 import java.awt.Color;
 import net.minecraft.world.entity.Entity;
 
-public interface TransactionHelper {
+public interface ThrowableData {
     public Color getColor(Entity var1);
 
     default public float getData2() {

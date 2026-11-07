@@ -1,13 +1,11 @@
 /*
  * Decompiled with CFR 0.152.
  */
-package dev.openhachimi.utils;
+package dev.openhachimi.render.targethuds;
 
+import dev.openhachimi.hud.DraggedHUDManager;
 import dev.openhachimi.hud.RenderableHud;
-import dev.openhachimi.modules.AimassistModule;
-import dev.openhachimi.modules.KillauraModule;
-import dev.openhachimi.modules.NicknameModule;
-import dev.openhachimi.modules.TargethudModule;
+import dev.openhachimi.modules.*;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import java.util.Locale;
@@ -28,7 +26,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import org.lwjgl.glfw.GLFW;
 
-public class PathHelper
+public class OpaiTargetHUD
 implements RenderableHud {
     private static final byte[] S_168BC2 = new byte[]{114, 114, 108, 114};  // XOR0x42 "00.0"
     private static final byte[] S_0 = new byte[0];
@@ -52,7 +50,7 @@ implements RenderableHud {
     private long lastActiveTime;
     private boolean visible;
     private float fade;
-    private static final FrameHelper.Draggable OWNER = new FrameHelper.Draggable(){};
+    private static final DraggedHUDManager.Draggable OWNER = new DraggedHUDManager.Draggable(){};
 
     @Override
     public void render(GuiGraphics graphics, float partialTick, TargethudModule config) {
@@ -63,7 +61,7 @@ implements RenderableHud {
         if (mc.getWindow() == null || mc.player == null || mc.level == null) {
             return;
         }
-        LivingEntity resolved = PathHelper.resolveTarget(mc);
+        LivingEntity resolved = OpaiTargetHUD.resolveTarget(mc);
         long now = System.currentTimeMillis();
         if (resolved != null) {
             this.lastActiveTime = now;
@@ -91,7 +89,7 @@ implements RenderableHud {
         float x = ((Integer)config.posX.get()).intValue();
         float y = ((Integer)config.posY.get()).intValue();
         if (mc.screen instanceof ChatScreen) {
-            float[] drag = PathHelper.handleDrag(mc, x, y, 122.0f, 40.0f);
+            float[] drag = OpaiTargetHUD.handleDrag(mc, x, y, 122.0f, 40.0f);
             x = drag[0];
             y = drag[1];
             config.posX.set((int)x);
@@ -111,23 +109,23 @@ implements RenderableHud {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         this.drawShadow(graphics, x, y, panelWidth, this.fade);
-        RenderUtil.drawRoundedRect(graphics, x, y, panelWidth, 40.0f, 6.0f, PathHelper.alpha(-938471408, this.fade));
-        RenderUtil.drawRoundedRect(graphics, x, y, panelWidth, 40.0f, 6.0f, PathHelper.alpha(0x1AFFFFFF, this.fade * 0.35f));
+        RenderUtil.drawRoundedRect(graphics, x, y, panelWidth, 40.0f, 6.0f, OpaiTargetHUD.alpha(-938471408, this.fade));
+        RenderUtil.drawRoundedRect(graphics, x, y, panelWidth, 40.0f, 6.0f, OpaiTargetHUD.alpha(0x1AFFFFFF, this.fade * 0.35f));
         this.drawFace(graphics, x + 3.0f, y + 3.0f, this.fade);
-        String fittedName = PathHelper.fit(font, name, panelWidth - 35.0f - labelWidth - 3.0f, fontScale);
-        this.drawText(graphics, font, fittedName, x + 32.0f, y + 5.0f, PathHelper.alpha(-1, this.fade), fontScale);
-        this.drawText(graphics, font, Health.format(sample.health()), x + 32.0f + (float)font.getStringWidth(fittedName) * fontScale + 1.5f, y + 5.0f, PathHelper.alpha(-4471809, this.fade), fontScale);
+        String fittedName = OpaiTargetHUD.fit(font, name, panelWidth - 35.0f - labelWidth - 3.0f, fontScale);
+        this.drawText(graphics, font, fittedName, x + 32.0f, y + 5.0f, OpaiTargetHUD.alpha(-1, this.fade), fontScale);
+        this.drawText(graphics, font, Health.format(sample.health()), x + 32.0f + (float)font.getStringWidth(fittedName) * fontScale + 1.5f, y + 5.0f, OpaiTargetHUD.alpha(-4471809, this.fade), fontScale);
         if (((Boolean)config.showArmor.get()).booleanValue()) {
             this.drawArmor(graphics, x, y);
         }
         float barWidth = Math.max(0.0f, panelWidth - 7.0f);
-        RenderUtil.drawRoundedRect(graphics, x + 3.0f, y + 32.0f, barWidth, 5.0f, 2.5f, PathHelper.alpha(0x66000000, this.fade));
+        RenderUtil.drawRoundedRect(graphics, x + 3.0f, y + 32.0f, barWidth, 5.0f, 2.5f, OpaiTargetHUD.alpha(0x66000000, this.fade));
         float trailWidth = barWidth * sample.trailFraction();
         if (trailWidth > 0.0f) {
-            RenderUtil.drawRoundedRect(graphics, x + 3.0f, y + 31.25f, trailWidth, 4.5f, 2.25f, PathHelper.alpha(0x66FFFFFF, this.fade));
+            RenderUtil.drawRoundedRect(graphics, x + 3.0f, y + 31.25f, trailWidth, 4.5f, 2.25f, OpaiTargetHUD.alpha(0x66FFFFFF, this.fade));
         }
         if ((fillWidth = barWidth * sample.fraction()) > 0.0f) {
-            RenderUtil.drawRoundedRect(graphics, x + 3.0f, y + 31.25f, fillWidth, 4.5f, 2.25f, PathHelper.alpha(-4471809, this.fade));
+            RenderUtil.drawRoundedRect(graphics, x + 3.0f, y + 31.25f, fillWidth, 4.5f, 2.25f, OpaiTargetHUD.alpha(-4471809, this.fade));
         }
         graphics.flush();
         RenderSystem.enableDepthTest();
@@ -143,12 +141,12 @@ implements RenderableHud {
         double mouseX = mc.mouseHandler.xpos() * (double)mc.getWindow().getGuiScaledWidth() / (double)mc.getWindow().getScreenWidth();
         double mouseY = mc.mouseHandler.ypos() * (double)mc.getWindow().getGuiScaledHeight() / (double)mc.getWindow().getScreenHeight();
         boolean mouseDown = GLFW.glfwGetMouseButton((long)mc.getWindow().getWindow(), (int)0) == 1;
-        FrameHelper.updateMouse(mouseX, mouseY, mouseDown);
-        FrameHelper.offer(OWNER, x, y, width, height);
-        if (!FrameHelper.isActive(OWNER)) {
+        DraggedHUDManager.updateMouse(mouseX, mouseY, mouseDown);
+        DraggedHUDManager.offer(OWNER, x, y, width, height);
+        if (!DraggedHUDManager.isActive(OWNER)) {
             return new float[]{x, y};
         }
-        return new float[]{(float)mouseX - FrameHelper.grabOffsetX(), (float)mouseY - FrameHelper.grabOffsetY()};
+        return new float[]{(float)mouseX - DraggedHUDManager.grabOffsetX(), (float)mouseY - DraggedHUDManager.grabOffsetY()};
     }
 
     private static LivingEntity resolveTarget(Minecraft mc) {
@@ -183,8 +181,8 @@ implements RenderableHud {
         }
         AbstractClientPlayer player = (AbstractClientPlayer)livingEntity;
         ResourceLocation skin = player.getSkinTextureLocation();
-        PathHelper.drawRoundedTexture(graphics, skin, x, y, 26.0f, 4.5f, 0.125f, 0.125f, 0.125f, fade);
-        PathHelper.drawRoundedTexture(graphics, skin, x, y, 26.0f, 4.5f, 0.625f, 0.125f, 0.125f, fade);
+        OpaiTargetHUD.drawRoundedTexture(graphics, skin, x, y, 26.0f, 4.5f, 0.125f, 0.125f, 0.125f, fade);
+        OpaiTargetHUD.drawRoundedTexture(graphics, skin, x, y, 26.0f, 4.5f, 0.625f, 0.125f, 0.125f, fade);
     }
 
     private void drawArmor(GuiGraphics graphics, float x, float y) {

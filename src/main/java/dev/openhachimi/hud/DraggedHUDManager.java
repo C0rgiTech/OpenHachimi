@@ -1,12 +1,12 @@
 /*
  * Decompiled with CFR 0.152.
  */
-package dev.openhachimi.utils;
+package dev.openhachimi.hud;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public final class FrameHelper {
+public final class DraggedHUDManager {
     private static final List<Entry> FRAME = new ArrayList<Entry>();
     private static Draggable active;
     private static float grabDX;
@@ -18,7 +18,7 @@ public final class FrameHelper {
     private static boolean sawMouse;
     public static final int RING_GUI = 100;
 
-    private FrameHelper() {
+    private DraggedHUDManager() {
     }
 
     public static void begin() {
@@ -45,7 +45,7 @@ public final class FrameHelper {
     }
 
     public static void offer(Draggable who, float x, float y, float w, float h) {
-        FrameHelper.offer(who, x, y, w, h, 0);
+        DraggedHUDManager.offer(who, x, y, w, h, 0);
     }
 
     public static float grabOffsetX() {

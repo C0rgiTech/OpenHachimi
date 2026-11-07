@@ -3,7 +3,7 @@
  */
 package dev.openhachimi.utils.player;
 
-import dev.openhachimi.render.StencilBuffer;
+import dev.openhachimi.utils.rotation.RotationManager;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.Input;
@@ -14,7 +14,7 @@ public class MoveUtil {
     private static final Minecraft mc = Minecraft.getInstance();
 
     private static float direction(float forward, float strafe) {
-        float direction = StencilBuffer.getCameraYaw();
+        float direction = RotationManager.getCameraYaw();
         boolean isMovingForward = forward > 0.0f;
         boolean isMovingBack = forward < 0.0f;
         boolean isMovingRight = strafe > 0.0f;

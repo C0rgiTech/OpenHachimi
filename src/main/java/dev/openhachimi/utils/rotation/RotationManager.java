@@ -1,7 +1,7 @@
 /*
  * Decompiled with CFR 0.152.
  */
-package dev.openhachimi.render;
+package dev.openhachimi.utils.rotation;
 
 import dev.openhachimi.modules.AutopearlModule;
 import dev.openhachimi.modules.AutosoupModule;
@@ -11,8 +11,7 @@ import dev.openhachimi.modules.KillauraModule;
 import dev.openhachimi.modules.MidpearlModule;
 import dev.openhachimi.modules.ScaffoldModule;
 import dev.openhachimi.modules.VelocityModule;
-import dev.openhachimi.utils.ModuleManager;
-import dev.openhachimi.utils.rotation.Rotation;
+import dev.openhachimi.modules.ModuleManager;
 import dev.openhachimi.utils.player.MoveUtil;
 
 import java.lang.reflect.Field;
@@ -22,7 +21,7 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
 import net.minecraft.util.Mth;
 
-public final class StencilBuffer {
+public final class RotationManager {
     public static float targetYaw;
     public static float targetPitch;
     public static boolean isRotating;
@@ -43,14 +42,14 @@ public final class StencilBuffer {
     private static Field xBobOField;
     private static boolean bobFieldsResolved;
 
-    private StencilBuffer() {
+    private RotationManager() {
     }
 
     public static void clear() {
         isRotating = false;
         renderInit = false;
         renderHoldTicks = 0;
-        StencilBuffer.restoreCameraIfNeeded();
+        RotationManager.restoreCameraIfNeeded();
     }
 
     public static void setTarget(float yaw, float pitch) {
@@ -60,9 +59,9 @@ public final class StencilBuffer {
     }
 
     public static void afterModules() {
-        StencilBuffer.pullTargets();
-        StencilBuffer.applyRenderOnly();
-        StencilBuffer.disableInteractionIfNeeded();
+        RotationManager.pullTargets();
+        RotationManager.applyRenderOnly();
+        RotationManager.disableInteractionIfNeeded();
     }
 
     private static void applyRenderOnly() {
@@ -84,7 +83,7 @@ public final class StencilBuffer {
 
     private static void applySpoof() {
         if (!isRotating) {
-            StencilBuffer.restoreCameraIfNeeded();
+            RotationManager.restoreCameraIfNeeded();
             return;
         }
         Minecraft mc = Minecraft.getInstance();
@@ -105,49 +104,49 @@ public final class StencilBuffer {
     }
 
     public static boolean hasServerLook() {
-        return hasLastSent && StencilBuffer.anglesClose(lastSentYaw, targetYaw) && StencilBuffer.anglesClose(lastSentPitch, targetPitch);
+        return hasLastSent && RotationManager.anglesClose(lastSentYaw, targetYaw) && RotationManager.anglesClose(lastSentPitch, targetPitch);
     }
 
     private static void pullTargets() {
         isRotating = false;
         AutosoupModule autoSoup = ModuleManager.getModule(AutosoupModule.class);
         if (autoSoup != null && autoSoup.enabled && AutosoupModule.hasTargetRotation) {
-            StencilBuffer.setTarget(AutosoupModule.targetYaw, AutosoupModule.targetPitch);
+            RotationManager.setTarget(AutosoupModule.targetYaw, AutosoupModule.targetPitch);
             return;
         }
         AutopearlModule autoPearl = AutopearlModule.INSTANCE;
         if (autoPearl != null && autoPearl.enabled && AutopearlModule.hasTargetRotation) {
-            StencilBuffer.setTarget(AutopearlModule.targetYaw, AutopearlModule.targetPitch);
+            RotationManager.setTarget(AutopearlModule.targetYaw, AutopearlModule.targetPitch);
             return;
         }
         MidpearlModule midPearl = MidpearlModule.INSTANCE;
         if (midPearl != null && midPearl.enabled && MidpearlModule.hasTargetRotation) {
-            StencilBuffer.setTarget(MidpearlModule.targetYaw, MidpearlModule.targetPitch);
+            RotationManager.setTarget(MidpearlModule.targetYaw, MidpearlModule.targetPitch);
             return;
         }
         VelocityModule velocity = VelocityModule.INSTANCE;
         if (velocity != null && velocity.enabled && VelocityModule.hasTargetRotation) {
-            StencilBuffer.setTarget(VelocityModule.targetYaw, VelocityModule.targetPitch);
+            RotationManager.setTarget(VelocityModule.targetYaw, VelocityModule.targetPitch);
             return;
         }
         ScaffoldModule scaffold = ModuleManager.getModule(ScaffoldModule.class);
         if (scaffold != null && scaffold.enabled && ScaffoldModule.hasTargetRotation) {
-            StencilBuffer.setTarget(ScaffoldModule.targetYaw, ScaffoldModule.targetPitch);
+            RotationManager.setTarget(ScaffoldModule.targetYaw, ScaffoldModule.targetPitch);
             return;
         }
         CrystalauraModule crystalAura = ModuleManager.getModule(CrystalauraModule.class);
         if (crystalAura != null && crystalAura.enabled && CrystalauraModule.hasTargetRotation) {
-            StencilBuffer.setTarget(CrystalauraModule.targetYaw, CrystalauraModule.targetPitch);
+            RotationManager.setTarget(CrystalauraModule.targetYaw, CrystalauraModule.targetPitch);
             return;
         }
         KillauraModule killAura = KillauraModule.INSTANCE;
         if (killAura != null && killAura.enabled && KillauraModule.hasTargetRotation) {
-            StencilBuffer.setTarget(KillauraModule.targetYaw, KillauraModule.targetPitch);
+            RotationManager.setTarget(KillauraModule.targetYaw, KillauraModule.targetPitch);
             return;
         }
         AutowebModule autoWebPlace = AutowebModule.INSTANCE;
         if (autoWebPlace != null && autoWebPlace.enabled && AutowebModule.hasTargetRotation) {
-            StencilBuffer.setTarget(AutowebModule.targetYaw, AutowebModule.targetPitch);
+            RotationManager.setTarget(AutowebModule.targetYaw, AutowebModule.targetPitch);
             return;
         }
     }
@@ -226,14 +225,14 @@ public final class StencilBuffer {
     public static void beginTick() {
         sentLookThisTick = false;
         sentMoveThisTick = false;
-        StencilBuffer.restoreCameraIfNeeded();
-        StencilBuffer.pullTargets();
-        StencilBuffer.applyRenderOnly();
+        RotationManager.restoreCameraIfNeeded();
+        RotationManager.pullTargets();
+        RotationManager.applyRenderOnly();
     }
 
     public static void onPostTick() {
-        StencilBuffer.restoreCameraIfNeeded();
-        StencilBuffer.applyRenderOnly();
+        RotationManager.restoreCameraIfNeeded();
+        RotationManager.applyRenderOnly();
     }
 
     public static Object transformOutgoing(Object packet) {
@@ -249,7 +248,7 @@ public final class StencilBuffer {
                 if (sentLookThisTick && !move.hasPosition()) {
                     return null;
                 }
-                if (hasLastSent && StencilBuffer.anglesClose(yaw, lastSentYaw) && StencilBuffer.anglesClose(pitch, lastSentPitch)) {
+                if (hasLastSent && RotationManager.anglesClose(yaw, lastSentYaw) && RotationManager.anglesClose(pitch, lastSentPitch)) {
                     if (move.hasPosition()) {
                         return new ServerboundMovePlayerPacket.Pos(move.getX(0.0), move.getY(0.0), move.getZ(0.0), move.isOnGround());
                     }
@@ -262,7 +261,7 @@ public final class StencilBuffer {
                 sentLookThisTick = true;
                 return replaced;
             }
-            if (move.hasPosition() && !StencilBuffer.hasServerLook()) {
+            if (move.hasPosition() && !RotationManager.hasServerLook()) {
                 Minecraft mc = Minecraft.getInstance();
                 LocalPlayer player = mc.player;
                 if (player == null) {
@@ -290,8 +289,8 @@ public final class StencilBuffer {
     }
 
     public static void onPlayerTickStart() {
-        StencilBuffer.pullTargets();
-        StencilBuffer.applySpoof();
+        RotationManager.pullTargets();
+        RotationManager.applySpoof();
     }
 
     public static void fixInput(Input input) {
@@ -302,7 +301,7 @@ public final class StencilBuffer {
     }
 
     public static void onPlayerTickEnd() {
-        StencilBuffer.applyRenderOnly();
+        RotationManager.applyRenderOnly();
     }
 
     public static void onIncomingPacket(Object packet) {

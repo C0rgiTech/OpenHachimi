@@ -1,52 +1,11 @@
 /*
  * Decompiled with CFR 0.152.
  */
-package dev.openhachimi.utils;
+package dev.openhachimi.modules;
 
 import dev.openhachimi.event.EventRegistrar;
-import dev.openhachimi.modules.AimassistModule;
-import dev.openhachimi.modules.AntibotModule;
-import dev.openhachimi.modules.AntinickModule;
-import dev.openhachimi.modules.AntistaffModule;
-import dev.openhachimi.modules.ArraylistModule;
-import dev.openhachimi.modules.AutoclickerModule;
-import dev.openhachimi.modules.AutopearlModule;
-import dev.openhachimi.modules.AutorodModule;
-import dev.openhachimi.modules.AutosoupModule;
-import dev.openhachimi.modules.AutosprintModule;
-import dev.openhachimi.modules.AutotoolsModule;
-import dev.openhachimi.modules.ChatoverlayModule;
-import dev.openhachimi.modules.ChestespModule;
-import dev.openhachimi.modules.CheststealerModule;
-import dev.openhachimi.modules.ClickguiModule;
-import dev.openhachimi.modules.CrystalauraModule;
-import dev.openhachimi.modules.DisablebossbarModule;
-import dev.openhachimi.modules.EagleModule;
-import dev.openhachimi.modules.EspModule;
-import dev.openhachimi.modules.FakelagModule;
-import dev.openhachimi.modules.FastplaceModule;
-import dev.openhachimi.modules.FriendModule;
-import dev.openhachimi.modules.HealthbypassModule;
-import dev.openhachimi.modules.InvmanagerModule;
-import dev.openhachimi.modules.JumpresetModule;
-import dev.openhachimi.modules.KillauraModule;
-import dev.openhachimi.modules.MidpearlModule;
-import dev.openhachimi.modules.Module;
-import dev.openhachimi.modules.NametagsModule;
-import dev.openhachimi.modules.NicknameModule;
-import dev.openhachimi.modules.NofovModule;
-import dev.openhachimi.modules.NojumpdelayModule;
-import dev.openhachimi.modules.NoslowModule;
-import dev.openhachimi.modules.NotificationModule;
-import dev.openhachimi.modules.PotionHudModule;
-import dev.openhachimi.modules.ProjaimModule;
-import dev.openhachimi.modules.ProjectileModule;
-import dev.openhachimi.modules.ScaffoldModule;
-import dev.openhachimi.modules.ScoreboardhudModule;
-import dev.openhachimi.modules.TargethudModule;
-import dev.openhachimi.modules.TeamsModule;
-import dev.openhachimi.modules.WatermarkModule;
-import dev.openhachimi.render.StencilBuffer;
+import dev.openhachimi.hud.DraggedHUDManager;
+import dev.openhachimi.utils.rotation.RotationManager;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -134,7 +93,7 @@ public class ModuleManager {
     }
 
     public static Object transformOutgoingPacket(Object packet) {
-        Object transformed = StencilBuffer.transformOutgoing(packet);
+        Object transformed = RotationManager.transformOutgoing(packet);
         if (transformed == null) {
             return null;
         }
@@ -205,11 +164,11 @@ public class ModuleManager {
             if (!m.enabled) continue;
             ModuleManager.safeInvoke(m, () -> m.onTick());
         }
-        StencilBuffer.onPostTick();
+        RotationManager.onPostTick();
     }
 
     public static void onPreTick() {
-        StencilBuffer.beginTick();
+        RotationManager.beginTick();
         NoslowModule noSlow = ModuleManager.getModule(NoslowModule.class);
         if (noSlow != null && noSlow.enabled) {
             ModuleManager.safeInvoke(noSlow, () -> noSlow.onPreTick());
@@ -218,11 +177,11 @@ public class ModuleManager {
             if (!m.enabled || m instanceof NoslowModule) continue;
             ModuleManager.safeInvoke(m, () -> m.onPreTick());
         }
-        StencilBuffer.afterModules();
+        RotationManager.afterModules();
     }
 
     public static boolean onIncomingPacket(Packet<?> packet) {
-        StencilBuffer.onIncomingPacket(packet);
+        RotationManager.onIncomingPacket(packet);
         for (Module m : modules) {
             if (!m.enabled || !m.onIncomingPacket(packet)) continue;
             return true;
@@ -257,7 +216,7 @@ public class ModuleManager {
     }
 
     public static void onRender2D(GuiGraphics g, float partialTick) {
-        FrameHelper.begin();
+        DraggedHUDManager.begin();
         for (Module m : modules) {
             if (!m.enabled && !m.shouldRender2DWhenDisabled()) continue;
             ModuleManager.safeInvoke(m, () -> m.onRender2D(g, partialTick));
@@ -269,7 +228,7 @@ public class ModuleManager {
             if (!overlay.enabled) continue;
             ModuleManager.safeInvoke(m, () -> overlay.render(mc, g));
         }
-        FrameHelper.commitForFrame();
+        DraggedHUDManager.commitForFrame();
     }
 
     public static void onUseItem(EventRegistrar.UseItemEvent event) {

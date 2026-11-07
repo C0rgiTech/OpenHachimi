@@ -3,11 +3,10 @@
  */
 package dev.openhachimi.modules;
 
-import dev.openhachimi.render.StencilBuffer;
+import dev.openhachimi.utils.rotation.RotationManager;
 import dev.openhachimi.settings.BooleanSetting;
 import dev.openhachimi.settings.ListSetting;
 import dev.openhachimi.settings.NumberSetting;
-import dev.openhachimi.utils.ModuleManager;
 import dev.openhachimi.utils.rotation.Rotation;
 import dev.openhachimi.utils.rotation.RotationUtil;
 
@@ -366,7 +365,7 @@ extends Module {
             this.preselectPlacementSlot();
             return;
         }
-        if (!StencilBuffer.hasServerLook()) {
+        if (!RotationManager.hasServerLook()) {
             this.preselectPlacementSlot();
             return;
         }
@@ -479,7 +478,7 @@ extends Module {
             this.clearTargetRotation();
             return;
         }
-        Rotation lastRot = StencilBuffer.getLastRotation();
+        Rotation lastRot = RotationManager.getLastRotation();
         float prevYaw = lastRot.getYaw();
         float unwrappedYaw = prevYaw + Mth.wrapDegrees((float)(rotation.yaw - prevYaw));
         Rotation utilRot = new Rotation(unwrappedYaw, rotation.pitch);
@@ -1250,7 +1249,7 @@ extends Module {
     private void clearTargetRotation() {
         hasTargetRotation = false;
         this.keepRotationTicks = 0;
-        StencilBuffer.clear();
+        RotationManager.clear();
     }
 
     private boolean isCobwebIntersecting(AABB aabb, BlockPos pos) {

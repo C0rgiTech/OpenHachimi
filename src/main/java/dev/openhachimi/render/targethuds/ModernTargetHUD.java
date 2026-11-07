@@ -1,8 +1,9 @@
 /*
  * Decompiled with CFR 0.152.
  */
-package dev.openhachimi.utils;
+package dev.openhachimi.render.targethuds;
 
+import dev.openhachimi.hud.DraggedHUDManager;
 import dev.openhachimi.hud.RenderableHud;
 import dev.openhachimi.modules.AimassistModule;
 import dev.openhachimi.modules.KillauraModule;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
+import dev.openhachimi.modules.ModuleManager;
 import dev.openhachimi.utils.render.font.Font;
 import dev.openhachimi.utils.render.font.FontManager;
 import dev.openhachimi.utils.render.shader.RoundRectRender;
@@ -35,7 +37,7 @@ import net.minecraft.world.entity.player.Player;
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
 
-public class MetricHelper
+public class ModernTargetHUD
 implements RenderableHud {
     private static final byte[] S_7583DA68 = new byte[]{3, 54, 54, 35, 33, 41};  // XOR0x42 "Attack"
     private static final byte[] S_10125 = new byte[]{3, 43, 47};  // XOR0x42 "Aim"
@@ -61,7 +63,7 @@ implements RenderableHud {
     private float sweepClock = -1000.0f;
     private int chipFlip = 1;
     private final List<FloatingText> chips = new ArrayList<FloatingText>();
-    private static final FrameHelper.Draggable OWNER = new FrameHelper.Draggable(){};
+    private static final DraggedHUDManager.Draggable OWNER = new DraggedHUDManager.Draggable(){};
     private long c2LastAttackTime;
 
     private static float approach(float current, float targetValue, float speed, float dt) {
@@ -100,11 +102,11 @@ implements RenderableHud {
         if (text == null) {
             return "";
         }
-        if (MetricHelper.textWidth(font, text) <= maxWidth) {
+        if (ModernTargetHUD.textWidth(font, text) <= maxWidth) {
             return text;
         }
         String ellipsis = "…";
-        float ellipsisW = MetricHelper.textWidth(font, ellipsis);
+        float ellipsisW = ModernTargetHUD.textWidth(font, ellipsis);
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < text.length(); i += step) {
             char c = text.charAt(i);
@@ -112,7 +114,7 @@ implements RenderableHud {
             if (c == '§' && i + 1 < text.length()) {
                 step = 2;
             }
-            if (MetricHelper.textWidth(font, sb.toString() + text.substring(i, i + step)) + ellipsisW > maxWidth) break;
+            if (ModernTargetHUD.textWidth(font, sb.toString() + text.substring(i, i + step)) + ellipsisW > maxWidth) break;
             sb.append(text, i, i + step);
         }
         while (sb.length() > 0 && sb.charAt(sb.length() - 1) == '§') {
@@ -209,7 +211,7 @@ implements RenderableHud {
             this.lastSeenMs = now;
         }
         boolean show = this.target != null && now - this.lastSeenMs < 350L;
-        MetricHelper.spring(this.cardSpring, show ? 1.0f : 0.0f, show ? 320.0f : 520.0f, show ? 23.0f : 46.0f, dt);
+        ModernTargetHUD.spring(this.cardSpring, show ? 1.0f : 0.0f, show ? 320.0f : 520.0f, show ? 23.0f : 46.0f, dt);
         float sp = this.cardSpring[0];
         if (!show && sp < 0.02f) {
             this.target = null;
@@ -217,7 +219,7 @@ implements RenderableHud {
             this.flash = 0.0f;
             this.shakeT = 0.0f;
             this.chips.clear();
-            FrameHelper.release();
+            DraggedHUDManager.release();
             return;
         }
         if (this.target == null) {
@@ -251,10 +253,10 @@ implements RenderableHud {
             this.shakeT = 1.0f;
         }
         this.lastHurtTime = this.target.hurtTime;
-        MetricHelper.spring(this.avatarSpring, 1.0f, 430.0f, 20.0f, dt);
-        this.healthSmooth = MetricHelper.approach(this.healthSmooth, ratio, 11.0f, dt);
-        this.healthLag = this.healthLag > this.healthSmooth + 0.002f ? MetricHelper.approach(this.healthLag, this.healthSmooth, 2.6f, dt) : this.healthSmooth;
-        this.flash = MetricHelper.approach(this.flash, 0.0f, 5.5f, dt);
+        ModernTargetHUD.spring(this.avatarSpring, 1.0f, 430.0f, 20.0f, dt);
+        this.healthSmooth = ModernTargetHUD.approach(this.healthSmooth, ratio, 11.0f, dt);
+        this.healthLag = this.healthLag > this.healthSmooth + 0.002f ? ModernTargetHUD.approach(this.healthLag, this.healthSmooth, 2.6f, dt) : this.healthSmooth;
+        this.flash = ModernTargetHUD.approach(this.flash, 0.0f, 5.5f, dt);
         this.shakeT = Math.max(0.0f, this.shakeT - dt / 0.42f);
         this.sweepClock += dt;
         for (int i = this.chips.size() - 1; i >= 0; --i) {
@@ -265,8 +267,8 @@ implements RenderableHud {
         }
         float fadeP = Math.max(0.0f, Math.min(sp, 1.0f));
         float fade = fadeP * fadeP * (3.0f - 2.0f * fadeP);
-        float neededNameW = MetricHelper.textWidth(FontManager.smallFont, NicknameModule.nameFor((Entity)this.target, this.target.getName().getString()));
-        float numTextW = MetricHelper.textWidth(FontManager.smallFont, String.format("%.1f", Float.valueOf(this.healthSmooth * maxHealth)));
+        float neededNameW = ModernTargetHUD.textWidth(FontManager.smallFont, NicknameModule.nameFor((Entity)this.target, this.target.getName().getString()));
+        float numTextW = ModernTargetHUD.textWidth(FontManager.smallFont, String.format("%.1f", Float.valueOf(this.healthSmooth * maxHealth)));
         float neededFullW = neededNameW + numTextW + 68.0f;
         float fullW = Math.max(164.0f, neededFullW);
         float h = 50.0f;
@@ -279,11 +281,11 @@ implements RenderableHud {
             double mouseX = mc.mouseHandler.xpos() * (double)mc.getWindow().getGuiScaledWidth() / (double)mc.getWindow().getScreenWidth();
             double mouseY = mc.mouseHandler.ypos() * (double)mc.getWindow().getGuiScaledHeight() / (double)mc.getWindow().getScreenHeight();
             boolean mouseDown = GLFW.glfwGetMouseButton((long)mc.getWindow().getWindow(), (int)0) == 1;
-            FrameHelper.updateMouse(mouseX, mouseY, mouseDown);
-            FrameHelper.offer(OWNER, baseX, baseY, fullW, h);
-            if (FrameHelper.isActive(OWNER)) {
-                baseX = (float)mouseX - FrameHelper.grabOffsetX();
-                baseY = (float)mouseY - FrameHelper.grabOffsetY();
+            DraggedHUDManager.updateMouse(mouseX, mouseY, mouseDown);
+            DraggedHUDManager.offer(OWNER, baseX, baseY, fullW, h);
+            if (DraggedHUDManager.isActive(OWNER)) {
+                baseX = (float)mouseX - DraggedHUDManager.grabOffsetX();
+                baseY = (float)mouseY - DraggedHUDManager.grabOffsetY();
                 config.posX.set((int)baseX);
                 config.posY.set((int)baseY);
             }
@@ -302,13 +304,13 @@ implements RenderableHud {
         g.pose().translate(cx, cy, 0.0f);
         g.pose().scale(scale, scale, 1.0f);
         g.pose().translate(-cx, -cy, 0.0f);
-        int sc = MetricHelper.argb((int)(30.0f * fade), 0, 0, 0);
-        MetricHelper.fillRounded(g, x - 2.4f, y - 2.4f + 1.4f, animW + 4.8f, h + 4.8f, r + 1.92f, sc, sc, false);
-        MetricHelper.fillRounded(g, x - 0.8f, y - 0.8f, animW + 1.6f, h + 1.6f, r + 0.8f, MetricHelper.argb((int)(78.0f * fade), 255, 255, 255), MetricHelper.argb((int)(15.0f * fade), 255, 255, 255), false);
+        int sc = ModernTargetHUD.argb((int)(30.0f * fade), 0, 0, 0);
+        ModernTargetHUD.fillRounded(g, x - 2.4f, y - 2.4f + 1.4f, animW + 4.8f, h + 4.8f, r + 1.92f, sc, sc, false);
+        ModernTargetHUD.fillRounded(g, x - 0.8f, y - 0.8f, animW + 1.6f, h + 1.6f, r + 0.8f, ModernTargetHUD.argb((int)(78.0f * fade), 255, 255, 255), ModernTargetHUD.argb((int)(15.0f * fade), 255, 255, 255), false);
         float fl = this.flash * 0.55f;
-        int cardTop = MetricHelper.argb((int)(212.0f * fade), MetricHelper.lerpI(46, 88, fl), MetricHelper.lerpI(46, 40, fl), MetricHelper.lerpI(50, 44, fl));
-        int cardBot = MetricHelper.argb((int)(226.0f * fade), MetricHelper.lerpI(26, 62, fl), MetricHelper.lerpI(26, 28, fl), MetricHelper.lerpI(30, 32, fl));
-        MetricHelper.fillRounded(g, x, y, animW, h, r, cardTop, cardBot, false);
+        int cardTop = ModernTargetHUD.argb((int)(212.0f * fade), ModernTargetHUD.lerpI(46, 88, fl), ModernTargetHUD.lerpI(46, 40, fl), ModernTargetHUD.lerpI(50, 44, fl));
+        int cardBot = ModernTargetHUD.argb((int)(226.0f * fade), ModernTargetHUD.lerpI(26, 62, fl), ModernTargetHUD.lerpI(26, 28, fl), ModernTargetHUD.lerpI(30, 32, fl));
+        ModernTargetHUD.fillRounded(g, x, y, animW, h, r, cardTop, cardBot, false);
         if (Math.abs(sp - 1.0f) < 0.03f && this.sweepClock >= 0.0f) {
             float f2 = 0;
             float ph = this.sweepClock % 3.8f;
@@ -316,13 +318,13 @@ implements RenderableHud {
                 float prog = ph / 0.9f;
                 float env = (float)Math.sin(Math.PI * (double)prog);
                 g.enableScissor((int)(x + 2.0f), (int)(y + 2.0f), (int)(x + animW - 2.0f), (int)(y + h - 2.0f));
-                MetricHelper.drawSweep(g, x - 40.0f + (animW + 80.0f) * prog, y, y + h, 30.0f, 13.0f, 0.1f * fade * env);
+                ModernTargetHUD.drawSweep(g, x - 40.0f + (animW + 80.0f) * prog, y, y + h, 30.0f, 13.0f, 0.1f * fade * env);
                 g.disableScissor();
             }
         }
         float ax = x + 10.0f;
         float ay = y + 10.0f;
-        float avA = fade * MetricHelper.stag(fadeP, 0.1f);
+        float avA = fade * ModernTargetHUD.stag(fadeP, 0.1f);
         if (avA > 0.02f && this.target instanceof AbstractClientPlayer) {
             ResourceLocation skin = ((AbstractClientPlayer)this.target).getSkinTextureLocation();
             float acx = ax + 15.0f;
@@ -332,27 +334,27 @@ implements RenderableHud {
             g.pose().translate(acx, acy, 0.0f);
             g.pose().scale(ap, ap, 1.0f);
             g.pose().translate(-acx, -acy, 0.0f);
-            int ringC = MetricHelper.argb((int)(45.0f * avA), 255, 255, 255);
-            MetricHelper.fillRounded(g, ax - 1.0f, ay - 1.0f, 32.0f, 32.0f, 10.0f, ringC, ringC, false);
-            MetricHelper.drawRoundedTexture(g, skin, ax, ay, 30.0f, 9.0f, 0.125f, 0.125f, 0.125f, 1.0f, 1.0f, 1.0f, avA);
-            MetricHelper.drawRoundedTexture(g, skin, ax, ay, 30.0f, 9.0f, 0.625f, 0.125f, 0.125f, 1.0f, 1.0f, 1.0f, avA);
+            int ringC = ModernTargetHUD.argb((int)(45.0f * avA), 255, 255, 255);
+            ModernTargetHUD.fillRounded(g, ax - 1.0f, ay - 1.0f, 32.0f, 32.0f, 10.0f, ringC, ringC, false);
+            ModernTargetHUD.drawRoundedTexture(g, skin, ax, ay, 30.0f, 9.0f, 0.125f, 0.125f, 0.125f, 1.0f, 1.0f, 1.0f, avA);
+            ModernTargetHUD.drawRoundedTexture(g, skin, ax, ay, 30.0f, 9.0f, 0.625f, 0.125f, 0.125f, 1.0f, 1.0f, 1.0f, avA);
             g.pose().popPose();
         }
         float contentX = x + 50.0f;
         float contentR = x + animW - 12.0f;
         float contentW = contentR - contentX;
         Font font = FontManager.smallFont;
-        int[] barCol = MetricHelper.appleHealth(this.healthSmooth, this.flash);
-        float s1 = MetricHelper.stag(fadeP, 0.3f);
-        float s2 = MetricHelper.stag(fadeP, 0.44f);
-        float s3 = MetricHelper.stag(fadeP, 0.56f);
+        int[] barCol = ModernTargetHUD.appleHealth(this.healthSmooth, this.flash);
+        float s1 = ModernTargetHUD.stag(fadeP, 0.3f);
+        float s2 = ModernTargetHUD.stag(fadeP, 0.44f);
+        float s3 = ModernTargetHUD.stag(fadeP, 0.56f);
         if (s1 > 0.03f && contentW > 8.0f) {
             float rowY = y + 8.0f + (1.0f - s1) * 3.5f;
             String numText = String.format("%.1f", Float.valueOf(this.healthSmooth * maxHealth));
-            float numW = MetricHelper.textWidth(font, numText);
-            MetricHelper.drawText(g, font, numText, contentR - numW, rowY, MetricHelper.argb((int)(255.0f * fade * s1), barCol[0], barCol[1], barCol[2]));
-            String name = MetricHelper.trim(font, NicknameModule.nameFor((Entity)this.target, this.target.getName().getString()), contentW - numW - 6.0f);
-            MetricHelper.drawText(g, font, name, contentX, rowY, MetricHelper.argb((int)(255.0f * fade * s1), 245, 245, 247));
+            float numW = ModernTargetHUD.textWidth(font, numText);
+            ModernTargetHUD.drawText(g, font, numText, contentR - numW, rowY, ModernTargetHUD.argb((int)(255.0f * fade * s1), barCol[0], barCol[1], barCol[2]));
+            String name = ModernTargetHUD.trim(font, NicknameModule.nameFor((Entity)this.target, this.target.getName().getString()), contentW - numW - 6.0f);
+            ModernTargetHUD.drawText(g, font, name, contentX, rowY, ModernTargetHUD.argb((int)(255.0f * fade * s1), 245, 245, 247));
         }
         if (s2 > 0.03f && contentW > 8.0f) {
             int subA = (int)(205.0f * fade * s2);
@@ -360,30 +362,30 @@ implements RenderableHud {
             g.pose().translate(contentX, y + 24.5f + (1.0f - s2) * 3.5f, 0.0f);
             g.pose().scale(0.78f, 0.78f, 1.0f);
             String distText = String.format("%.1f m", Float.valueOf(mc.player.distanceTo((Entity)this.target)));
-            MetricHelper.drawText(g, font, distText, 0.0f, 0.0f, MetricHelper.argb(subA, 152, 152, 157));
+            ModernTargetHUD.drawText(g, font, distText, 0.0f, 0.0f, ModernTargetHUD.argb(subA, 152, 152, 157));
             float absorb = this.target.getAbsorptionAmount();
             if (absorb > 0.5f) {
                 String abText = String.format("+%.0f", Float.valueOf(absorb));
-                MetricHelper.drawText(g, font, abText, contentW / 0.78f - MetricHelper.textWidth(font, abText), 0.0f, MetricHelper.argb(subA, 255, 214, 10));
+                ModernTargetHUD.drawText(g, font, abText, contentW / 0.78f - ModernTargetHUD.textWidth(font, abText), 0.0f, ModernTargetHUD.argb(subA, 255, 214, 10));
             }
             g.pose().popPose();
         }
         if (s3 > 0.03f && contentW > 8.0f) {
             float by = y + 38.0f + (1.0f - s3) * 3.5f;
             float bh = 5.0f;
-            int trackC = MetricHelper.argb((int)(26.0f * fade * s3), 255, 255, 255);
-            MetricHelper.fillRounded(g, contentX, by, contentW, bh, bh / 2.0f, trackC, trackC, false);
+            int trackC = ModernTargetHUD.argb((int)(26.0f * fade * s3), 255, 255, 255);
+            ModernTargetHUD.fillRounded(g, contentX, by, contentW, bh, bh / 2.0f, trackC, trackC, false);
             float fillW = contentW * this.healthSmooth;
             float lagW = contentW * this.healthLag;
             if (lagW > fillW + 0.5f) {
-                int lagC = MetricHelper.argb((int)(85.0f * fade * s3), 255, 255, 255);
-                MetricHelper.fillRounded(g, contentX, by, lagW, bh, bh / 2.0f, lagC, lagC, false);
+                int lagC = ModernTargetHUD.argb((int)(85.0f * fade * s3), 255, 255, 255);
+                ModernTargetHUD.fillRounded(g, contentX, by, lagW, bh, bh / 2.0f, lagC, lagC, false);
             }
             if (fillW > 0.6f) {
                 int cA = (int)(255.0f * fade * s3);
-                int colL = MetricHelper.argb(cA, (int)((float)barCol[0] * 0.84f), (int)((float)barCol[1] * 0.84f), (int)((float)barCol[2] * 0.84f));
-                int colR = MetricHelper.argb(cA, barCol[0], barCol[1], barCol[2]);
-                MetricHelper.fillRounded(g, contentX, by, fillW, bh, bh / 2.0f, colL, colR, true);
+                int colL = ModernTargetHUD.argb(cA, (int)((float)barCol[0] * 0.84f), (int)((float)barCol[1] * 0.84f), (int)((float)barCol[2] * 0.84f));
+                int colR = ModernTargetHUD.argb(cA, barCol[0], barCol[1], barCol[2]);
+                ModernTargetHUD.fillRounded(g, contentX, by, fillW, bh, bh / 2.0f, colL, colR, true);
             }
         }
         for (int i = 0; i < this.chips.size(); ++i) {
@@ -396,12 +398,12 @@ implements RenderableHud {
             float pop = Math.min(ft.life / 0.16f, 1.0f);
             float chipX = contentR + ft.drift * rise;
             float chipY = y + 4.0f - rise * 18.0f;
-            int col = ft.heal ? MetricHelper.argb((int)(255.0f * ca), 48, 209, 88) : MetricHelper.argb((int)(255.0f * ca), 255, 69, 58);
+            int col = ft.heal ? ModernTargetHUD.argb((int)(255.0f * ca), 48, 209, 88) : ModernTargetHUD.argb((int)(255.0f * ca), 255, 69, 58);
             g.pose().pushPose();
             g.pose().translate(chipX, chipY, 0.0f);
             float cs = 0.8f * Math.max(pop, 0.05f);
             g.pose().scale(cs, cs, 1.0f);
-            MetricHelper.drawText(g, font, ft.text, -MetricHelper.textWidth(font, ft.text), 0.0f, col);
+            ModernTargetHUD.drawText(g, font, ft.text, -ModernTargetHUD.textWidth(font, ft.text), 0.0f, col);
             g.pose().popPose();
         }
         g.pose().popPose();
@@ -556,24 +558,24 @@ implements RenderableHud {
             out[2] = 88;
         } else if (r >= 0.4f) {
             float t = (r - 0.4f) / 0.25f;
-            out[0] = MetricHelper.lerpI(255, 48, t);
-            out[1] = MetricHelper.lerpI(214, 209, t);
-            out[2] = MetricHelper.lerpI(10, 88, t);
+            out[0] = ModernTargetHUD.lerpI(255, 48, t);
+            out[1] = ModernTargetHUD.lerpI(214, 209, t);
+            out[2] = ModernTargetHUD.lerpI(10, 88, t);
         } else if (r >= 0.2f) {
             float t = (r - 0.2f) / 0.2f;
             out[0] = 255;
-            out[1] = MetricHelper.lerpI(159, 214, t);
+            out[1] = ModernTargetHUD.lerpI(159, 214, t);
             out[2] = 10;
         } else {
             float t = r / 0.2f;
             out[0] = 255;
-            out[1] = MetricHelper.lerpI(69, 159, t);
-            out[2] = MetricHelper.lerpI(58, 10, t);
+            out[1] = ModernTargetHUD.lerpI(69, 159, t);
+            out[2] = ModernTargetHUD.lerpI(58, 10, t);
         }
         float f = flash * 0.55f;
-        out[0] = MetricHelper.lerpI(out[0], 255, f);
-        out[1] = MetricHelper.lerpI(out[1], 255, f);
-        out[2] = MetricHelper.lerpI(out[2], 255, f);
+        out[0] = ModernTargetHUD.lerpI(out[0], 255, f);
+        out[1] = ModernTargetHUD.lerpI(out[1], 255, f);
+        out[2] = ModernTargetHUD.lerpI(out[2], 255, f);
         return out;
     }
 

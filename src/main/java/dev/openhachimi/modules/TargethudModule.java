@@ -7,10 +7,10 @@ import dev.openhachimi.hud.RenderableHud;
 import dev.openhachimi.settings.BooleanSetting;
 import dev.openhachimi.settings.ListSetting;
 import dev.openhachimi.settings.ModeSetting;
-import dev.openhachimi.utils.TargetHUDRenderHelper;
-import dev.openhachimi.utils.MetricHelper;
-import dev.openhachimi.utils.PathHelper;
-import dev.openhachimi.utils.TargetHUD;
+import dev.openhachimi.render.targethuds.SimpleTargetHUD;
+import dev.openhachimi.render.targethuds.ModernTargetHUD;
+import dev.openhachimi.render.targethuds.OpaiTargetHUD;
+import dev.openhachimi.render.targethuds.DefaultTargetHUD;
 
 import java.util.function.Supplier;
 import net.minecraft.client.gui.GuiGraphics;
@@ -35,10 +35,10 @@ extends Module {
     public final BooleanSetting showArmor = new BooleanSetting("Show Armor", true);
     public final ListSetting posX = new ListSetting("PosX", 100, 0, 2000);
     public final ListSetting posY = new ListSetting("PosY", 100, 0, 1000);
-    private final RenderableHud modernHUD = new MetricHelper();
-    private final RenderableHud defaultHUD = new TargetHUD();
-    private final RenderableHud simpleHUD = new TargetHUDRenderHelper();
-    private final RenderableHud opaiHUD = new PathHelper();
+    private final RenderableHud modernHUD = new ModernTargetHUD();
+    private final RenderableHud defaultHUD = new DefaultTargetHUD();
+    private final RenderableHud simpleHUD = new SimpleTargetHUD();
+    private final RenderableHud opaiHUD = new OpaiTargetHUD();
 
     public TargethudModule() {
         super("TargetHUD", Category.RENDER);

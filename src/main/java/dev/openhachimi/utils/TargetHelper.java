@@ -8,7 +8,7 @@ import java.util.Set;
 import net.minecraft.world.entity.Entity;
 
 public class TargetHelper
-implements TransactionHelper {
+implements ThrowableData {
     private final Color color;
     private final Set<Class<? extends Entity>> entityClass;
 

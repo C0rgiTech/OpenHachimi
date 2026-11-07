@@ -1,9 +1,9 @@
 /*
  * Decompiled with CFR 0.152.
  */
-package dev.openhachimi.utils.player;
+package dev.openhachimi.utils.render.font;
 
-public class AttributeManager {
+public class Glyph {
     public final float x0;
     public final float y0;
     public final float x1;
@@ -14,7 +14,7 @@ public class AttributeManager {
     public final float v1;
     public final float xAdvance;
 
-    public AttributeManager(float x0, float y0, float x1, float y1, float u0, float v0, float u1, float v1, float xAdvance) {
+    public Glyph(float x0, float y0, float x1, float y1, float u0, float v0, float u1, float v1, float xAdvance) {
         this.x0 = x0;
         this.y0 = y0;
         this.x1 = x1;
