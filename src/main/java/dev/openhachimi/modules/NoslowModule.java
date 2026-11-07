@@ -5,7 +5,6 @@ package dev.openhachimi.modules;
 
 import dev.openhachimi.event.EventRegistrar;
 import dev.openhachimi.settings.BooleanSetting;
-import dev.openhachimi.utils.ModuleManager;
 
 import java.lang.reflect.Field;
 import java.util.Queue;
@@ -15,7 +14,6 @@ import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.PacketListener;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.protocol.game.ClientboundBossEventPacket;

@@ -9,7 +9,6 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.HashMap;
 
-import dev.openhachimi.utils.KinematicManager;
 import net.minecraft.client.renderer.texture.AbstractTexture;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.stb.STBTTFontinfo;
@@ -27,7 +26,7 @@ public class TrueTypeFont {
     private final int height;
     private final float scale;
     private final float ascent;
-    private final KinematicManager[] charData;
+    private final Glyph[] charData;
     private final int from;
     private final int oversample;
     private final int atlasSize;
@@ -75,12 +74,12 @@ public class TrueTypeFont {
             STBTruetype.stbtt_GetFontVMetrics((STBTTFontinfo)fontInfo, (IntBuffer)ascentBuf, null, null);
             this.ascent = ascentBuf.get(0);
         }
-        this.charData = new KinematicManager[count];
+        this.charData = new Glyph[count];
         for (int i = 0; i < this.charData.length; ++i) {
             STBTTPackedchar packedChar = (STBTTPackedchar)cdata.get(i);
             float ipw = 1.0f / (float)size;
             float iph = 1.0f / (float)size;
-            this.charData[i] = new KinematicManager(packedChar.xoff(), packedChar.yoff(), packedChar.xoff2(), packedChar.yoff2(), (float)packedChar.x0() * ipw, (float)packedChar.y0() * iph, (float)packedChar.x1() * ipw, (float)packedChar.y1() * iph, packedChar.xadvance());
+            this.charData[i] = new Glyph(packedChar.xoff(), packedChar.yoff(), packedChar.xoff2(), packedChar.yoff2(), (float)packedChar.x0() * ipw, (float)packedChar.y0() * iph, (float)packedChar.x1() * ipw, (float)packedChar.y1() * iph, packedChar.xadvance());
         }
     }
 
@@ -102,7 +101,7 @@ public class TrueTypeFont {
         }
         double width = 0.0;
         for (int i = 0; i < string.length(); ++i) {
-            KinematicManager c;
+            Glyph c;
             int cp = string.charAt(i) - this.from;
             if (cp == 167 && i + 1 < string.length()) {
                 char ctrl = string.charAt(i + 1);
@@ -127,7 +126,7 @@ public class TrueTypeFont {
         return this.ascent;
     }
 
-    public KinematicManager[] getCharData() {
+    public Glyph[] getCharData() {
         return this.charData;
     }
 
@@ -147,7 +146,7 @@ public class TrueTypeFont {
         return this.packOk;
     }
 
-    public KinematicManager metricsFor(int code) {
+    public Glyph metricsFor(int code) {
         int i = code - this.from;
         if (i < 0 || i >= this.charData.length) {
             return null;

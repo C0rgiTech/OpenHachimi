@@ -3,8 +3,6 @@
  */
 package dev.openhachimi.modules;
 
-import dev.openhachimi.utils.ModuleManager;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;

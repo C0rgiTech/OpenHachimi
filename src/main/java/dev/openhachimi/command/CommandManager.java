@@ -13,9 +13,9 @@ import dev.openhachimi.settings.ListSetting;
 import dev.openhachimi.settings.ModeSetting;
 import dev.openhachimi.settings.NumberSetting;
 import dev.openhachimi.settings.Setting;
-import dev.openhachimi.utils.ModuleManager;
+import dev.openhachimi.modules.ModuleManager;
 import dev.openhachimi.config.ConfigLoadManager;
-import dev.openhachimi.utils.ClickGUI;
+import dev.openhachimi.utils.ClickGUIRenderHelper;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import java.awt.Desktop;
@@ -713,11 +713,11 @@ public final class CommandManager {
 
     private static String themeList() {
         StringBuilder sb = new StringBuilder(48);
-        for (int i = 0; i < ClickGUI.THEMES.length; ++i) {
+        for (int i = 0; i < ClickGUIRenderHelper.THEMES.length; ++i) {
             if (i > 0) {
                 sb.append(", ");
             }
-            sb.append(ClickGUI.THEMES[i]);
+            sb.append(ClickGUIRenderHelper.THEMES[i]);
         }
         return sb.toString();
     }
@@ -765,7 +765,7 @@ public final class CommandManager {
             return null;
         }
         String trimmed = wanted.trim();
-        for (String theme : ClickGUI.THEMES) {
+        for (String theme : ClickGUIRenderHelper.THEMES) {
             if (!theme.equalsIgnoreCase(trimmed)) continue;
             return theme;
         }

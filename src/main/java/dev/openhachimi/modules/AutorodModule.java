@@ -5,7 +5,6 @@ package dev.openhachimi.modules;
 
 import dev.openhachimi.settings.ListSetting;
 import dev.openhachimi.settings.ModeSetting;
-import dev.openhachimi.utils.ModuleManager;
 
 import java.lang.reflect.Method;
 import net.minecraft.client.Minecraft;

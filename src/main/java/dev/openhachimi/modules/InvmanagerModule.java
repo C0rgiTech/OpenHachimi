@@ -6,7 +6,6 @@ package dev.openhachimi.modules;
 import dev.openhachimi.settings.BooleanSetting;
 import dev.openhachimi.settings.ListSetting;
 import dev.openhachimi.settings.ModeSetting;
-import dev.openhachimi.utils.ModuleManager;
 import dev.openhachimi.utils.player.InventoryUtil;
 import dev.openhachimi.utils.player.MoveUtil;
 import dev.openhachimi.utils.MSTimer;
