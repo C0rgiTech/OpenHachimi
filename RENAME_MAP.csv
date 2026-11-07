@@ -1,0 +1,119 @@
+﻿original_class,original_package,new_class,new_package,confidence,evidence
+AnchorHelper,net.minecraftforge.common.internal.util,S08detectorModule,dev.openhachimi.modules,high,module 'S08Detector' (ContainerHelper.MISC)
+AttributeHelper,net.minecraftforge.common.internal.util,AttributeHelper,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+AttributeManager,net.minecraftforge.common.internal.util,AttributeManager,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+BatchHelper,net.minecraftforge.common.internal.util,AntibotModule,dev.openhachimi.modules,high,module 'AntiBot' (ContainerHelper.MISC)
+BufferHelper,net.minecraftforge.common.internal.util,NojumpdelayModule,dev.openhachimi.modules,high,module 'NoJumpDelay' (ContainerHelper.MOVEMENT)
+BuilderHelper,net.minecraftforge.common.internal.util,ClickguiModule,dev.openhachimi.modules,high,module 'ClickGui' (ContainerHelper.RENDER)
+BytecodeHelper,net.minecraftforge.common.internal.util,NativeLoader,dev.openhachimi.security,high,loads /assets/hachimi/native/hachimi.dll to tmpdir
+BytecodeManager,net.minecraftforge.common.internal.util,BytecodeManager,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+CadenceHelper,net.minecraftforge.common.internal.util,EventRegistrar,dev.openhachimi.event,high,only class wiring MinecraftForge.EVENT_BUS listeners
+CadenceManager,net.minecraftforge.common.internal.util,CadenceManager,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+CanvasHelper,net.minecraftforge.common.internal.util,FastplaceModule,dev.openhachimi.modules,high,module 'FastPlace' (ContainerHelper.PLAYER)
+ChannelHelper,net.minecraftforge.common.internal.util,NoslowModule,dev.openhachimi.modules,high,module 'NoSlow' (ContainerHelper.MOVEMENT)
+ChordHelper,net.minecraftforge.common.internal.util,AutorodModule,dev.openhachimi.modules,high,module 'AutoRod' (ContainerHelper.MISC)
+ClassManager,net.minecraftforge.common.internal.util,ClassManager,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+ClockHelper,net.minecraftforge.common.internal.util,RenderableHud,dev.openhachimi.hud,high,"interface render(GuiGraphics,float,ctx)"
+ClockManager,net.minecraftforge.common.internal.util,AntiDebug,dev.openhachimi.security,high,jdwp / arthas / com.sun.tools.attach detection
+ComputationHelper,net.minecraftforge.common.internal.util,IntegrityCheck,dev.openhachimi.security,high,native_self_check + -javaagent/-agentpath detection
+ComputationManager,net.minecraftforge.common.internal.util,ComputationManager,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+ContainerHelper,net.minecraftforge.common.internal.util,Category,dev.openhachimi.modules,high,enum COMBAT/PLAYER/RENDER/MOVEMENT/MISC
+ContainerManager,net.minecraftforge.common.internal.util,ContainerManager,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+ContextHelper,net.minecraftforge.common.internal.util,ContextHelper,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+ControllerHelper,net.minecraftforge.common.internal.util,ScoreboardhudModule,dev.openhachimi.modules,high,module 'ScoreboardHud' (ContainerHelper.RENDER)
+CoordinatorHelper,net.minecraftforge.common.internal.util,TargethudModule,dev.openhachimi.modules,high,module 'TargetHUD' (ContainerHelper.RENDER)
+DecoderHelper,net.minecraftforge.common.internal.util,FpsboostModule,dev.openhachimi.modules,high,module 'FpsBoost' (ContainerHelper.RENDER)
+DeltaHelper,net.minecraftforge.common.internal.util,DeltaHelper,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+DeltaManager,net.minecraftforge.common.internal.util,DeltaManager,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+DepthHelper,net.minecraftforge.common.internal.util,CrystalauraModule,dev.openhachimi.modules,high,module 'CrystalAura' (ContainerHelper.COMBAT)
+DispatcherHelper,net.minecraftforge.common.internal.util,ProjectileModule,dev.openhachimi.modules,high,module 'Projectile' (ContainerHelper.RENDER)
+ElementHelper,net.minecraftforge.common.internal.util,TeamsModule,dev.openhachimi.modules,high,module 'Teams' (ContainerHelper.MISC)
+EncoderHelper,net.minecraftforge.common.internal.util,EspModule,dev.openhachimi.modules,high,module 'ESP' (ContainerHelper.RENDER)
+EnvironmentHelper,net.minecraftforge.common.internal.util,EnvironmentHelper,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+EventDispatcherImpl,net.minecraftforge.common.internal.util,EventDispatcherImpl,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+ExecutorHelper,net.minecraftforge.common.internal.util,ExecutorHelper,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+FactoryHelper,net.minecraftforge.common.internal.util,FactoryHelper,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+FieldHelper,net.minecraftforge.common.internal.util,AntinickModule,dev.openhachimi.modules,high,module 'AntiNick' (ContainerHelper.MISC)
+FragmentHelper,net.minecraftforge.common.internal.util,AutosprintModule,dev.openhachimi.modules,high,module 'AutoSprint' (ContainerHelper.MOVEMENT)
+FrameHelper,net.minecraftforge.common.internal.util,FrameHelper,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+FrameManager,net.minecraftforge.common.internal.util,EnumSetting,dev.openhachimi.settings,low,"extends Setting, mode 'None'"
+GeometryHelper,net.minecraftforge.common.internal.util,ClickGuiScreen,dev.openhachimi.render,high,"extends Screen, GuiConfigMenu / ClickGui"
+GeometryManager,net.minecraftforge.common.internal.util,DoubleSetting,dev.openhachimi.settings,low,extends Setting (narrow type unverified)
+GridHelper,net.minecraftforge.common.internal.util,JumpresetModule,dev.openhachimi.modules,high,module 'JumpReset' (ContainerHelper.COMBAT)
+HandleHelper,net.minecraftforge.common.internal.util,HandleHelper,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+HandleManager,net.minecraftforge.common.internal.util,HandleManager,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+HandlerHelper,net.minecraftforge.common.internal.util,NicknameModule,dev.openhachimi.modules,high,module 'Nickname' (ContainerHelper.RENDER)
+HashHelper,net.minecraftforge.common.internal.util,HashHelper,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+HashManager,net.minecraftforge.common.internal.util,IntSetting,dev.openhachimi.settings,low,extends Setting (narrow type unverified)
+IndexHelper,net.minecraftforge.common.internal.util,ProjaimModule,dev.openhachimi.modules,high,module 'ProjAim' (ContainerHelper.COMBAT)
+InterpolationHelper,net.minecraftforge.common.internal.util,InterpolationHelper,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+InterpolationManager,net.minecraftforge.common.internal.util,InterpolationTexture,dev.openhachimi.render,mid,extends AbstractTexture
+KinematicHelper,net.minecraftforge.common.internal.util,Module,dev.openhachimi.modules,high,base module: name/enabled/category/key/values + event hooks
+KinematicManager,net.minecraftforge.common.internal.util,KinematicManager,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+LayoutHelper,net.minecraftforge.common.internal.util,AutopearlModule,dev.openhachimi.modules,high,module 'AutoPearl' (ContainerHelper.MISC)
+ListenerHelper,net.minecraftforge.common.internal.util,NofovModule,dev.openhachimi.modules,high,module 'NoFov' (ContainerHelper.RENDER)
+MaskHelper,net.minecraftforge.common.internal.util,AutosoupModule,dev.openhachimi.modules,high,module 'AutoSoup' (ContainerHelper.MISC)
+MatrixHelper,net.minecraftforge.common.internal.util,KeepsprintModule,dev.openhachimi.modules,high,module 'KeepSprint' (ContainerHelper.MOVEMENT)
+MemoryHelper,net.minecraftforge.common.internal.util,MemoryHelper,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+MemoryManager,net.minecraftforge.common.internal.util,NumberSetting,dev.openhachimi.settings,mid,"extends Setting, display %.2f"
+MetricHelper,net.minecraftforge.common.internal.util,MetricHelper,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+MetricManager,net.minecraftforge.common.internal.util,ColorSetting,dev.openhachimi.settings,high,"extends ModeSetting, colour palette"
+NodeHelper,net.minecraftforge.common.internal.util,NodeHelper,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+NodeManager,net.minecraftforge.common.internal.util,NodeManager,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+ObserverHelper,net.minecraftforge.common.internal.util,NotificationModule,dev.openhachimi.modules,high,module 'Notification' (ContainerHelper.RENDER)
+OperationHelper,net.minecraftforge.common.internal.util,OperationHelper,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+ParserHelper,net.minecraftforge.common.internal.util,DisablebossbarModule,dev.openhachimi.modules,high,module 'DisableBossBar' (ContainerHelper.RENDER)
+PathHelper,net.minecraftforge.common.internal.util,PathHelper,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+PathManager,net.minecraftforge.common.internal.util,Setting,dev.openhachimi.settings,high,abstract Setting<T>: name/value/default/visible/click/getDisplay
+PayloadData,net.minecraftforge.common.internal.util,PayloadData,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+PayloadHelper,net.minecraftforge.common.internal.util,PayloadHelper,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+PayloadManager,net.minecraftforge.common.internal.util,PayloadManager,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+PivotHelper,net.minecraftforge.common.internal.util,FakelagModule,dev.openhachimi.modules,high,module 'FakeLag' (ContainerHelper.MISC)
+PolygonHelper,net.minecraftforge.common.internal.util,AutowebModule,dev.openhachimi.modules,high,module 'Autoweb' (ContainerHelper.PLAYER)
+PooledHelper,net.minecraftforge.common.internal.util,PooledHelper,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+PooledManager,net.minecraftforge.common.internal.util,BooleanSetting,dev.openhachimi.settings,high,"Setting<Boolean>, display ON/OFF"
+ProviderHelper,net.minecraftforge.common.internal.util,ShaderUniforms,dev.openhachimi.render,mid,shader uniform names (ModelViewMat/ProjMat/u*)
+PublisherHelper,net.minecraftforge.common.internal.util,PotionHudModule,dev.openhachimi.modules,high,module 'Potion HUD' (ContainerHelper.RENDER)
+RangeHelper,net.minecraftforge.common.internal.util,KillauraModule,dev.openhachimi.modules,high,module 'KillAura' (ContainerHelper.COMBAT)
+RateHelper,net.minecraftforge.common.internal.util,VelocityModule,dev.openhachimi.modules,high,module 'Velocity' (ContainerHelper.COMBAT)
+ReaderHelper,net.minecraftforge.common.internal.util,ChatoverlayModule,dev.openhachimi.modules,high,module 'ChatOverlay' (ContainerHelper.RENDER)
+RegistryHelper,net.minecraftforge.common.internal.util,RegistryHelper,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+RegistryManager,net.minecraftforge.common.internal.util,RegistryManager,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+RenderHelper,net.minecraftforge.common.internal.util,Render2D,dev.openhachimi.render,mid,2D draw helpers
+RenderManager,net.minecraftforge.common.internal.util,DynamicTexture2D,dev.openhachimi.render,mid,"extends AbstractTexture, RGB/RGBA/Nearest/Linear"
+RepositoryHelper,net.minecraftforge.common.internal.util,RepositoryHelper,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+ResolverHelper,net.minecraftforge.common.internal.util,NametagsModule,dev.openhachimi.modules,high,module 'NameTags' (ContainerHelper.RENDER)
+ResourceHelper,net.minecraftforge.common.internal.util,ResourceHelper,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+ResourceManager,net.minecraftforge.common.internal.util,ListSetting,dev.openhachimi.settings,low,"extends Setting, List<String>"
+ScanHelper,net.minecraftforge.common.internal.util,AimassistModule,dev.openhachimi.modules,high,module 'AimAssist' (ContainerHelper.COMBAT)
+SchedulerHelper,net.minecraftforge.common.internal.util,WatermarkModule,dev.openhachimi.modules,high,module 'Watermark' (ContainerHelper.RENDER)
+ScopeHelper,net.minecraftforge.common.internal.util,ScopeHelper,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+SerializerHelper,net.minecraftforge.common.internal.util,InventoryrenderModule,dev.openhachimi.modules,high,module 'InventoryRender' (ContainerHelper.RENDER)
+SignalHelper,net.minecraftforge.common.internal.util,Notifications,dev.openhachimi.hud,high,"show()/showToggle(), NotificationType INFO/WARNING/ERROR"
+SignalManager,net.minecraftforge.common.internal.util,ModeSetting,dev.openhachimi.settings,high,Setting<String> + modes[] + next()/isMode()
+SlotHelper,net.minecraftforge.common.internal.util,SlotHelper,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+SlotManager,net.minecraftforge.common.internal.util,SlotManager,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+SpanHelper,net.minecraftforge.common.internal.util,FriendModule,dev.openhachimi.modules,high,module 'Friend' (ContainerHelper.MISC)
+SpriteHelper,net.minecraftforge.common.internal.util,EagleModule,dev.openhachimi.modules,high,module 'Eagle' (ContainerHelper.MOVEMENT)
+StateHelper,net.minecraftforge.common.internal.util,ConfigManager,dev.openhachimi.config,high,"config read/write, .bin, filename sanitising"
+StateManager,net.minecraftforge.common.internal.util,FontManager,dev.openhachimi.config,high,assets/hachimi/font/pingfang.ttf + bold.ttf
+StencilHelper,net.minecraftforge.common.internal.util,StencilBuffer,dev.openhachimi.render,mid,stencil mask helpers
+StencilManager,net.minecraftforge.common.internal.util,StencilManager,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+StreamHelper,net.minecraftforge.common.internal.util,ScaffoldModule,dev.openhachimi.modules,high,module 'Scaffold' (ContainerHelper.PLAYER)
+TextureHelper,net.minecraftforge.common.internal.util,CheststealerModule,dev.openhachimi.modules,high,module 'ChestStealer' (ContainerHelper.PLAYER)
+TickHelper,net.minecraftforge.common.internal.util,CommandManager,dev.openhachimi.command,high,chat commands .friend/.help/.save/.load/.list
+TickManager,net.minecraftforge.common.internal.util,TickManager,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+TokenHelper,net.minecraftforge.common.internal.util,AutoclickerModule,dev.openhachimi.modules,high,module 'AutoClicker' (ContainerHelper.COMBAT)
+TraceHelper,net.minecraftforge.common.internal.util,HealthbypassModule,dev.openhachimi.modules,high,module 'HealthBypass' (ContainerHelper.MISC)
+TransactionHelper,net.minecraftforge.common.internal.util,TransactionHelper,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+TypeHelper,net.minecraftforge.common.internal.util,TypeHelper,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+TypeManager,net.minecraftforge.common.internal.util,TypeManager,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+ValidatorHelper,net.minecraftforge.common.internal.util,ArraylistModule,dev.openhachimi.modules,high,module 'ArrayList' (ContainerHelper.RENDER)
+ValueHelper,net.minecraftforge.common.internal.util,AntistaffModule,dev.openhachimi.modules,high,module 'AntiStaff' (ContainerHelper.MISC)
+VaultHelper,net.minecraftforge.common.internal.util,MidpearlModule,dev.openhachimi.modules,high,module 'MidPearl' (ContainerHelper.MISC)
+VectorHelper,net.minecraftforge.common.internal.util,FastwebModule,dev.openhachimi.modules,high,module 'FastWeb' (ContainerHelper.MOVEMENT)
+VertexHelper,net.minecraftforge.common.internal.util,AutotoolsModule,dev.openhachimi.modules,high,module 'AutoTools' (ContainerHelper.PLAYER)
+WeightHelper,net.minecraftforge.common.internal.util,CriticalsModule,dev.openhachimi.modules,high,module 'Criticals' (ContainerHelper.COMBAT)
+WidgetHelper,net.minecraftforge.common.internal.util,InvmanagerModule,dev.openhachimi.modules,high,module 'InvManager' (ContainerHelper.PLAYER)
+WorkerHelper,net.minecraftforge.common.internal.util,WorkerHelper,dev.openhachimi.utils,unverified,deobfuscated English name kept (semantics not proven)
+WriterHelper,net.minecraftforge.common.internal.util,ChestespModule,dev.openhachimi.modules,high,module 'ChestESP' (ContainerHelper.RENDER)

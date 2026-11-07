@@ -1,0 +1,10 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven { name = 'MinecraftForge'; url = 'https://maven.minecraftforge.net/' }
+    }
+}
+
+// Foojay resolver removed: toolchain 17 is provided by the local JDK, and the plugin
+// marker is not resolvable in offline builds.
+rootProject.name = 'OpenHachimi'

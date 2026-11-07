@@ -1,0 +1,685 @@
+﻿javac.exe : D:\project\OpenHachimi\src\main\java\dev\openhachimi\config\ConfigManager.java:50: error: cannot find 
+symbol
+At line:32 char:1
++ & $javac -Xmaxerrs 10000 -nowarn -proc:none -encoding UTF-8 -d D:\pro ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (D:\project\Open...not find symbol:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+    public static final String DIR_NAME = hachimi; // initialiser lost by CFR
+                                          ^
+  symbol:   variable hachimi
+  location: class ConfigManager
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\config\ConfigManager.java:51: error: cannot find symbol
+    public static final String CONFIG_DIR_NAME = config; // initialiser lost by CFR
+                                                 ^
+  symbol:   variable config
+  location: class ConfigManager
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\ChatoverlayModule.java:394: error: cannot find symbol
+            for (i = 0; i < size; ++i) {
+                 ^
+  symbol:   variable i
+  location: class ChatoverlayModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\ChatoverlayModule.java:394: error: cannot find symbol
+            for (i = 0; i < size; ++i) {
+                        ^
+  symbol:   variable i
+  location: class ChatoverlayModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\ChatoverlayModule.java:394: error: cannot find symbol
+            for (i = 0; i < size; ++i) {
+                                    ^
+  symbol:   variable i
+  location: class ChatoverlayModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\ChatoverlayModule.java:395: error: cannot find symbol
+                long age = (long)(size - 1 - i) * (span / (long)Math.max(1, size));
+                                             ^
+  symbol:   variable i
+  location: class ChatoverlayModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\ChatoverlayModule.java:402: error: cannot find symbol
+            for (i = 0; i < prevCount; ++i) {
+                 ^
+  symbol:   variable i
+  location: class ChatoverlayModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\ChatoverlayModule.java:402: error: cannot find symbol
+            for (i = 0; i < prevCount; ++i) {
+                        ^
+  symbol:   variable i
+  location: class ChatoverlayModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\ChatoverlayModule.java:402: error: cannot find symbol
+            for (i = 0; i < prevCount; ++i) {
+                                         ^
+  symbol:   variable i
+  location: class ChatoverlayModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\ChatoverlayModule.java:403: error: cannot find symbol
+                String t = this.prevTexts.get(i);
+                                              ^
+  symbol:   variable i
+  location: class ChatoverlayModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\ChatoverlayModule.java:410: error: cannot find symbol
+                q.addLast(this.prevTimes.get(i));
+                                             ^
+  symbol:   variable i
+  location: class ChatoverlayModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\ChatoverlayModule.java:412: error: cannot find symbol
+            for (i = 0; i < size; ++i) {
+                 ^
+  symbol:   variable i
+  location: class ChatoverlayModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\ChatoverlayModule.java:412: error: cannot find symbol
+            for (i = 0; i < size; ++i) {
+                        ^
+  symbol:   variable i
+  location: class ChatoverlayModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\ChatoverlayModule.java:412: error: cannot find symbol
+            for (i = 0; i < size; ++i) {
+                                    ^
+  symbol:   variable i
+  location: class ChatoverlayModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\ChatoverlayModule.java:413: error: cannot find symbol
+                String text = raw.get(i);
+                                      ^
+  symbol:   variable i
+  location: class ChatoverlayModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\CheststealerModule.java:222: error: incompatible types: 
+Object cannot be converted to Integer
+                for (Integer pSlotId : slots) {
+                                       ^
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\MemoryHelper.java:229: error: cannot find symbol
+                n = i;
+                ^
+  symbol:   variable n
+  location: class MemoryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\MemoryHelper.java:230: error: cannot find symbol
+                this.digitTarget[n] = this.digitTarget[n] + shift;
+                                 ^
+  symbol:   variable n
+  location: class MemoryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\MemoryHelper.java:230: error: cannot find symbol
+                this.digitTarget[n] = this.digitTarget[n] + shift;
+                                                       ^
+  symbol:   variable n
+  location: class MemoryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\MemoryHelper.java:237: error: cannot find symbol
+                n = i;
+                ^
+  symbol:   variable n
+  location: class MemoryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\MemoryHelper.java:238: error: cannot find symbol
+                this.digitPending[n] = this.digitPending[n] + shift;
+                                  ^
+  symbol:   variable n
+  location: class MemoryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\MemoryHelper.java:238: error: cannot find symbol
+                this.digitPending[n] = this.digitPending[n] + shift;
+                                                         ^
+  symbol:   variable n
+  location: class MemoryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\FpsboostModule.java:53: error: incompatible types: Object 
+cannot be converted to T
+            this.restorers.add(() -> option.set(old));
+                                                ^
+  where T is a type-variable:
+    T extends Object declared in method <T>setOption(OptionInstance<T>,T)
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\InvmanagerModule.java:424: error: cannot find symbol
+            offHand = this.offhandStack();
+            ^
+  symbol:   variable offHand
+  location: class InvmanagerModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\InvmanagerModule.java:425: error: cannot find symbol
+            Item offHandItem = offHand.getItem();
+                               ^
+  symbol:   variable offHand
+  location: class InvmanagerModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\InvmanagerModule.java:429: error: cannot find symbol
+                if (offHand.getCount() < offHand.getMaxStackSize() && egapSlot != -1 && timer.delay(nextDelay)) {
+                    ^
+  symbol:   variable offHand
+  location: class InvmanagerModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\InvmanagerModule.java:429: error: cannot find symbol
+                if (offHand.getCount() < offHand.getMaxStackSize() && egapSlot != -1 && timer.delay(nextDelay)) {
+                                         ^
+  symbol:   variable offHand
+  location: class InvmanagerModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\InvmanagerModule.java:430: error: cannot find symbol
+                    targetSlot = egapSlot;
+                    ^
+  symbol:   variable targetSlot
+  location: class InvmanagerModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\InvmanagerModule.java:431: error: cannot find symbol
+                    if (targetSlot < 9) {
+                        ^
+  symbol:   variable targetSlot
+  location: class InvmanagerModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\InvmanagerModule.java:432: error: cannot find symbol
+                        mc.gameMode.handleInventoryMouseClick(mc.player.inventoryMenu.containerId, targetSlot + 36, 0, 
+ClickType.PICKUP, (Player)mc.player);
+                                                                                                   ^
+  symbol:   variable targetSlot
+  location: class InvmanagerModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\InvmanagerModule.java:434: error: cannot find symbol
+                        mc.gameMode.handleInventoryMouseClick(mc.player.inventoryMenu.containerId, targetSlot, 0, 
+ClickType.PICKUP, (Player)mc.player);
+                                                                                                   ^
+  symbol:   variable targetSlot
+  location: class InvmanagerModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\InvmanagerModule.java:446: error: cannot find symbol
+                } else if (offHand.getCount() < offHand.getMaxStackSize() && gapSlot != -1 && timer.delay(nextDelay)) {
+                           ^
+  symbol:   variable offHand
+  location: class InvmanagerModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\InvmanagerModule.java:446: error: cannot find symbol
+                } else if (offHand.getCount() < offHand.getMaxStackSize() && gapSlot != -1 && timer.delay(nextDelay)) {
+                                                ^
+  symbol:   variable offHand
+  location: class InvmanagerModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\InvmanagerModule.java:447: error: cannot find symbol
+                    targetSlot = gapSlot;
+                    ^
+  symbol:   variable targetSlot
+  location: class InvmanagerModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\InvmanagerModule.java:448: error: cannot find symbol
+                    if (targetSlot < 9) {
+                        ^
+  symbol:   variable targetSlot
+  location: class InvmanagerModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\InvmanagerModule.java:449: error: cannot find symbol
+                        mc.gameMode.handleInventoryMouseClick(mc.player.inventoryMenu.containerId, targetSlot + 36, 0, 
+ClickType.PICKUP, (Player)mc.player);
+                                                                                                   ^
+  symbol:   variable targetSlot
+  location: class InvmanagerModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\InvmanagerModule.java:451: error: cannot find symbol
+                        mc.gameMode.handleInventoryMouseClick(mc.player.inventoryMenu.containerId, targetSlot, 0, 
+ClickType.PICKUP, (Player)mc.player);
+                                                                                                   ^
+  symbol:   variable targetSlot
+  location: class InvmanagerModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\InvmanagerModule.java:467: error: cannot find symbol
+            offHand = this.offhandStack();
+            ^
+  symbol:   variable offHand
+  location: class InvmanagerModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\InvmanagerModule.java:471: error: cannot find symbol
+                boolean shouldSwap = offHand.getItem() != Items.EGG && offHand.getItem() != Items.SNOWBALL || 
+offHand.getCount() < bestProjectile.getCount();
+                                     ^
+  symbol:   variable offHand
+  location: class InvmanagerModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\InvmanagerModule.java:471: error: cannot find symbol
+                boolean shouldSwap = offHand.getItem() != Items.EGG && offHand.getItem() != Items.SNOWBALL || 
+offHand.getCount() < bestProjectile.getCount();
+                                                                       ^
+  symbol:   variable offHand
+  location: class InvmanagerModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\InvmanagerModule.java:471: error: cannot find symbol
+                boolean shouldSwap = offHand.getItem() != Items.EGG && offHand.getItem() != Items.SNOWBALL || 
+offHand.getCount() < bestProjectile.getCount();
+                                                                                                              ^
+  symbol:   variable offHand
+  location: class InvmanagerModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\InvmanagerModule.java:478: error: cannot find symbol
+            offHand = this.offhandStack();
+            ^
+  symbol:   variable offHand
+  location: class InvmanagerModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\InvmanagerModule.java:480: error: cannot find symbol
+            if (slotx != -1 && timer.delay(nextDelay) && offHand.getItem() != Items.FISHING_ROD) {
+                                                         ^
+  symbol:   variable offHand
+  location: class InvmanagerModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\InvmanagerModule.java:484: error: cannot find symbol
+            offHand = this.offhandStack();
+            ^
+  symbol:   variable offHand
+  location: class InvmanagerModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\InvmanagerModule.java:488: error: cannot find symbol
+                boolean shouldSwapx = !DeltaManager.isValidStack(offHand) || offHand.getCount() < bestBlock.getCount();
+                                                                 ^
+  symbol:   variable offHand
+  location: class InvmanagerModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\InvmanagerModule.java:488: error: cannot find symbol
+                boolean shouldSwapx = !DeltaManager.isValidStack(offHand) || offHand.getCount() < bestBlock.getCount();
+                                                                             ^
+  symbol:   variable offHand
+  location: class InvmanagerModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\InvmanagerModule.java:627: error: incompatible types: 
+Object cannot be converted to Integer
+            for (Integer slotIdx : slots) {
+                                   ^
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\MidpearlModule.java:323: error: incompatible types: 
+EntityHitResult cannot be converted to BlockHitResult
+                bestHit = new EntityHitResult(other, hit);
+                          ^
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\NofovModule.java:96: error: cannot find symbol
+            cap = module.ratioLimit();
+            ^
+  symbol:   variable cap
+  location: class NofovModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\NofovModule.java:97: error: cannot find symbol
+            float cappedPart = (cap + 1.0f) * 0.5f;
+                                ^
+  symbol:   variable cap
+  location: class NofovModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\NofovModule.java:104: error: cannot find symbol
+            cap = module.ratioLimit();
+            ^
+  symbol:   variable cap
+  location: class NofovModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\NofovModule.java:105: error: cannot find symbol
+            out = capped = raw * ((cap + 1.0f) / (ratio + 1.0f));
+                                   ^
+  symbol:   variable cap
+  location: class NofovModule
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\NoslowModule.java:183: error: incompatible types: 
+PacketListener cannot be converted to CAP#1
+        packet.handle((PacketListener)listener);
+                      ^
+  where CAP#1 is a fresh type-variable:
+    CAP#1 extends PacketListener from capture of ?
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\NoslowModule.java:192: error: cannot find symbol
+            return data.f_133143_() == this.mc.player.getId();
+                       ^
+  symbol:   method f_133143_()
+  location: variable data of type ClientboundSetEntityDataPacket
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\ProjaimModule.java:57: error: incompatible types: Object 
+cannot be converted to Entity
+        for (Entity entity : entities) {
+                             ^
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\ProjectileModule.java:249: error: incompatible types: 
+Object cannot be converted to Entity
+            for (Entity aabbEntity : getByAABBEntitys) {
+                                     ^
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\ScoreboardhudModule.java:97: error: incompatible types: 
+Object cannot be converted to Score
+        for (Score score : collection) {
+                           ^
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\ScoreboardhudModule.java:171: error: incompatible types: 
+Object cannot be converted to Component
+        for (Component run : runs) {
+                             ^
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\VelocityModule.java:65: error: incompatible types: 
+PacketListener cannot be converted to CAP#1
+                raw.handle((PacketListener)mc.getConnection());
+                           ^
+  where CAP#1 is a fresh type-variable:
+    CAP#1 extends PacketListener from capture of ?
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\modules\VelocityModule.java:167: error: cannot find symbol
+        if (packet instanceof ClientboundDamageEventPacket && (damagePacket = 
+(ClientboundDamageEventPacket)packet).f_268504_() == mc.player.getId()) {
+                                                                                                                   ^
+  symbol:   method f_268504_()
+  location: class ClientboundDamageEventPacket
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\render\DynamicTexture2D.java:18: error: DynamicTexture2D is not 
+abstract and does not override abstract method load(ResourceManager) in AbstractTexture
+public class DynamicTexture2D
+       ^
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\render\InterpolationTexture.java:15: error: InterpolationTexture 
+is not abstract and does not override abstract method load(ResourceManager) in AbstractTexture
+public class InterpolationTexture
+       ^
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\render\StencilBuffer.java:258: error: incompatible types: bad 
+type in conditional expression
+                ServerboundMovePlayerPacket.PosRot replaced = move.hasPosition() ? new 
+ServerboundMovePlayerPacket.PosRot(move.getX(0.0), move.getY(0.0), move.getZ(0.0), yaw, pitch, move.isOnGround()) : 
+new ServerboundMovePlayerPacket.Rot(yaw, pitch, move.isOnGround());
+                                                                                                                       
+                                                                                    ^
+    Rot cannot be converted to PosRot
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\render\StencilBuffer.java:283: error: incompatible types: bad 
+type in conditional expression
+            ServerboundMovePlayerPacket.PosRot replaced = move.hasPosition() ? new 
+ServerboundMovePlayerPacket.PosRot(move.getX(0.0), move.getY(0.0), move.getZ(0.0), moveYaw, movePitch, 
+move.isOnGround()) : new ServerboundMovePlayerPacket.Rot(moveYaw, movePitch, move.isOnGround());
+                                                                                                                       
+                                                                                        ^
+    Rot cannot be converted to PosRot
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\FactoryHelper.java:48: error: incompatible types: Object 
+cannot be converted to EntityHitResult
+        }).orElse(null);
+                 ^
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\HashHelper.java:73: error: incompatible types: LivingEntity 
+cannot be converted to LocalPlayer
+                target = aimTarget;
+                         ^
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\HashHelper.java:77: error: incompatible types: LivingEntity 
+cannot be converted to LocalPlayer
+                    target = (LivingEntity)KillauraModule.currentTarget;
+                             ^
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\HashHelper.java:79: error: incompatible types: LivingEntity 
+cannot be converted to LocalPlayer
+                    target = (LivingEntity)mc.crosshairPickEntity;
+                             ^
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\MetricHelper.java:182: error: incompatible types: Player 
+cannot be converted to LocalPlayer
+                found = (Player)aimTarget;
+                        ^
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\MetricHelper.java:186: error: incompatible types: Player 
+cannot be converted to LocalPlayer
+                    found = (Player)KillauraModule.currentTarget;
+                            ^
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\MetricHelper.java:191: error: incompatible types: Player 
+cannot be converted to LocalPlayer
+                            found = (Player)mc.crosshairPickEntity;
+                                    ^
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\MetricHelper.java:196: error: incompatible types: Player 
+cannot be converted to LocalPlayer
+                            found = this.target;
+                                        ^
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\MetricHelper.java:199: error: incompatible types: Player 
+cannot be converted to LocalPlayer
+                        found = (Player)mc.crosshairPickEntity;
+                                ^
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\PathHelper.java:158: error: incompatible types: 
+LivingEntity cannot be converted to LocalPlayer
+                target = aimTarget;
+                         ^
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\PathHelper.java:162: error: incompatible types: 
+LivingEntity cannot be converted to LocalPlayer
+                    target = (LivingEntity)KillauraModule.currentTarget;
+                             ^
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\PathHelper.java:164: error: incompatible types: 
+LivingEntity cannot be converted to LocalPlayer
+                    target = (LivingEntity)mc.crosshairPickEntity;
+                             ^
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:882: error: incompatible types: int 
+cannot be converted to boolean
+                isSearching = clickedField;
+                              ^
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:950: error: cannot find symbol
+                        strW = RegistryHelper.textWidth(TickManager.smallFont, display, 0.78f);
+                        ^
+  symbol:   variable strW
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:951: error: cannot find symbol
+                        float chipW = Math.min(strW + (dot = RegistryHelper.fontPixel()) + 18.0f, group.w);
+                                               ^
+  symbol:   variable strW
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:958: error: cannot find symbol
+                        strW = RegistryHelper.textWidth(TickManager.smallFont, display, 0.78f);
+                        ^
+  symbol:   variable strW
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:959: error: cannot find symbol
+                        if (PooledHelper.isHovering(group.x + group.w - strW - 10.0f, rowY, strW + 14.0f, sHeight, mx, 
+my)) {
+                                                                        ^
+  symbol:   variable strW
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:959: error: cannot find symbol
+                        if (PooledHelper.isHovering(group.x + group.w - strW - 10.0f, rowY, strW + 14.0f, sHeight, mx, 
+my)) {
+                                                                                            ^
+  symbol:   variable strW
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:965: error: cannot find symbol
+                        strW = RegistryHelper.textWidth(TickManager.smallFont, display, 0.78f);
+                        ^
+  symbol:   variable strW
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:966: error: cannot find symbol
+                        float chipW = Math.min(strW + 10.0f, group.w);
+                                               ^
+  symbol:   variable strW
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:973: error: cannot find symbol
+                        strW = RegistryHelper.sliderValueWidth(display);
+                        ^
+  symbol:   variable strW
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:977: error: cannot find symbol
+                        if ((float)mx >= group.x + group.w - strW - 8.0f && (float)mx <= group.x + group.w && 
+(float)my >= rowY && (float)my <= rowY + sHeight) {
+                                                             ^
+  symbol:   variable strW
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1266: error: cannot find symbol
+                    valueY = rowY + (sHeight - RegistryHelper.fontPixel()) / 2.0f;
+                    ^
+  symbol:   variable valueY
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1267: error: cannot find symbol
+                    chipH = RegistryHelper.fontPixel() + 4.0f;
+                    ^
+  symbol:   variable chipH
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1268: error: cannot find symbol
+                    float dot = chipH - 6.0f;
+                                ^
+  symbol:   variable chipH
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1269: error: cannot find symbol
+                    chipW = Math.min(strW + dot + 18.0f, group.w);
+                    ^
+  symbol:   variable chipW
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1270: error: cannot find symbol
+                    float chipX = group.x + group.w - chipW;
+                                                      ^
+  symbol:   variable chipW
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1271: error: cannot find symbol
+                    if (!RegistryHelper.glassControl(g, chipX, valueY - 2.0f, chipW, chipH, chipH * 0.5f, alphaMul, 
+RegistryHelper.pillTint(150))) {
+                                                               ^
+  symbol:   variable valueY
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1271: error: cannot find symbol
+                    if (!RegistryHelper.glassControl(g, chipX, valueY - 2.0f, chipW, chipH, chipH * 0.5f, alphaMul, 
+RegistryHelper.pillTint(150))) {
+                                                                              ^
+  symbol:   variable chipW
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1271: error: cannot find symbol
+                    if (!RegistryHelper.glassControl(g, chipX, valueY - 2.0f, chipW, chipH, chipH * 0.5f, alphaMul, 
+RegistryHelper.pillTint(150))) {
+                                                                                     ^
+  symbol:   variable chipH
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1271: error: cannot find symbol
+                    if (!RegistryHelper.glassControl(g, chipX, valueY - 2.0f, chipW, chipH, chipH * 0.5f, alphaMul, 
+RegistryHelper.pillTint(150))) {
+                                                                                            ^
+  symbol:   variable chipH
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1272: error: cannot find symbol
+                        PooledHelper.drawRoundedRect(g, chipX, valueY - 2.0f, chipW, chipH, chipH * 0.5f, 
+RegistryHelper.pillFallback(p.chip, Math.round(alphaMul * 150.0f)));
+                                                               ^
+  symbol:   variable valueY
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1272: error: cannot find symbol
+                        PooledHelper.drawRoundedRect(g, chipX, valueY - 2.0f, chipW, chipH, chipH * 0.5f, 
+RegistryHelper.pillFallback(p.chip, Math.round(alphaMul * 150.0f)));
+                                                                              ^
+  symbol:   variable chipW
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1272: error: cannot find symbol
+                        PooledHelper.drawRoundedRect(g, chipX, valueY - 2.0f, chipW, chipH, chipH * 0.5f, 
+RegistryHelper.pillFallback(p.chip, Math.round(alphaMul * 150.0f)));
+                                                                                     ^
+  symbol:   variable chipH
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1272: error: cannot find symbol
+                        PooledHelper.drawRoundedRect(g, chipX, valueY - 2.0f, chipW, chipH, chipH * 0.5f, 
+RegistryHelper.pillFallback(p.chip, Math.round(alphaMul * 150.0f)));
+                                                                                            ^
+  symbol:   variable chipH
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1274: error: cannot find symbol
+                    PooledHelper.drawRoundedRect(g, chipX + 5.0f, valueY + 1.0f, dot, dot, dot * 0.5f, 
+RegistryHelper.fade(RegistryHelper.rgba(255, pv.rgb()), alphaMul));
+                                                                  ^
+  symbol:   variable valueY
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1275: error: cannot find symbol
+                    float labelY = valueY - 2.0f + (chipH - RegistryHelper.fontPixel()) * 0.5f;
+                                   ^
+  symbol:   variable valueY
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1275: error: cannot find symbol
+                    float labelY = valueY - 2.0f + (chipH - RegistryHelper.fontPixel()) * 0.5f;
+                                                    ^
+  symbol:   variable chipH
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1281: error: cannot find symbol
+                    valueY = rowY + (sHeight - RegistryHelper.fontPixel()) / 2.0f;
+                    ^
+  symbol:   variable valueY
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1282: error: cannot find symbol
+                    chipH = RegistryHelper.fontPixel() + 4.0f;
+                    ^
+  symbol:   variable chipH
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1286: error: cannot find symbol
+                    boolean mvHovered = PooledHelper.isHovering(chipX, valueY - 2.0f, chipW, chipH, mx, my);
+                                                                       ^
+  symbol:   variable valueY
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1286: error: cannot find symbol
+                    boolean mvHovered = PooledHelper.isHovering(chipX, valueY - 2.0f, chipW, chipH, mx, my);
+                                                                                             ^
+  symbol:   variable chipH
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1289: error: cannot find symbol
+                    if (!RegistryHelper.glassControl(g, chipX, valueY - 2.0f, chipW, chipH, chipH * 0.5f, alphaMul * 
+(0.88f + 0.12f * mv.animHover), RegistryHelper.pillTint(150, mvBase))) {
+                                                               ^
+  symbol:   variable valueY
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1289: error: cannot find symbol
+                    if (!RegistryHelper.glassControl(g, chipX, valueY - 2.0f, chipW, chipH, chipH * 0.5f, alphaMul * 
+(0.88f + 0.12f * mv.animHover), RegistryHelper.pillTint(150, mvBase))) {
+                                                                                     ^
+  symbol:   variable chipH
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1289: error: cannot find symbol
+                    if (!RegistryHelper.glassControl(g, chipX, valueY - 2.0f, chipW, chipH, chipH * 0.5f, alphaMul * 
+(0.88f + 0.12f * mv.animHover), RegistryHelper.pillTint(150, mvBase))) {
+                                                                                            ^
+  symbol:   variable chipH
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1290: error: cannot find symbol
+                        PooledHelper.drawRoundedRect(g, chipX, valueY - 2.0f, chipW, chipH, chipH * 0.5f, 
+RegistryHelper.fade(mvBase, alphaMul));
+                                                               ^
+  symbol:   variable valueY
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1290: error: cannot find symbol
+                        PooledHelper.drawRoundedRect(g, chipX, valueY - 2.0f, chipW, chipH, chipH * 0.5f, 
+RegistryHelper.fade(mvBase, alphaMul));
+                                                                                     ^
+  symbol:   variable chipH
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1290: error: cannot find symbol
+                        PooledHelper.drawRoundedRect(g, chipX, valueY - 2.0f, chipW, chipH, chipH * 0.5f, 
+RegistryHelper.fade(mvBase, alphaMul));
+                                                                                            ^
+  symbol:   variable chipH
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1292: error: cannot find symbol
+                    float labelY = valueY - 2.0f + (chipH - RegistryHelper.fontPixel()) * 0.5f;
+                                   ^
+  symbol:   variable valueY
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1292: error: cannot find symbol
+                    float labelY = valueY - 2.0f + (chipH - RegistryHelper.fontPixel()) * 0.5f;
+                                                    ^
+  symbol:   variable chipH
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1298: error: cannot find symbol
+                    strW = RegistryHelper.textWidth(TickManager.smallFont, display, 0.78f);
+                    ^
+  symbol:   variable strW
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1301: error: cannot find symbol
+                    chipW = Math.min(strW + 10.0f, group.w);
+                    ^
+  symbol:   variable chipW
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1301: error: cannot find symbol
+                    chipW = Math.min(strW + 10.0f, group.w);
+                                     ^
+  symbol:   variable strW
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1302: error: cannot find symbol
+                    float chipX = group.x + group.w - chipW;
+                                                      ^
+  symbol:   variable chipW
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1303: error: cannot find symbol
+                    float labelX = chipX + Math.max(0.0f, (chipW - strW) * 0.5f);
+                                                           ^
+  symbol:   variable chipW
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1303: error: cannot find symbol
+                    float labelX = chipX + Math.max(0.0f, (chipW - strW) * 0.5f);
+                                                                   ^
+  symbol:   variable strW
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1304: error: cannot find symbol
+                    boolean kvHovered = binding || PooledHelper.isHovering(chipX, valueY - 2.0f, chipW, chipH, mx, my);
+                                                                                                 ^
+  symbol:   variable chipW
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1307: error: cannot find symbol
+                    if (!RegistryHelper.glassControl(g, chipX, valueY - 2.0f, chipW, chipH, chipH * 0.5f, alphaMul * 
+(0.88f + 0.12f * kv.animHover), RegistryHelper.pillTint(150, kvBase))) {
+                                                                              ^
+  symbol:   variable chipW
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1308: error: cannot find symbol
+                        PooledHelper.drawRoundedRect(g, chipX, valueY - 2.0f, chipW, chipH, chipH * 0.5f, 
+RegistryHelper.fade(kvBase, alphaMul));
+                                                                              ^
+  symbol:   variable chipW
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1329: error: cannot find symbol
+                    strW = RegistryHelper.sliderValueWidth(display);
+                    ^
+  symbol:   variable strW
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\RegistryHelper.java:1337: error: cannot find symbol
+                    RegistryHelper.text(g, TickManager.smallFont, display, group.x + group.w - strW, valueY, 
+RegistryHelper.fade(editingNow ? p.title : p.value, alphaMul), 0.7f);
+                                                                                               ^
+  symbol:   variable strW
+  location: class RegistryHelper
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\ResourceHelper.java:62: error: incompatible types: 
+AbstractClientPlayer cannot be converted to LocalPlayer
+                target = (AbstractClientPlayer)aimTarget;
+                         ^
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\ResourceHelper.java:66: error: incompatible types: 
+AbstractClientPlayer cannot be converted to LocalPlayer
+                    target = (AbstractClientPlayer)KillauraModule.currentTarget;
+                             ^
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\ResourceHelper.java:71: error: incompatible types: 
+AbstractClientPlayer cannot be converted to LocalPlayer
+                            target = (AbstractClientPlayer)mc.crosshairPickEntity;
+                                     ^
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\ResourceHelper.java:76: error: incompatible types: 
+AbstractClientPlayer cannot be converted to LocalPlayer
+                            target = this.c2LastTarget;
+                                         ^
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\ResourceHelper.java:79: error: incompatible types: 
+AbstractClientPlayer cannot be converted to LocalPlayer
+                        target = (AbstractClientPlayer)mc.crosshairPickEntity;
+                                 ^
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\SlotHelper.java:119: error: incompatible types: Object 
+cannot be converted to Entity
+        for (Entity candidate : list) {
+                                ^
+D:\project\OpenHachimi\src\main\java\dev\openhachimi\utils\SlotHelper.java:128: error: incompatible types: Object 
+cannot be converted to Vec3
+                hitVec = intercept.orElse(eyePos);
+                                         ^
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: D:\project\OpenHachimi\src\main\java\dev\openhachimi\HachimiClient.java uses or overrides a deprecated API that 
+is marked for removal.
+Note: Recompile with -Xlint:removal for details.
+Note: Some input files use unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+Note: Some messages have been simplified; recompile with -Xdiags:verbose to get full output
+132 errors

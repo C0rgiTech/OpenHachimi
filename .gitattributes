@@ -1,0 +1,18 @@
+# Normalise line endings: text files LF in the repo
+* text=auto eol=lf
+
+# Windows scripts stay CRLF
+*.bat        text eol=crlf
+
+# Gradle wrapper script must stay LF + executable
+gradlew      text eol=lf
+
+# Treat these as binary (no diff / no eol conversion)
+*.ttf        binary
+*.png        binary
+*.jar        binary
+*.bin        binary
+*.gz         binary
+*.mca        binary
+*.dat        binary
+*.zip        binary

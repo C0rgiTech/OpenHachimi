@@ -1,0 +1,12 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="All Rights Reserved"
+
+[[mods]]
+modId="hachimi"
+version="1.20.1"
+displayName="Hachimi"
+authors="OpenHachimi"
+description='''
+Decompiled + reorganised Hachimi client (1.20.1).
+'''
