@@ -68,9 +68,134 @@ tasks.named('jar', Jar).configure {
                 'Specification-Version'   : '1',
                 'Implementation-Title'    : project.name,
                 'Implementation-Version'  : project.jar.archiveVersion,
-                'Implementation-Vendor'   : mod_authors
+                'Implementation-Vendor'   : mod_authors,
+                // Used by the native injector's call to instrument.dll Agent_OnAttach.
+                'Agent-Class'             : 'dev.openhachimi.security.InjectAgent'
         ])
     }
     finalizedBy 'reobfJar'
+}
+
+def nativeDllDir = file('native/dll')
+def nativeDllBuildDir = file('native/build-dll')
+def nativeDllOutput = file('native/build-dll/bin/OpenHachimi.dll')
+def injectorBuildDir = file('native/build-injector')
+def injectorOutput = file('native/build-injector/bin/OpenHachimiInject.exe')
+def cmakeCommand = System.getenv('CMAKE') ?: 'cmake'
+def nativeJavaHome = System.getenv('JAVA_HOME') ?: System.getProperty('java.home')
+
+tasks.register('configureNativeDll', Exec) {
+    group = 'native'
+    description = 'Configures the Windows bootstrap DLL and embeds the built mod jar.'
+    dependsOn tasks.named('build')
+    workingDir projectDir
+    environment 'JAVA_HOME', nativeJavaHome
+    inputs.file(tasks.named('jar', Jar).flatMap { it.archiveFile })
+    inputs.files(fileTree('native/dll'))
+    outputs.file(file('native/build-dll/CMakeCache.txt'))
+
+    doFirst {
+        if (!System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+            throw new GradleException('The native injector currently requires Windows and MSVC.')
+        }
+        if (!nativeJavaHome || !file("${nativeJavaHome}/include/jni.h").exists()) {
+            throw new GradleException("JAVA_HOME must point to a JDK containing include/jni.h (current: ${nativeJavaHome})")
+        }
+        def jarPath = tasks.named('jar', Jar).get().archiveFile.get().asFile
+        if (!jarPath.exists()) {
+            throw new GradleException("Mod jar not found: ${jarPath}")
+        }
+        commandLine cmakeCommand,
+                '-S', nativeDllDir.absolutePath,
+                '-B', nativeDllBuildDir.absolutePath,
+                "-DJAR_SOURCE=${jarPath.absolutePath.replace('\\', '/')}",
+                '-DCMAKE_BUILD_TYPE=Release'
+    }
+}
+
+tasks.register('buildNativeDll', Exec) {
+    group = 'native'
+    description = 'Builds the Windows DLL that loads OpenHachimi into a running Minecraft JVM.'
+    dependsOn tasks.named('configureNativeDll')
+    workingDir projectDir
+    environment 'JAVA_HOME', nativeJavaHome
+    inputs.files(fileTree('native/dll'))
+    inputs.file(tasks.named('jar', Jar).flatMap { it.archiveFile })
+    outputs.file(nativeDllOutput)
+
+    doFirst {
+        commandLine cmakeCommand,
+                '--build', nativeDllBuildDir.absolutePath,
+                '--config', 'Release',
+                '--target', 'OpenHachimi',
+                '--parallel'
+    }
+}
+
+tasks.register('buildDll') {
+    group = 'native'
+    description = 'Builds the native injection DLL.'
+    dependsOn tasks.named('buildNativeDll')
+}
+
+tasks.register('builddll') {
+    group = 'native'
+    description = 'Alias for buildDll.'
+    dependsOn tasks.named('buildDll')
+}
+
+tasks.register('configureInjector', Exec) {
+    group = 'native'
+    description = 'Configures the command-line Windows injector.'
+    workingDir projectDir
+    inputs.files(fileTree('native/injector'))
+    outputs.file(file('native/build-injector/CMakeCache.txt'))
+
+    doFirst {
+        if (!System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+            throw new GradleException('The command-line injector currently requires Windows and MSVC.')
+        }
+        commandLine cmakeCommand,
+                '-S', file('native/injector').absolutePath,
+                '-B', injectorBuildDir.absolutePath,
+                '-DCMAKE_BUILD_TYPE=Release'
+    }
+}
+
+tasks.register('buildInjector', Exec) {
+    group = 'native'
+    description = 'Builds the command-line Windows injector.'
+    dependsOn tasks.named('configureInjector')
+    workingDir projectDir
+    inputs.files(fileTree('native/injector'))
+    outputs.file(injectorOutput)
+
+    doFirst {
+        commandLine cmakeCommand,
+                '--build', injectorBuildDir.absolutePath,
+                '--config', 'Release',
+                '--target', 'OpenHachimiInject',
+                '--parallel'
+    }
+}
+
+tasks.register('packageInject', Zip) {
+    group = 'distribution'
+    description = 'Packages the mod jar, native DLL, and injector into one zip.'
+    dependsOn tasks.named('buildDll'), tasks.named('buildInjector')
+    archiveBaseName = 'OpenHachimi-Inject'
+    archiveVersion = '1.20.1'
+    destinationDirectory = layout.buildDirectory.dir('distributions')
+
+    from(tasks.named('jar', Jar).flatMap { it.archiveFile }) {
+        into 'OpenHachimi-Inject-1.20.1'
+        rename { 'openhachimi-1.0.0.jar' }
+    }
+    from(nativeDllOutput) { into 'OpenHachimi-Inject-1.20.1' }
+    from(injectorOutput) { into 'OpenHachimi-Inject-1.20.1' }
+    from('tools/INJECT_README.txt') {
+        into 'OpenHachimi-Inject-1.20.1'
+        rename { 'README.txt' }
+    }
 }
 

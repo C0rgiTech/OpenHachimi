@@ -3,6 +3,8 @@
 build/
 out/
 bin/
+native/build-dll/
+native/build-injector/
 
 # Forge / MC dev run dir (world saves, logs, configs, dumped caches)
 run/
